@@ -1,0 +1,9 @@
+{
+  "name": "stargaze-nft",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "@cosmjs/cli": "^0.27.1"
+  }
+}
