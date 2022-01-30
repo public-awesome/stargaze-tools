@@ -1,7 +1,7 @@
 // This deploys an sg721 contract to a Stargaze chain (testnet or mainnet).
 // NOTE: On Stargaze, you don't have to deploy contracts that have already been deployed once.
 // You can instantiate an existing contract. This script only exists for those that want to
-// depoloy a custom sg721 contract.
+// depoloy a custom sg721 contract. You most likely will never have to run this.
 
 import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
