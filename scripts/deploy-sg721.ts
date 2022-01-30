@@ -6,9 +6,11 @@
 import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import { calculateFee, GasPrice } from "@cosmjs/stargate";
+// const config = require('config');
+import config from "config";
 import * as fs from "fs";
 
-const rpcEndpoint = "http://localhost:26659";
+const rpcEndpoint = config.get('chain.rpc');
 
 // Example user from scripts/wasmd/README.md
 const alice = {

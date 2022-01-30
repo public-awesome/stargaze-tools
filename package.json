@@ -4,7 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "devDependencies": {
-    "@cosmjs/cli": "^0.27.1"
+    "@cosmjs/cli": "^0.27.1",
+    "@types/config": "^0.0.41"
   },
   "dependencies": {
     "config": "^3.3.7"
