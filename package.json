@@ -9,5 +9,9 @@
   },
   "dependencies": {
     "config": "^3.3.7"
+  },
+  "scripts": {
+    "gen-addr": "cosmwasm-cli --init scripts/generate_address.ts",
+    "init-sg721": "cosmwasm-cli --init scripts/init-sg721.ts"
   }
 }
