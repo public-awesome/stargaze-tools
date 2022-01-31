@@ -8,7 +8,8 @@
     "@types/config": "^0.0.41"
   },
   "dependencies": {
-    "config": "^3.3.7"
+    "config": "^3.3.7",
+    "ipfs-car": "^0.6.1"
   },
   "scripts": {
     "gen-addr": "cosmwasm-cli --init scripts/generate_address.ts",
