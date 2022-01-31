@@ -1,0 +1,25 @@
+{
+  "attributes": [
+    {
+      "trait_type": "hair",
+      "value": "long"
+    },
+    {
+      "trait_type": "personality",
+      "value": "cool"
+    },
+    {
+      "trait_type": "shirt_color",
+      "value": "purple"
+    },
+    {
+      "display_type": "number",
+      "trait_type": "generation",
+      "value": 1
+    }
+  ],
+  "description": "Just some guy that likes to code.",
+  "external_url": "https://example.com/?token_id=2",
+  "image": "ipfs://bafybeih3ykpa42eipgtzcrfkeo5nvazcdqhj3oh3ztju44tcoipzsdaauy/images/2.png",
+  "name": "Meow Stargaze"
+}
