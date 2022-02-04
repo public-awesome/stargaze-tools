@@ -12,8 +12,8 @@
     "ipfs-car": "^0.6.1"
   },
   "scripts": {
-    "gen-addr": "cosmwasm-cli --init scripts/generate_address.ts",
-    "init-sg721": "cosmwasm-cli --init scripts/init-sg721.ts",
+    "gen-addr": "cosmwasm-cli --init scripts/generate_address.ts --code 'process.exit(0)'",
+    "init-sg721": "cosmwasm-cli --init scripts/init-sg721.ts --code 'process.exit(0)'",
     "pack-images": "ipfs-car --pack images --output images.car",
     "pack-metadata": "ipfs-car --pack metadata --output metadata.car"
   }
