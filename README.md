@@ -37,5 +37,7 @@ Edit `config.json` with the contract address.
 ## Mint an NFT
 
 ```sh
-yarn run mint [to-address]
+yarn run mint --to [address]
 ```
+
+`[address]` can be any Cosmos address. It'll be converted automatically into a Stargaze address that starts with "stars".

@@ -2,8 +2,15 @@ import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import { calculateFee, GasPrice } from "@cosmjs/stargate";
 import fs from "fs";
+import { Bech32 } from "@cosmjs/encoding";
 
 async function main(recipient: string) {
+  if (!recipient.startsWith("stars")) {
+    const { data } = Bech32.decode(recipient);
+    const starsAddr = Bech32.encode("stars", data);
+    recipient = starsAddr;
+  }
+
   const config = JSON.parse(fs.readFileSync("./config.json", "utf8"));
   const gasPrice = GasPrice.fromString("0stars");
   const wallet = await DirectSecp256k1HdWallet.fromMnemonic(
@@ -16,7 +23,6 @@ async function main(recipient: string) {
     config["rpcEndpoint"],
     wallet
   );
-
   const executeFee = calculateFee(300_000, gasPrice);
   const result = await client.execute(
     config["creator"],
@@ -30,7 +36,7 @@ async function main(recipient: string) {
     wasmEvent
   );
 }
-const args = process.argv.slice(6);
+const args = process.argv.slice(7);
 console.log(args);
 await main(args[0]);
 console.info("Done.");
