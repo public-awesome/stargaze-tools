@@ -3,8 +3,10 @@ import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import { calculateFee, GasPrice } from "@cosmjs/stargate";
 import fs from "fs";
 
+const CONFIG = "./config.json";
+
 async function main() {
-  const config = JSON.parse(fs.readFileSync("./config.json", "utf8"));
+  const config = JSON.parse(fs.readFileSync(CONFIG, "utf8"));
   const gasPrice = GasPrice.fromString("0stars");
   const wallet = await DirectSecp256k1HdWallet.fromMnemonic(
     config["mnemonic"],
@@ -34,6 +36,8 @@ async function main() {
     instantiateFee
   );
   console.info(`Contract instantiated at: `, contractAddress);
+  config["minter"] = contractAddress;
+  fs.writeFileSync(CONFIG, JSON.stringify(config), "utf8");
 }
 
 await main();

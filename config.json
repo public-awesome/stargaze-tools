@@ -4,7 +4,7 @@
   "baseTokenURI": "",
   "numTokens": 0,
   "contractCodeId": 0,
-  "unitPrice": 1.0,
+  "unitPrice": 1,
   "name": "Collection Name",
   "symbol": "SYM",
   "minter": "stars1...",
