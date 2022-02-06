@@ -1,8 +1,0 @@
-{
-  "chain": {
-    "chainId": "stargaze-devnet-1",
-    "gasPrices": "0ustars",
-    "rpc": "https://rpc.devnet.publicawesome.dev:443/"
-  },
-  "contract": { "codeId": 4 }
-}

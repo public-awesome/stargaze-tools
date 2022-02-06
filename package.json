@@ -4,11 +4,9 @@
   "main": "index.js",
   "license": "MIT",
   "devDependencies": {
-    "@cosmjs/cli": "^0.27.1",
-    "@types/config": "^0.0.41"
+    "@cosmjs/cli": "^0.27.1"
   },
   "dependencies": {
-    "config": "^3.3.7",
     "ipfs-car": "^0.6.1"
   },
   "scripts": {
