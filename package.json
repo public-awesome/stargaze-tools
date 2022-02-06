@@ -10,10 +10,10 @@
     "ipfs-car": "^0.6.1"
   },
   "scripts": {
+    "pack-images": "ipfs-car --pack images --output images.car",
+    "pack-metadata": "ipfs-car --pack metadata --output metadata.car",
     "account": "cosmwasm-cli --init scripts/account.ts --code 'process.exit(0)'",
     "init": "cosmwasm-cli --init scripts/init.ts --code 'process.exit(0)'",
-    "mint": "cosmwasm-cli --init scripts/mint.ts --code 'process.exit(0)'",
-    "pack-images": "ipfs-car --pack images --output images.car",
-    "pack-metadata": "ipfs-car --pack metadata --output metadata.car"
+    "mint": "cosmwasm-cli --init scripts/mint.ts --code 'process.exit(0)'"
   }
 }
