@@ -19,7 +19,7 @@ yarn run account
 ## Get funds from faucet
 
 ```sh
-yarn fund [your-address]
+yarn run fund [your-address]
 ```
 
 ## Configure project
@@ -37,5 +37,5 @@ Edit `config.json` with the contract address.
 ## Mint an NFT
 
 ```sh
-yarn mint [to-address]
+yarn run mint [to-address]
 ```
