@@ -1,10 +1,10 @@
 import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import { calculateFee, GasPrice } from "@cosmjs/stargate";
+const fs = require("fs");
 
 const rpcEndpoint = "https://rpc.devnet.publicawesome.dev:443/";
 
-// Example user from scripts/wasmd/README.md
 const alice = {
   mnemonic: "enlist hip relief stomach skate base shallow young switch frequent cry park",
 };
@@ -20,19 +20,24 @@ async function main() {
   console.log(accounts);
   // Instantiate
   const instantiateFee = calculateFee(500_000, gasPrice);
+
+  const configData = fs.readFileSync("config.json");
+  const config = JSON.parse(configData);
+
   // This contract specific message is passed to the contract
-  const msg = {
-    name: "Stargaze Punks",
-    symbol: "PUNK",
-    minter: accounts[0].address,
+  const collectionMsg = {
+    name: config["name"],
+    symbol: config["symbol"],
+    minter: config["minter"],
   };
+  console.log(collectionMsg);
+
   const { contractAddress } = await client.instantiate(
     accounts[0].address,
-    codeId,
-    msg,
-    "My NFT",
+    config["contractCodeId"],
+    collectionMsg,
+    config["name"],
     instantiateFee,
-    { memo: `Launch Stargaze Punks` },
   );
   console.info(`Contract instantiated at: `, contractAddress);
 }
