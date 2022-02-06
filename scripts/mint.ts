@@ -3,7 +3,7 @@ import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import { calculateFee, GasPrice } from "@cosmjs/stargate";
 import fs from "fs";
 
-async function main() {
+async function main(recipient: string) {
   const config = JSON.parse(fs.readFileSync("./config.json", "utf8"));
   const gasPrice = GasPrice.fromString("0stars");
   const wallet = await DirectSecp256k1HdWallet.fromMnemonic(
@@ -16,25 +16,21 @@ async function main() {
     config["rpcEndpoint"],
     wallet
   );
-  const instantiateFee = calculateFee(500_000, gasPrice);
 
-  const collectionMsg = {
-    name: config["name"],
-    symbol: config["symbol"],
-    // TODO: this is the contract being instantiated, so we won't have a minter here right?
-    minter: config["minter"],
-  };
-  console.log(collectionMsg);
-
-  const { contractAddress } = await client.instantiate(
+  const executeFee = calculateFee(300_000, gasPrice);
+  const result = await client.execute(
     config["creator"],
-    config["contractCodeId"],
-    collectionMsg,
-    config["name"],
-    instantiateFee
+    config["minter"],
+    { mintFor: { recipient: recipient } },
+    executeFee
   );
-  console.info(`Contract instantiated at: `, contractAddress);
+  const wasmEvent = result.logs[0].events.find((e) => e.type === "wasm");
+  console.info(
+    "The `wasm` event emitted by the contract execution:",
+    wasmEvent
+  );
 }
-
-await main();
+const args = process.argv.slice(6);
+console.log(args);
+await main(args[0]);
 console.info("Done.");
