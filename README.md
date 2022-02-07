@@ -1,5 +1,7 @@
 # Stargaze Mission Control
 
+## WORK IN PROGRESS -- NOT READY FOR PRODUCTION USE YET
+
 Mission control is a set of tools for launching a project and minting on Stargaze.
 
 ## Setup project
