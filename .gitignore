@@ -26,6 +26,9 @@ coverage/
 # Documentation builds
 /docs_deployment/
 
+# IPFS .car files
+*.car
+
 # Yarn v2
 .yarn/*
 !.yarn/cache
