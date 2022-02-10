@@ -2,6 +2,7 @@ import fs from "fs";
 import os from "os";
 import path from "path";
 import pinataSDK from "@pinata/sdk";
+import { checkFiles } from "../src/validation";
 
 // Load config
 const config = require("../config");
@@ -11,50 +12,11 @@ const apiKey = config.pinataApiKey;
 const secretKey = config.pinataSecretKey;
 const pinata = pinataSDK(apiKey, secretKey);
 
-export const checkFiles = (images: string[], metadata: string[]) => {
-  // Check images length is equal to metadata length
-  if (images.length !== metadata.length) {
-    throw Error("Images files must have matching number of metadata files");
-  }
-
-  function parseFileName(path: string | null): string {
-    // Check file name is not null
-    if (!path) {
-      throw Error("File cannot be null");
-    }
-
-    // Extract fileName from path
-    const fileName = path.match(
-      /([a-zA-Z0-9\s_\\.\-:])+(.png|.jpg|.gif|.json)$/i
-    )![1];
-
-    // Check that file name is an Integer
-    if (isNaN(parseInt(fileName, 10))) {
-      throw Error("Filenames must be numbers");
-    }
-    return fileName;
-  }
-
-  // Check each image is sequentially named with a number and has a matching metadata file
-  for (let i = 0; i < images.length; i++) {
-    // TODO update
-    let image = parseFileName(images[i]);
-    let json = parseFileName(metadata[i]);
-    if (image !== json) {
-      throw Error("Images must have matching JSON files");
-    }
-    if (i !== 0) {
-      let previousImage = parseFileName(images[i - 1]);
-      if (image < previousImage) {
-        throw Error("Images must be sequential");
-      }
-    }
-  }
-};
-
-export async function ipfsUpload() {
+export async function pinataUpload() {
   // Config
-  console.log("Deploying files to IPFS using the following configuration:");
+  console.log(
+    "Deploying files to IPFS via Pinata using the following configuration:"
+  );
   console.log(config);
 
   const imagesBasePath = path.join(__dirname, "../images");
@@ -111,4 +73,4 @@ export async function ipfsUpload() {
   });
 }
 
-ipfsUpload();
+pinataUpload();

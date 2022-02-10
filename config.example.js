@@ -23,7 +23,7 @@ module.exports = {
   // The 3-7 letter ticker symbol for your collection
   symbol: "SYM",
   // Project description
-  description: "An awesome NFT series"
+  description: "An awesome NFT series",
   // The URI containing JSON metadata about your contract
   // Please follow: https://docs.opensea.io/docs/contract-level-metadata
   contractURI: "ipfs://...",
@@ -39,4 +39,8 @@ module.exports = {
   whitelist: ["stars1..", "stars1..."],
   // The date when the whitelist only purchasing period ends and everyone can buy
   whitelistEndTime: "26 Dec 2021 00:00:00 GMT",
+  // Pinata API Key
+  pinataApiKey: "",
+  // Pinata Secret Key
+  pinataSecretKey: "",
 };

@@ -19,6 +19,6 @@
     "init": "cosmwasm-cli --init scripts/init.ts --code 'process.exit(0)'",
     "mint": "cosmwasm-cli --init scripts/mint.ts --code 'process.exit(0)'",
     "load": "cosmwasm-cli --init scripts/load.ts",
-    "upload": "ts-node scripts/ipfs-upload.ts"
+    "pinata-upload": "ts-node scripts/pinata-upload.ts"
   }
 }
