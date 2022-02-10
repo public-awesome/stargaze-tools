@@ -26,6 +26,9 @@ coverage/
 # Documentation builds
 /docs_deployment/
 
+# IPFS .car files
+*.car
+
 # Yarn v2
 .yarn/*
 !.yarn/cache
@@ -35,3 +38,6 @@ coverage/
 !.yarn/sdks
 # We are not using yarn's deferred versioning for now (see https://yarnpkg.com/features/release-workflow)
 # !.yarn/versions
+
+# Config files
+config.js

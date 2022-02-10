@@ -1,8 +1,9 @@
 import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import { calculateFee, GasPrice } from "@cosmjs/stargate";
-import fs from "fs";
 import { Bech32 } from "@cosmjs/encoding";
+
+const config = require("./config");
 
 async function main(recipient: string) {
   if (!recipient.startsWith("stars")) {
@@ -11,7 +12,6 @@ async function main(recipient: string) {
     recipient = starsAddr;
   }
 
-  const config = JSON.parse(fs.readFileSync("./config.json", "utf8"));
   const gasPrice = GasPrice.fromString("0stars");
   const wallet = await DirectSecp256k1HdWallet.fromMnemonic(
     config["mnemonic"],
