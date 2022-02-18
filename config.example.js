@@ -35,7 +35,7 @@ module.exports = {
   // The address for royalites to go to (may be the same as creator)
   royaltyAddress: "stars1...",
   // Royalty share: 1 = 100%, 0.1 = 10%
-  royaltyShare: 0.5,
+  royaltyShare: "0.5",
   // The date when the sale goes live (if whitelist is enabled, only whitelisted addresses will be able to purchase)
   startTime: "25 Dec 2021 00:00:00 GMT",
   // A list of whitelisted addresses that will be able to purchase the sale early

@@ -65,7 +65,7 @@ async function main() {
         creator: config.account,
         royalties: {
           payment_address: config.royaltyAddress,
-          share: config.royaltyShare.toString(),
+          share: config.royaltyShare,
         },
       },
     },
