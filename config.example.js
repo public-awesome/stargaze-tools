@@ -12,14 +12,12 @@ module.exports = {
   rpcEndpoint: "https://rpc.devnet.publicawesome.dev:443",
   // The base URI to be used to programatically mint tokens
   baseTokenURI: "",
-  // The creator's STARS address
-  account: "stars1...",
-  // The minter contract address
-  minter: "stars1...",
   // The number of tokens to mint
   numTokens: 0,
   // The code ID for sg721
-  contractCodeId: 0,
+  sg721CodeId: 40,
+  // The code ID for the minter contract
+  minterCodeId: 41,
   // The price (in STARS) for your NFTs
   unitPrice: 1,
   // The name of your collection
@@ -31,6 +29,8 @@ module.exports = {
   // The URI containing JSON metadata about your contract
   // Please follow: https://docs.opensea.io/docs/contract-level-metadata
   contractURI: "ipfs://...",
+  // The creator's STARS address
+  creator: "stars1...",
   // The address for royalites to go to (may be the same as creator)
   royaltyAddress: "stars1...",
   // Royalty share: 1 = 100%, 0.1 = 10%
