@@ -5,7 +5,13 @@ import { Bech32 } from "@cosmjs/encoding";
 
 const config = require("./config");
 
-async function main() {
+async function main(recipient: string) {
+  if (!recipient.startsWith("stars")) {
+    const { data } = Bech32.decode(recipient);
+    const starsAddr = Bech32.encode("stars", data);
+    recipient = starsAddr;
+  }
+
   const gasPrice = GasPrice.fromString("0stars");
   const wallet = await DirectSecp256k1HdWallet.fromMnemonic(config.mnemonic, {
     prefix: "stars",
@@ -18,7 +24,7 @@ async function main() {
   const result = await client.execute(
     config.account,
     config.minter,
-    { mint: {} },
+    { mintTo: { recipient: recipient } },
     executeFee
   );
   const wasmEvent = result.logs[0].events.find((e) => e.type === "wasm");
@@ -28,5 +34,5 @@ async function main() {
   );
 }
 const args = process.argv.slice(7);
-await main();
+await main(args[0]);
 console.info("Done.");
