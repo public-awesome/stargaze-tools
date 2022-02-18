@@ -13,20 +13,17 @@ async function main(recipient: string) {
   }
 
   const gasPrice = GasPrice.fromString("0stars");
-  const wallet = await DirectSecp256k1HdWallet.fromMnemonic(
-    config["mnemonic"],
-    {
-      prefix: "stars",
-    }
-  );
+  const wallet = await DirectSecp256k1HdWallet.fromMnemonic(config.mnemonic, {
+    prefix: "stars",
+  });
   const client = await SigningCosmWasmClient.connectWithSigner(
-    config["rpcEndpoint"],
+    config.rpcEndpoint,
     wallet
   );
   const executeFee = calculateFee(300_000, gasPrice);
   const result = await client.execute(
-    config["creator"],
-    config["minter"],
+    config.account,
+    config.minter,
     { mintFor: { recipient: recipient } },
     executeFee
   );
