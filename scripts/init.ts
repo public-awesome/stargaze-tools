@@ -74,7 +74,7 @@ async function main() {
       denom: "ustars",
     },
   };
-  console.log(msg);
+  console.log(JSON.stringify(msg, null, 2));
 
   const { contractAddress } = await client.instantiate(
     config.account,
