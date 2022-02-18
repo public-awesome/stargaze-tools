@@ -41,3 +41,5 @@ coverage/
 
 # Config files
 config.js
+
+.env

@@ -19,7 +19,7 @@ async function main() {
   const instantiateFee = calculateFee(500_000, gasPrice);
 
   const msg = {
-    base_token_uri: config.baseTokenURI,
+    base_token_uri: config.baseTokenUri,
     num_tokens: config.numTokens,
     sg721_code_id: config.sg721CodeId,
     sg721_instantiate_msg: {
@@ -27,7 +27,7 @@ async function main() {
       symbol: config.symbol,
       minter: config.account,
       config: {
-        contract_uri: config.contractURI,
+        contract_uri: config.contractUri,
         creator: config.creator,
         royalties: {
           payment_address: config.royaltyAddress,

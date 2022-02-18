@@ -21,11 +21,11 @@ module.exports = {
   description: "An awesome NFT series",
   // The URI containing JSON metadata about your contract
   // Please follow: https://docs.opensea.io/docs/contract-level-metadata
-  contractURI: "ipfs://...",
+  contractUri: "ipfs://...",
 
   //// MINTER CONTRACT ////
   // The base URI to be used to programatically mint tokens
-  baseTokenURI: "",
+  baseTokenUri: "",
   // The number of tokens to mint
   numTokens: 0,
   // The price (in STARS) for your NFTs
