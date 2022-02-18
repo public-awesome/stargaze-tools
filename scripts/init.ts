@@ -18,19 +18,35 @@ async function main() {
   );
   const instantiateFee = calculateFee(500_000, gasPrice);
 
-  const collectionMsg = {
-    name: config["name"],
-    symbol: config["symbol"],
-    // TODO: this is the contract being instantiated, so we won't have a minter here right?
-    minter: config["minter"],
+  const msg = {
+    base_token_uri: config.baseTokenURI,
+    num_tokens: config.numTokens,
+    sg721_code_id: config.sg721CodeId,
+    sg721_instantiate_msg: {
+      name: config.name,
+      symbol: config.symbol,
+      minter: config.account,
+      config: {
+        contract_uri: config.contractURI,
+        creator: config.creator,
+        royalties: {
+          payment_address: config.royaltyAddress,
+          share: config.royaltyShare.toString(),
+        },
+      },
+    },
+    unit_price: {
+      amount: (config.unitPrice * 1000000).toString(),
+      denom: "ustars",
+    },
   };
-  console.log(collectionMsg);
+  console.log(msg);
 
   const { contractAddress } = await client.instantiate(
-    config["creator"],
-    config["contractCodeId"],
-    collectionMsg,
-    config["name"],
+    config.account,
+    config.minterCodeId,
+    msg,
+    config.name,
     instantiateFee
   );
   console.info(`Contract instantiated at: `, contractAddress);
