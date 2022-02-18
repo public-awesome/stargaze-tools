@@ -29,8 +29,8 @@ module.exports = {
   // The URI containing JSON metadata about your contract
   // Please follow: https://docs.opensea.io/docs/contract-level-metadata
   contractURI: "ipfs://...",
-  // The creator's STARS address
-  creator: "stars1...",
+  // Your STARS address
+  account: "stars1...",
   // The address for royalites to go to (may be the same as creator)
   royaltyAddress: "stars1...",
   // Royalty share: 1 = 100%, 0.1 = 10%
