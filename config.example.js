@@ -5,21 +5,14 @@
  */
 
 module.exports = {
+  //// ACCOUNT INFO ////
   // The account seed phrase to use for deployment
   mnemonic:
     "enlist hip relief stomach skate base shallow young switch frequent cry park",
-  // The RPC endpoint to query and send Stargaze transactions to
-  rpcEndpoint: "https://rpc.devnet.publicawesome.dev:443",
-  // The base URI to be used to programatically mint tokens
-  baseTokenURI: "",
-  // The number of tokens to mint
-  numTokens: 0,
-  // The code ID for sg721
-  sg721CodeId: 40,
-  // The code ID for the minter contract
-  minterCodeId: 41,
-  // The price (in STARS) for your NFTs
-  unitPrice: 1,
+  // Your STARS address
+  account: "stars1...",
+
+  //// COLLECTION INFO ////
   // The name of your collection
   name: "Collection Name",
   // The 3-7 letter ticker symbol for your collection
@@ -29,8 +22,16 @@ module.exports = {
   // The URI containing JSON metadata about your contract
   // Please follow: https://docs.opensea.io/docs/contract-level-metadata
   contractURI: "ipfs://...",
-  // Your STARS address
-  account: "stars1...",
+
+  //// MINTER CONTRACT ////
+  // The base URI to be used to programatically mint tokens
+  baseTokenURI: "",
+  // The number of tokens to mint
+  numTokens: 0,
+  // The price (in STARS) for your NFTs
+  unitPrice: 1,
+  // The minter contract address (get this after running yarn run init)
+  minter: "stars1...",
   // The address for royalites to go to (may be the same as creator)
   royaltyAddress: "stars1...",
   // Royalty share: 1 = 100%, 0.1 = 10%
@@ -41,8 +42,18 @@ module.exports = {
   whitelist: ["stars1..", "stars1..."],
   // The date when the whitelist only purchasing period ends and everyone can buy
   whitelistEndTime: "26 Dec 2021 00:00:00 GMT",
+
+  //// API CONFIG ////
+  // The RPC endpoint to query and send Stargaze transactions to
+  rpcEndpoint: "https://rpc.devnet.publicawesome.dev:443",
   // Pinata API Key
   pinataApiKey: "",
   // Pinata Secret Key
   pinataSecretKey: "",
+
+  //// CONTRACT CODE IDs ////
+  // The code ID for sg721
+  sg721CodeId: 40,
+  // The code ID for the minter contract
+  minterCodeId: 41,
 };
