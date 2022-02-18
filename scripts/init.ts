@@ -46,6 +46,10 @@ async function main() {
     throw new Error("Invalid base token URI");
   }
 
+  if (config.numTokens > 10_000) {
+    throw new Error("Too many tokens");
+  }
+
   const instantiateFee = calculateFee(500_000, gasPrice);
 
   const msg = {
