@@ -31,6 +31,8 @@ module.exports = {
   contractURI: "ipfs://...",
   // Your STARS address
   account: "stars1...",
+  // The minter contract address (get this by running yarn run init)
+  minter: "stars1...",
   // The address for royalites to go to (may be the same as creator)
   royaltyAddress: "stars1...",
   // Royalty share: 1 = 100%, 0.1 = 10%
