@@ -6,14 +6,11 @@ const config = require("./config");
 
 async function main() {
   const gasPrice = GasPrice.fromString("0stars");
-  const wallet = await DirectSecp256k1HdWallet.fromMnemonic(
-    config["mnemonic"],
-    {
-      prefix: "stars",
-    }
-  );
+  const wallet = await DirectSecp256k1HdWallet.fromMnemonic(config.mnemonic, {
+    prefix: "stars",
+  });
   const client = await SigningCosmWasmClient.connectWithSigner(
-    config["rpcEndpoint"],
+    config.rpcEndpoint,
     wallet
   );
   const instantiateFee = calculateFee(500_000, gasPrice);
