@@ -4,15 +4,48 @@ import { calculateFee, GasPrice } from "@cosmjs/stargate";
 
 const config = require("./config");
 
+function isValidHttpUrl(uri: string) {
+  let url;
+
+  try {
+    url = new URL(uri);
+  } catch (_) {
+    return false;
+  }
+
+  return url.protocol === "http:" || url.protocol === "https:";
+}
+
+function isValidIpfsUrl(uri: string) {
+  let url;
+
+  try {
+    url = new URL(uri);
+  } catch (_) {
+    return false;
+  }
+
+  return url.protocol === "ipfs:";
+}
+
 async function main() {
   const gasPrice = GasPrice.fromString("0stars");
   const wallet = await DirectSecp256k1HdWallet.fromMnemonic(config.mnemonic, {
     prefix: "stars",
   });
+
+  if (!isValidHttpUrl(config.rpcEndpoint)) {
+    throw new Error("Invalid RPC endpoint");
+  }
   const client = await SigningCosmWasmClient.connectWithSigner(
     config.rpcEndpoint,
     wallet
   );
+
+  if (!isValidIpfsUrl(config.baseTokenUri)) {
+    throw new Error("Invalid base token URI");
+  }
+
   const instantiateFee = calculateFee(500_000, gasPrice);
 
   const msg = {
@@ -25,7 +58,7 @@ async function main() {
       minter: config.account,
       config: {
         contract_uri: config.contractUri,
-        creator: config.creator,
+        creator: config.account,
         royalties: {
           payment_address: config.royaltyAddress,
           share: config.royaltyShare.toString(),
