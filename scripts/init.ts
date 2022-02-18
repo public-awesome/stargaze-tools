@@ -1,22 +1,25 @@
-import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
-import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
-import { calculateFee, GasPrice } from "@cosmjs/stargate";
+import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
+import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
+import { calculateFee, GasPrice } from '@cosmjs/stargate';
 
-const config = require("./config");
+const config = require('./config');
 
 async function main() {
-  const gasPrice = GasPrice.fromString("0stars");
-  const wallet = await DirectSecp256k1HdWallet.fromMnemonic(config.mnemonic, {
-    prefix: "stars",
-  });
+  const gasPrice = GasPrice.fromString('0stars');
+  const wallet = await DirectSecp256k1HdWallet.fromMnemonic(
+    config.mnemonic,
+    {
+      prefix: 'stars',
+    },
+  );
   const client = await SigningCosmWasmClient.connectWithSigner(
     config.rpcEndpoint,
-    wallet
+    wallet,
   );
-  const instantiateFee = calculateFee(500_000, gasPrice);
-
+  const instantiateFee = calculateFee(1_000_000, gasPrice);
+  console.log(config);
   const msg = {
-    base_token_uri: config.baseTokenUri,
+    base_token_uri: config.baseTokenURI,
     num_tokens: config.numTokens,
     sg721_code_id: config.sg721CodeId,
     sg721_instantiate_msg: {
@@ -24,7 +27,7 @@ async function main() {
       symbol: config.symbol,
       minter: config.account,
       config: {
-        contract_uri: config.contractUri,
+        contract_uri: config.contractURI,
         creator: config.creator,
         royalties: {
           payment_address: config.royaltyAddress,
@@ -34,7 +37,7 @@ async function main() {
     },
     unit_price: {
       amount: (config.unitPrice * 1000000).toString(),
-      denom: "ustars",
+      denom: 'ustars',
     },
   };
   console.log(msg);
@@ -44,10 +47,10 @@ async function main() {
     config.minterCodeId,
     msg,
     config.name,
-    instantiateFee
+    instantiateFee,
   );
   console.info(`Contract instantiated at: `, contractAddress);
 }
 
 await main();
-console.info("Done.");
+console.info('Done.');
