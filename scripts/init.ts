@@ -25,7 +25,19 @@ function isValidIpfsUrl(uri: string) {
     return false;
   }
 
-  return url.protocol === "ipfs:";
+  return url.protocol === 'ipfs:';
+}
+
+function isValidAddr(addr: string) {
+  const prefix = 'stars1';
+  const addr_length = 44;
+  if (!addr.startsWith(prefix)) {
+    return false;
+  }
+  if (addr.length != addr_length) {
+    return false;
+  }
+  return true;
 }
 
 async function main() {
@@ -47,7 +59,11 @@ async function main() {
   }
 
   if (config.numTokens > 10_000) {
-    throw new Error("Too many tokens");
+    throw new Error('Too many tokens');
+  }
+
+  if (!isValidAddr(config.minter)) {
+    throw new Error('Invalid minter address');
   }
 
   const instantiateFee = calculateFee(950_000, gasPrice);
