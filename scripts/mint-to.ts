@@ -11,6 +11,7 @@ async function main(recipient: string) {
     const starsAddr = Bech32.encode("stars", data);
     recipient = starsAddr;
   }
+  console.log("recipient: ", recipient);
 
   const gasPrice = GasPrice.fromString("0stars");
   const wallet = await DirectSecp256k1HdWallet.fromMnemonic(config.mnemonic, {
@@ -24,7 +25,7 @@ async function main(recipient: string) {
   const result = await client.execute(
     config.account,
     config.minter,
-    { mintTo: { recipient: recipient } },
+    { mint_to: { recipient: recipient } },
     executeFee,
     "minty fresh",
     coins("100000000", "ustars")

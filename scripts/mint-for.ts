@@ -21,10 +21,13 @@ async function main(tokenId: string, recipient: string) {
     wallet
   );
   const executeFee = calculateFee(300_000, gasPrice);
+  const msg = { mintFor: { tokenId, recipient } };
+  console.log(JSON.stringify(msg, null, 2));
+
   const result = await client.execute(
     config.account,
     config.minter,
-    { mintFor: { tokenId, recipient } },
+    msg,
     executeFee,
     "minty fresh",
     coins("100000000", "ustars")

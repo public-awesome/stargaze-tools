@@ -41,7 +41,7 @@ yarn run init
 ## Mint an NFT
 
 ```sh
-yarn run mint --to [address]
+yarn run mint
 ```
 
 `[address]` can be any Cosmos address. It'll be converted automatically into a Stargaze address.
