@@ -68,7 +68,7 @@ async function mintFor(tokenId: string, recipient: string) {
     const starsAddr = Bech32.encode("stars", data);
     recipient = starsAddr;
   }
-  console.log("Minting token " + tokenId + " for: ", recipient);
+  console.log("Minting token " + tokenId + " for", recipient);
 
   const gasPrice = GasPrice.fromString("0stars");
   const wallet = await DirectSecp256k1HdWallet.fromMnemonic(config.mnemonic, {
@@ -85,7 +85,7 @@ async function mintFor(tokenId: string, recipient: string) {
     config.minter,
     { mint_for: { token_id: Number(tokenId), recipient } },
     executeFee,
-    "minty for",
+    "mint for",
     coins("100000000", "ustars")
   );
   const wasmEvent = result.logs[0].events.find((e) => e.type === "wasm");
