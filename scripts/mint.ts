@@ -1,7 +1,6 @@
 import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
-import { calculateFee, GasPrice } from "@cosmjs/stargate";
-import { Bech32 } from "@cosmjs/encoding";
+import { calculateFee, coins, GasPrice } from "@cosmjs/stargate";
 
 const config = require("./config");
 
@@ -19,7 +18,9 @@ async function main() {
     config.account,
     config.minter,
     { mint: {} },
-    executeFee
+    executeFee,
+    "minty fresh",
+    coins("100000000", "ustars")
   );
   const wasmEvent = result.logs[0].events.find((e) => e.type === "wasm");
   console.info(
