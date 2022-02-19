@@ -106,5 +106,3 @@ if (args.length == 0) {
 } else {
   console.log("Invalid arguments");
 }
-
-console.info("Done.");

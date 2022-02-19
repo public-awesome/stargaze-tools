@@ -81,9 +81,9 @@ async function main() {
     msg.sg721_instantiate_msg.config.royalties = undefined;
   }
 
-  console.log(JSON.stringify(msg, null, 2));
+  // console.log(JSON.stringify(msg, null, 2));
 
-  const { contractAddress } = await client.instantiate(
+  const result = await client.instantiate(
     config.account,
     config.minterCodeId,
     msg,
@@ -91,8 +91,11 @@ async function main() {
     instantiateFee,
     { funds: coins("1000000000", "ustars") }
   );
-  console.info(`Contract instantiated at: `, contractAddress);
+  const wasmEvent = result.logs[0].events.find((e) => e.type === "wasm");
+  console.info(
+    "The `wasm` event emitted by the contract execution:",
+    wasmEvent
+  );
 }
 
 await main();
-console.info("Done.");

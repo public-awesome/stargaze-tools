@@ -30,4 +30,3 @@ async function main(numMints: string) {
 }
 const args = process.argv.slice(6);
 await main(args[0]);
-console.info("Done.");
