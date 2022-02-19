@@ -18,8 +18,6 @@
     "account": "cosmwasm-cli --init scripts/account.ts --code 'process.exit(0)'",
     "init": "cosmwasm-cli --init scripts/init.ts --code 'process.exit(0)'",
     "mint": "cosmwasm-cli --init scripts/mint.ts --code 'process.exit(0)'",
-    "mint-to": "cosmwasm-cli --init scripts/mint-to.ts --code 'process.exit(0)'",
-    "mint-for": "cosmwasm-cli --init scripts/mint-for.ts --code 'process.exit(0)'",
     "load": "cosmwasm-cli --init scripts/load.ts",
     "pinata-upload": "ts-node scripts/pinata-upload.ts"
   }
