@@ -53,7 +53,7 @@ module.exports = {
 
   //// CONTRACT CODE IDs ////
   // The code ID for sg721
-  sg721CodeId: 40,
+  sg721CodeId: 4,
   // The code ID for the minter contract
-  minterCodeId: 41,
+  minterCodeId: 5,
 };
