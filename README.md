@@ -38,7 +38,7 @@ Edit `config.js` with your project configuration.
 yarn run init
 ```
 
-## Mint an NFTs
+## Mint
 
 ### Mint to yourself
 
