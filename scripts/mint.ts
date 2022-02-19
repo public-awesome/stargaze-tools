@@ -20,7 +20,7 @@ async function mintSender() {
     config.minter,
     { mint: {} },
     executeFee,
-    "minty fresh",
+    "mint to sender",
     coins("100000000", "ustars")
   );
   const wasmEvent = result.logs[0].events.find((e) => e.type === "wasm");
@@ -52,7 +52,7 @@ async function mintTo(recipient: string) {
     config.minter,
     { mint_to: { recipient: recipient } },
     executeFee,
-    "minty fresh",
+    "mint to",
     coins("100000000", "ustars")
   );
   const wasmEvent = result.logs[0].events.find((e) => e.type === "wasm");
@@ -85,7 +85,7 @@ async function mintFor(tokenId: string, recipient: string) {
     config.minter,
     { mint_for: { token_id: Number(tokenId), recipient } },
     executeFee,
-    "minty fresh",
+    "minty for",
     coins("100000000", "ustars")
   );
   const wasmEvent = result.logs[0].events.find((e) => e.type === "wasm");
