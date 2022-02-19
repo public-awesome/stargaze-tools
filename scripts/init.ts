@@ -50,7 +50,7 @@ async function main() {
     throw new Error("Too many tokens");
   }
 
-  const instantiateFee = calculateFee(500_000, gasPrice);
+  const instantiateFee = calculateFee(950_000, gasPrice);
 
   const msg = {
     base_token_uri: config.baseTokenUri,
@@ -74,6 +74,13 @@ async function main() {
       denom: "ustars",
     },
   };
+
+  if (!msg.sg721_instantiate_msg.config.royalties) {
+    console.log("Instantiating with royalties");
+  } else {
+    msg.sg721_instantiate_msg.config.royalties = undefined;
+  }
+
   console.log(JSON.stringify(msg, null, 2));
 
   const { contractAddress } = await client.instantiate(
