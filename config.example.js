@@ -45,7 +45,7 @@ module.exports = {
 
   //// API CONFIG ////
   // The RPC endpoint to query and send Stargaze transactions to
-  rpcEndpoint: "https://rpc.devnet.publicawesome.dev:443",
+  rpcEndpoint: "https://rpc.big-bang-1.stargaze-apis.com/",
   // Pinata API Key
   pinataApiKey: "",
   // Pinata Secret Key
