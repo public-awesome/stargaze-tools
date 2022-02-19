@@ -38,13 +38,35 @@ Edit `config.js` with your project configuration.
 yarn run init
 ```
 
-## Mint an NFT
+## Mint
+
+### Mint to yourself
+
+```sh
+yarn run mint
+```
+
+### Mint to an address
 
 ```sh
 yarn run mint --to [address]
 ```
 
 `[address]` can be any Cosmos address. It'll be converted automatically into a Stargaze address.
+
+### Mint a specific NFT to an address
+
+```sh
+yarn run mint --for [token_id] [address]
+```
+
+### Batch mint
+
+Mint `num` NFTs to yourself.
+
+```sh
+yarn run batch-mint [num]
+```
 
 # More documentation
 
