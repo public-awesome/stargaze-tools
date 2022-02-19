@@ -1,6 +1,6 @@
 import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
-import { calculateFee, GasPrice } from "@cosmjs/stargate";
+import { calculateFee, coins, GasPrice } from "@cosmjs/stargate";
 
 const config = require("./config");
 
@@ -47,7 +47,8 @@ async function main() {
     config.minterCodeId,
     msg,
     config.name,
-    instantiateFee
+    instantiateFee,
+    { funds: coins("1000000000", "ustars") }
   );
   console.info(`Contract instantiated at: `, contractAddress);
 }
