@@ -13,7 +13,6 @@ node_modules/
 .DS_Store
 
 # IDE-specific
-.vscode/
 .idea/
 
 # demo mnemonics from cli
