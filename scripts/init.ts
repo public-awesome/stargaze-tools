@@ -1,8 +1,8 @@
-import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
-import { DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
-import { calculateFee, coins, GasPrice } from "@cosmjs/stargate";
+import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
+import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
+import { calculateFee, coins, GasPrice } from '@cosmjs/stargate';
 
-const config = require("./config");
+const config = require('./config');
 
 function isValidHttpUrl(uri: string) {
   let url;
@@ -13,7 +13,7 @@ function isValidHttpUrl(uri: string) {
     return false;
   }
 
-  return url.protocol === "http:" || url.protocol === "https:";
+  return url.protocol === 'http:' || url.protocol === 'https:';
 }
 
 function isValidIpfsUrl(uri: string) {
@@ -25,29 +25,32 @@ function isValidIpfsUrl(uri: string) {
     return false;
   }
 
-  return url.protocol === "ipfs:";
+  return url.protocol === 'ipfs:';
 }
 
 async function main() {
-  const gasPrice = GasPrice.fromString("0stars");
-  const wallet = await DirectSecp256k1HdWallet.fromMnemonic(config.mnemonic, {
-    prefix: "stars",
-  });
+  const gasPrice = GasPrice.fromString('0stars');
+  const wallet = await DirectSecp256k1HdWallet.fromMnemonic(
+    config.mnemonic,
+    {
+      prefix: 'stars',
+    },
+  );
 
   if (!isValidHttpUrl(config.rpcEndpoint)) {
-    throw new Error("Invalid RPC endpoint");
+    throw new Error('Invalid RPC endpoint');
   }
   const client = await SigningCosmWasmClient.connectWithSigner(
     config.rpcEndpoint,
-    wallet
+    wallet,
   );
 
   if (!isValidIpfsUrl(config.baseTokenUri)) {
-    throw new Error("Invalid base token URI");
+    throw new Error('Invalid base token URI');
   }
 
   if (config.numTokens > 10_000) {
-    throw new Error("Too many tokens");
+    throw new Error('Too many tokens');
   }
 
   const instantiateFee = calculateFee(950_000, gasPrice);
@@ -71,12 +74,12 @@ async function main() {
     },
     unit_price: {
       amount: (config.unitPrice * 1000000).toString(),
-      denom: "ustars",
+      denom: 'ustars',
     },
   };
 
   if (!msg.sg721_instantiate_msg.config.royalties) {
-    console.log("Instantiating with royalties");
+    console.log('Instantiating with royalties');
   } else {
     msg.sg721_instantiate_msg.config.royalties = undefined;
   }
@@ -89,12 +92,14 @@ async function main() {
     msg,
     config.name,
     instantiateFee,
-    { funds: coins("1000000000", "ustars") }
+    { funds: coins('1000000000', 'ustars') },
   );
-  const wasmEvent = result.logs[0].events.find((e) => e.type === "wasm");
+  const wasmEvent = result.logs[0].events.find(
+    (e) => e.type === 'wasm',
+  );
   console.info(
-    "The `wasm` event emitted by the contract execution:",
-    wasmEvent
+    'The `wasm` event emitted by the contract execution:',
+    wasmEvent,
   );
 }
 
