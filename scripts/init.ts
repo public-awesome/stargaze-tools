@@ -53,6 +53,9 @@ async function main() {
     throw new Error('Too many tokens');
   }
 
+  const whitelist =
+    config.whitelist.length > 0 ? config.whitelist : null;
+
   const instantiateFee = calculateFee(950_000, gasPrice);
 
   const msg = {
@@ -72,6 +75,7 @@ async function main() {
         },
       },
     },
+    whitelist_addresses: whitelist,
     unit_price: {
       amount: (config.unitPrice * 1000000).toString(),
       denom: 'ustars',
