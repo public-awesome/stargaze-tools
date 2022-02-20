@@ -55,8 +55,6 @@ async function updateWhitelist(add: string, remove: string) {
   console.log(res);
 }
 
-// yarn run add-whitelist ['stars10w5eulj60qp3cfqa0hkmke78qdy2feq6x9xdmd'] ['stars1c0d5qjavfkd7y4rcs9wa3s8w8l6e2dt58elscj']
-
 const args = process.argv.slice(6);
 console.log(args);
 if (args.length == 0) {
