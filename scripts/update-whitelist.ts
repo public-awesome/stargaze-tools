@@ -35,7 +35,7 @@ async function updateWhitelist(add: string, remove: string) {
     config.rpcEndpoint,
     wallet,
   );
-  const executeFee = calculateFee(300_000, gasPrice);
+  const executeFee = calculateFee(600_000, gasPrice);
   const result = await client.execute(
     config.account,
     config.minter,
