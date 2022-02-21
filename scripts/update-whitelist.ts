@@ -56,17 +56,12 @@ async function updateWhitelist(add: string, remove: string) {
 }
 
 const args = process.argv.slice(6);
-console.log(args);
 if (args.length == 0) {
-  console.log(
-    'Invalid arguments. did you mean --add, --remove, or --update ?',
-  );
+  console.log('Invalid arguments. did you mean --add or --remove');
 } else if (args.length == 2 && args[0] == '--add') {
   await updateWhitelist(args[1], '');
 } else if (args.length == 2 && args[0] == '--remove') {
   await updateWhitelist('', args[1]);
-} else if (args.length == 3 && args[0] == '--update') {
-  await updateWhitelist(args[1], args[2]);
 } else {
   console.log('Invalid arguments');
 }
