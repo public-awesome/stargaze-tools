@@ -3,6 +3,7 @@ import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
 import { calculateFee, coins, GasPrice } from '@cosmjs/stargate';
 import { Bech32 } from '@cosmjs/encoding';
 
+const addrHelper = require('./addrHelper');
 const config = require('./config');
 
 async function mintSender() {
@@ -73,12 +74,8 @@ async function mintTo(recipient: string) {
 }
 
 async function mintFor(tokenId: string, recipient: string) {
-  if (!recipient.startsWith('stars')) {
-    const { data } = Bech32.decode(recipient);
-    const starsAddr = Bech32.encode('stars', data);
-    recipient = starsAddr;
-  }
-  console.log('Minting token ' + tokenId + ' for', recipient);
+  let stars_recipient = addrHelper.to_stars_addr(recipient);
+  console.log('Minting token ' + tokenId + ' for', stars_recipient);
 
   const gasPrice = GasPrice.fromString('0stars');
   const wallet = await DirectSecp256k1HdWallet.fromMnemonic(
@@ -96,7 +93,12 @@ async function mintFor(tokenId: string, recipient: string) {
   const result = await client.execute(
     config.account,
     config.minter,
-    { mint_for: { token_id: Number(tokenId), recipient } },
+    {
+      mint_for: {
+        token_id: Number(tokenId),
+        recipient: stars_recipient,
+      },
+    },
     executeFee,
     'mint for',
     coins('100000000', 'ustars'),
