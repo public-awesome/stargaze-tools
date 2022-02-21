@@ -2,6 +2,7 @@ import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
 import { calculateFee, coins, GasPrice } from '@cosmjs/stargate';
 
+const addrHelper = require('./addrHelper');
 const config = require('./config');
 
 function isValidHttpUrl(uri: string) {
@@ -54,7 +55,14 @@ async function main() {
   }
 
   const whitelist =
-    config.whitelist.length > 0 ? config.whitelist : null;
+    config.whitelist.length > 0
+      ? (function (tmp_whitelist: Array<string> = config.whitelist) {
+          tmp_whitelist.forEach(function (addr, index) {
+            tmp_whitelist[index] = addrHelper.to_stars_addr(addr);
+          });
+          return tmp_whitelist;
+        })()
+      : null;
 
   const instantiateFee = calculateFee(950_000, gasPrice);
 
@@ -87,8 +95,6 @@ async function main() {
   } else {
     msg.sg721_instantiate_msg.config.royalties = undefined;
   }
-
-  // console.log(JSON.stringify(msg, null, 2));
 
   const result = await client.instantiate(
     config.account,
