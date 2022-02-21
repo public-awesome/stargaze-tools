@@ -5,15 +5,22 @@ import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
 import { calculateFee, coins, GasPrice } from '@cosmjs/stargate';
 
+const addrHelper = require('./addrHelper');
 const config = require('./config');
 
 async function updateWhitelist(add: string, remove: string) {
   const add_addresses = add == '' ? null : add.split(',');
   const remove_addresses = remove == '' ? null : remove.split(',');
   if (add_addresses != null) {
+    add_addresses.forEach(function (addr, index) {
+      add_addresses[index] = addrHelper.to_stars_addr(addr);
+    });
     console.log('add addresses: ', add_addresses.join(','));
   }
   if (remove_addresses != null) {
+    remove_addresses.forEach(function (addr, index) {
+      remove_addresses[index] = addrHelper.to_stars_addr(addr);
+    });
     console.log('remove addresses: ', remove_addresses.join(','));
   }
 
