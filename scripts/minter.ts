@@ -8,6 +8,18 @@ const NEW_COLLECTION_FEE = coins('1000000000', 'ustars');
 const gasPrice = GasPrice.fromString('0ustars');
 const executeFee = calculateFee(300_000, gasPrice);
 
+export declare type Expiration = {
+  readonly at_time: string;
+};
+
+function isValidHttpUrl(uri: string) {
+  let url;
+
+  try {
+    url = new URL(uri);
+  } catch (_) {
+    return false;
+  }
 const wallet = await DirectSecp256k1HdWallet.fromMnemonic(config.mnemonic, {
   prefix: 'stars',
 });
@@ -51,6 +63,27 @@ async function init() {
         })()
       : null;
 
+  const startTime: Expiration | null =
+    config.startTime == ''
+      ? null
+      : {
+          at_time:
+            // time expressed in nanoseconds (1 millionth of a millisecond)
+            (
+              new Date(config.startTime).getTime() * 1_000_000
+            ).toString(),
+        };
+
+  const whitelistEndTime: Expiration | null =
+    config.whitelistEndTime == ''
+      ? null
+      : {
+          // time expressed in nanoseconds (1 millionth of a millisecond)
+          at_time: (
+            new Date(config.whitelistEndTime).getTime() * 1_000_000
+          ).toString(),
+        };
+
   const instantiateFee = calculateFee(950_000, gasPrice);
 
   const msg = {
@@ -71,6 +104,8 @@ async function init() {
       },
     },
     whitelist_addresses: whitelist,
+    whitelist_expiration: whitelistEndTime,
+    start_time: startTime,
     unit_price: {
       amount: (config.unitPrice * 1000000).toString(),
       denom: 'ustars',
