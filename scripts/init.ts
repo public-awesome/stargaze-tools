@@ -79,6 +79,16 @@ async function main() {
             ).toString(),
         };
 
+  const whitelistEndTime: Expiration | null =
+    config.whitelistEndTime == ''
+      ? null
+      : {
+          // time expressed in nanoseconds (1 millionth of a millisecond)
+          at_time: (
+            new Date(config.whitelistEndTime).getTime() * 1_000_000
+          ).toString(),
+        };
+
   const instantiateFee = calculateFee(950_000, gasPrice);
 
   const msg = {
@@ -99,6 +109,7 @@ async function main() {
       },
     },
     whitelist_addresses: whitelist,
+    whitelist_expiration: whitelistEndTime,
     start_time: startTime,
     unit_price: {
       amount: (config.unitPrice * 1000000).toString(),
