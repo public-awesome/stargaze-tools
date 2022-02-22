@@ -5,6 +5,17 @@ import { calculateFee, coins, GasPrice } from '@cosmjs/stargate';
 const addrHelper = require('./addrHelper');
 const config = require('./config');
 
+export declare type Expiration =
+  | {
+      readonly at_height: number;
+    }
+  | {
+      readonly at_time: number;
+    }
+  | {
+      readonly never: Record<any, never>;
+    };
+
 function isValidHttpUrl(uri: string) {
   let url;
 
@@ -64,6 +75,15 @@ async function main() {
         })()
       : null;
 
+  const start_time: Expiration | null =
+    config.startTime == ''
+      ? null
+      : {
+          at_time: parseInt(
+            (new Date(config.startTime).getTime() / 1000).toFixed(0),
+          ),
+        };
+
   const instantiateFee = calculateFee(950_000, gasPrice);
 
   const msg = {
@@ -84,6 +104,7 @@ async function main() {
       },
     },
     whitelist_addresses: whitelist,
+    start_time: start_time,
     unit_price: {
       amount: (config.unitPrice * 1000000).toString(),
       denom: 'ustars',
