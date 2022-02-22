@@ -1,22 +1,10 @@
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
 import { calculateFee, coins, GasPrice } from '@cosmjs/stargate';
-import { toStars } from '../src/utils';
+import { toStars, isValidHttpUrl } from '../src/utils';
 
 const config = require('./config');
 const NEW_COLLECTION_FEE = coins('1000000000', 'ustars');
-
-function isValidHttpUrl(uri: string) {
-  let url;
-
-  try {
-    url = new URL(uri);
-  } catch (_) {
-    return false;
-  }
-
-  return url.protocol === 'http:' || url.protocol === 'https:';
-}
 
 function isValidIpfsUrl(uri: string) {
   let url;
