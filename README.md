@@ -1,14 +1,14 @@
-# Stargaze Mission Control
+# Stargaze Tools
 
 ## WORK IN PROGRESS -- NOT READY FOR PRODUCTION USE YET
 
-Mission control is a set of tools for launching a project and minting on Stargaze.
+Stargaze Tools is a set of tools for launching a project and minting on Stargaze.
 
 ## Setup project
 
 ```sh
-git clone https://github.com/public-awesome/stargaze-nft
-cd stargaze-nft
+git clone https://github.com/public-awesome/stargaze-tools
+cd stargaze-tools
 yarn install
 ```
 
@@ -71,3 +71,7 @@ yarn run batch-mint [num]
 # More documentation
 
 A more comprehensive guide is available at [Stargaze Docs](https://docs.stargaze.zone/guides/readme).
+
+# Disclaimer
+
+STARGAZE TOOLING IS PROVIDED “AS IS”, AT YOUR OWN RISK, AND WITHOUT WARRANTIES OF ANY KIND. No developer or entity involved in creating Stargaze Tooling or smart contracts will be liable for any claims or damages whatsoever associated with your use, inability to use, or your interaction with other users of Stargaze, including any direct, indirect, incidental, special, exemplary, punitive or consequential damages, or loss of profits, cryptocurrencies, tokens, or anything else of value. Although Public Awesome, LLC and the Stargaze Foundation developed the initial code for Stargaze, it does not own or control the Stargaze protocol, which is run by a decentralized validator set.

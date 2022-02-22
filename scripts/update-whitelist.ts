@@ -3,37 +3,34 @@
 
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
-import { calculateFee, coins, GasPrice } from '@cosmjs/stargate';
+import { calculateFee, GasPrice } from '@cosmjs/stargate';
+import { toStars } from '../src/utils';
 
-const addrHelper = require('./addrHelper');
 const config = require('./config');
 
 async function updateWhitelist(add: string, remove: string) {
-  const add_addresses = add == '' ? null : add.split(',');
-  const remove_addresses = remove == '' ? null : remove.split(',');
-  if (add_addresses != null) {
-    add_addresses.forEach(function (addr, index) {
-      add_addresses[index] = addrHelper.to_stars_addr(addr);
+  const addAddresses = add == '' ? null : add.split(',');
+  const removeAddresses = remove == '' ? null : remove.split(',');
+  if (addAddresses != null) {
+    addAddresses.forEach(function (addr, index) {
+      addAddresses[index] = toStars(addr);
     });
-    console.log('add addresses: ', add_addresses.join(','));
+    console.log('add addresses: ', addAddresses.join(','));
   }
-  if (remove_addresses != null) {
-    remove_addresses.forEach(function (addr, index) {
-      remove_addresses[index] = addrHelper.to_stars_addr(addr);
+  if (removeAddresses != null) {
+    removeAddresses.forEach(function (addr, index) {
+      removeAddresses[index] = toStars(addr);
     });
-    console.log('remove addresses: ', remove_addresses.join(','));
+    console.log('remove addresses: ', removeAddresses.join(','));
   }
 
   const gasPrice = GasPrice.fromString('0stars');
-  const wallet = await DirectSecp256k1HdWallet.fromMnemonic(
-    config.mnemonic,
-    {
-      prefix: 'stars',
-    },
-  );
+  const wallet = await DirectSecp256k1HdWallet.fromMnemonic(config.mnemonic, {
+    prefix: 'stars',
+  });
   const client = await SigningCosmWasmClient.connectWithSigner(
     config.rpcEndpoint,
-    wallet,
+    wallet
   );
   const executeFee = calculateFee(600_000, gasPrice);
   const result = await client.execute(
@@ -41,19 +38,17 @@ async function updateWhitelist(add: string, remove: string) {
     config.minter,
     {
       update_whitelist: {
-        add_addresses: add_addresses,
-        remove_addresses: remove_addresses,
+        add_addresses: addAddresses,
+        remove_addresses: removeAddresses,
       },
     },
     executeFee,
-    'update whitelist',
+    'update whitelist'
   );
-  const wasmEvent = result.logs[0].events.find(
-    (e) => e.type === 'wasm',
-  );
+  const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');
   console.info(
     'The `wasm` event emitted by the contract execution:',
-    wasmEvent,
+    wasmEvent
   );
 
   let res = await client.queryContractSmart(config.minter, {

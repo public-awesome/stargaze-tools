@@ -1,9 +1,10 @@
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
 import { calculateFee, coins, GasPrice } from '@cosmjs/stargate';
+import { toStars } from '../src/utils';
 
-const addrHelper = require('./addrHelper');
 const config = require('./config');
+const MINT_FEE = coins('100000000', 'ustars');
 
 export declare type Expiration = {
   readonly at_time: string;
@@ -34,20 +35,17 @@ function isValidIpfsUrl(uri: string) {
 }
 
 async function main() {
-  const gasPrice = GasPrice.fromString('0stars');
-  const wallet = await DirectSecp256k1HdWallet.fromMnemonic(
-    config.mnemonic,
-    {
-      prefix: 'stars',
-    },
-  );
+  const gasPrice = GasPrice.fromString('0ustars');
+  const wallet = await DirectSecp256k1HdWallet.fromMnemonic(config.mnemonic, {
+    prefix: 'stars',
+  });
 
   if (!isValidHttpUrl(config.rpcEndpoint)) {
     throw new Error('Invalid RPC endpoint');
   }
   const client = await SigningCosmWasmClient.connectWithSigner(
     config.rpcEndpoint,
-    wallet,
+    wallet
   );
 
   if (!isValidIpfsUrl(config.baseTokenUri)) {
@@ -60,11 +58,11 @@ async function main() {
 
   const whitelist =
     config.whitelist.length > 0
-      ? (function (tmp_whitelist: Array<string> = config.whitelist) {
-          tmp_whitelist.forEach(function (addr, index) {
-            tmp_whitelist[index] = addrHelper.to_stars_addr(addr);
+      ? (function (tmpWhitelist: Array<string> = config.whitelist) {
+          tmpWhitelist.forEach(function (addr, index) {
+            tmpWhitelist[index] = toStars(addr);
           });
-          return tmp_whitelist;
+          return tmpWhitelist;
         })()
       : null;
 
@@ -129,14 +127,12 @@ async function main() {
     msg,
     config.name,
     instantiateFee,
-    { funds: coins('1000000000', 'ustars') },
+    { funds: MINT_FEE }
   );
-  const wasmEvent = result.logs[0].events.find(
-    (e) => e.type === 'wasm',
-  );
+  const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');
   console.info(
     'The `wasm` event emitted by the contract execution:',
-    wasmEvent,
+    wasmEvent
   );
 }
 
