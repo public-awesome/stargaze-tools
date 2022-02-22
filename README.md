@@ -7,8 +7,8 @@ Stargaze Tools is a set of tools for launching a project and minting on Stargaze
 ## Setup project
 
 ```sh
-git clone https://github.com/public-awesome/stargaze-nft
-cd stargaze-nft
+git clone https://github.com/public-awesome/stargaze-tools
+cd stargaze-tools
 yarn install
 ```
 
