@@ -1,22 +1,22 @@
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
 import { calculateFee, coins, GasPrice } from '@cosmjs/stargate';
-import { Bech32 } from '@cosmjs/encoding';
+import { toStars } from '../src/utils';
 
-const addrHelper = require('./addrHelper');
 const config = require('./config');
+const MINT_FEE = coins('100000000', 'ustars');
+const gasPrice = GasPrice.fromString('0ustars');
+const executeFee = calculateFee(300_000, gasPrice);
+
+const wallet = await DirectSecp256k1HdWallet.fromMnemonic(config.mnemonic, {
+  prefix: 'stars',
+});
+const client = await SigningCosmWasmClient.connectWithSigner(
+  config.rpcEndpoint,
+  wallet
+);
 
 async function mintSender() {
-  const gasPrice = GasPrice.fromString('0stars');
-  const wallet = await DirectSecp256k1HdWallet.fromMnemonic(config.mnemonic, {
-    prefix: 'stars',
-  });
-  const client = await SigningCosmWasmClient.connectWithSigner(
-    config.rpcEndpoint,
-    wallet
-  );
-  const executeFee = calculateFee(300_000, gasPrice);
-
   const msg = { mint: {} };
   console.log(msg);
 
@@ -26,7 +26,7 @@ async function mintSender() {
     msg,
     executeFee,
     'mint to sender',
-    coins('100000000', 'ustars')
+    MINT_FEE
   );
   const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');
   console.info(
@@ -36,24 +36,10 @@ async function mintSender() {
 }
 
 async function mintTo(recipient: string) {
-  if (!recipient.startsWith('stars')) {
-    const { data } = Bech32.decode(recipient);
-    const starsAddr = Bech32.encode('stars', data);
-    recipient = starsAddr;
-  }
-  console.log('Minting to: ', recipient);
+  const starsRecipient = toStars(recipient);
+  console.log('Minting to: ', starsRecipient);
 
-  const gasPrice = GasPrice.fromString('0stars');
-  const wallet = await DirectSecp256k1HdWallet.fromMnemonic(config.mnemonic, {
-    prefix: 'stars',
-  });
-  const client = await SigningCosmWasmClient.connectWithSigner(
-    config.rpcEndpoint,
-    wallet
-  );
-  const executeFee = calculateFee(300_000, gasPrice);
-
-  const msg = { mint_to: { recipient: recipient } };
+  const msg = { mint_to: { recipient: starsRecipient } };
   console.log(msg);
 
   const result = await client.execute(
@@ -62,7 +48,7 @@ async function mintTo(recipient: string) {
     msg,
     executeFee,
     'mint to',
-    coins('100000000', 'ustars')
+    MINT_FEE
   );
   const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');
   console.info(
@@ -72,18 +58,8 @@ async function mintTo(recipient: string) {
 }
 
 async function mintFor(tokenId: string, recipient: string) {
-  let starsRecipient = addrHelper.to_stars_addr(recipient);
+  const starsRecipient = toStars(recipient);
   console.log('Minting token ' + tokenId + ' for', starsRecipient);
-
-  const gasPrice = GasPrice.fromString('0stars');
-  const wallet = await DirectSecp256k1HdWallet.fromMnemonic(config.mnemonic, {
-    prefix: 'stars',
-  });
-  const client = await SigningCosmWasmClient.connectWithSigner(
-    config.rpcEndpoint,
-    wallet
-  );
-  const executeFee = calculateFee(300_000, gasPrice);
 
   const msg = {
     mint_for: { token_id: Number(tokenId), recipient: starsRecipient },
@@ -96,7 +72,7 @@ async function mintFor(tokenId: string, recipient: string) {
     msg,
     executeFee,
     'mint for',
-    coins('100000000', 'ustars')
+    MINT_FEE
   );
   const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');
   console.info(
@@ -106,7 +82,7 @@ async function mintFor(tokenId: string, recipient: string) {
 }
 
 const args = process.argv.slice(6);
-console.log(args);
+// console.log(args);
 if (args.length == 0) {
   await mintSender();
 } else if (args.length == 2 && args[0] == '--to') {
