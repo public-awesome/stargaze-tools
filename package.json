@@ -20,7 +20,6 @@
     "mint": "cosmwasm-cli --init scripts/mint.ts --code 'process.exit(0)'",
     "batch-mint": "cosmwasm-cli --init scripts/mint-batch.ts --code 'process.exit(0)'",
     "whitelist": "cosmwasm-cli --init scripts/whitelist.ts --code 'process.exit(0)'",
-    "update-whitelist": "cosmwasm-cli --init scripts/update-whitelist.ts --code 'process.exit(0)'",
     "load": "cosmwasm-cli --init scripts/load.ts",
     "pinata-upload": "ts-node scripts/pinata-upload.ts"
   }

@@ -5,18 +5,16 @@ import { toStars, isValidHttpUrl } from '../src/utils';
 
 const config = require('./config');
 const gasPrice = GasPrice.fromString('0ustars');
+
 const wallet = await DirectSecp256k1HdWallet.fromMnemonic(config.mnemonic, {
   prefix: 'stars',
 });
-if (!isValidHttpUrl(config.rpcEndpoint)) {
-  throw new Error('Invalid RPC endpoint');
-}
 const client = await SigningCosmWasmClient.connectWithSigner(
   config.rpcEndpoint,
   wallet
 );
 
-async function main() {
+async function init() {
   const whitelist =
     config.whitelist.length > 0
       ? (function (tmpWhitelist: Array<string> = config.whitelist) {
@@ -48,4 +46,46 @@ async function main() {
   );
 }
 
-await main();
+async function add(add: string) {
+  const addAddresses = add == '' ? null : add.split(',');
+  if (addAddresses != null) {
+    addAddresses.forEach(function (addr, index) {
+      addAddresses[index] = toStars(addr);
+    });
+    console.log('add addresses: ', addAddresses.join(','));
+  }
+
+  const executeFee = calculateFee(600_000, gasPrice);
+  const result = await client.execute(
+    config.account,
+    config.minter,
+    {
+      update_whitelist: {
+        add_addresses: addAddresses,
+        remove_addresses: [],
+      },
+    },
+    executeFee,
+    'update whitelist'
+  );
+  const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');
+  console.info(
+    'The `wasm` event emitted by the contract execution:',
+    wasmEvent
+  );
+
+  let res = await client.queryContractSmart(config.whitelist, {
+    members: {},
+  });
+  console.log(res);
+}
+
+const args = process.argv.slice(6);
+// console.log(args);
+if (args.length == 0) {
+  await init();
+} else if (args.length == 2 && args[0] == '--add') {
+  await add(args[1]);
+} else {
+  console.log('Invalid arguments');
+}
