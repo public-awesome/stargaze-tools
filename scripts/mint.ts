@@ -72,8 +72,8 @@ async function mintTo(recipient: string) {
 }
 
 async function mintFor(tokenId: string, recipient: string) {
-  let stars_recipient = addrHelper.to_stars_addr(recipient);
-  console.log('Minting token ' + tokenId + ' for', stars_recipient);
+  let starsRecipient = addrHelper.to_stars_addr(recipient);
+  console.log('Minting token ' + tokenId + ' for', starsRecipient);
 
   const gasPrice = GasPrice.fromString('0stars');
   const wallet = await DirectSecp256k1HdWallet.fromMnemonic(config.mnemonic, {
@@ -85,7 +85,9 @@ async function mintFor(tokenId: string, recipient: string) {
   );
   const executeFee = calculateFee(300_000, gasPrice);
 
-  const msg = { mint_for: { token_id: Number(tokenId), recipient } };
+  const msg = {
+    mint_for: { token_id: Number(tokenId), recipient: starsRecipient },
+  };
   console.log(msg);
 
   const result = await client.execute(
