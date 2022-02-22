@@ -1,22 +1,24 @@
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
 import { calculateFee, coins, GasPrice } from '@cosmjs/stargate';
-import { toStars } from '../src/utils';
+import { toStars, isValidHttpUrl } from '../src/utils';
 
 const config = require('./config');
 const NEW_COLLECTION_FEE = coins('1000000000', 'ustars');
+const gasPrice = GasPrice.fromString('0ustars');
+const executeFee = calculateFee(300_000, gasPrice);
 
-function isValidHttpUrl(uri: string) {
-  let url;
+const wallet = await DirectSecp256k1HdWallet.fromMnemonic(config.mnemonic, {
+  prefix: 'stars',
+});
 
-  try {
-    url = new URL(uri);
-  } catch (_) {
-    return false;
-  }
-
-  return url.protocol === 'http:' || url.protocol === 'https:';
+if (!isValidHttpUrl(config.rpcEndpoint)) {
+  throw new Error('Invalid RPC endpoint');
 }
+const client = await SigningCosmWasmClient.connectWithSigner(
+  config.rpcEndpoint,
+  wallet
+);
 
 function isValidIpfsUrl(uri: string) {
   let url;
@@ -30,20 +32,7 @@ function isValidIpfsUrl(uri: string) {
   return url.protocol === 'ipfs:';
 }
 
-async function main() {
-  const gasPrice = GasPrice.fromString('0ustars');
-  const wallet = await DirectSecp256k1HdWallet.fromMnemonic(config.mnemonic, {
-    prefix: 'stars',
-  });
-
-  if (!isValidHttpUrl(config.rpcEndpoint)) {
-    throw new Error('Invalid RPC endpoint');
-  }
-  const client = await SigningCosmWasmClient.connectWithSigner(
-    config.rpcEndpoint,
-    wallet
-  );
-
+async function init() {
   if (!isValidIpfsUrl(config.baseTokenUri)) {
     throw new Error('Invalid base token URI');
   }
@@ -109,4 +98,32 @@ async function main() {
   );
 }
 
-await main();
+async function setWhitelist(whitelist: string) {
+  console.log('Setting whitelist contract: ', whitelist);
+
+  const msg = { set_whitelist: { whitelist } };
+  console.log(msg);
+
+  const result = await client.execute(
+    config.account,
+    config.minter,
+    msg,
+    executeFee,
+    'set whitelist'
+  );
+  const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');
+  console.info(
+    'The `wasm` event emitted by the contract execution:',
+    wasmEvent
+  );
+}
+
+const args = process.argv.slice(6);
+// console.log(args);
+if (args.length == 0) {
+  await init();
+} else if (args.length == 2 && args[0] == '--whitelist') {
+  await setWhitelist(args[1]);
+} else {
+  console.log('Invalid arguments');
+}
