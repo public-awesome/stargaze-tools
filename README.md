@@ -35,7 +35,7 @@ Edit `config.js` with your project configuration.
 ## Initialize an NFT minting contract
 
 ```sh
-yarn run init
+yarn run minter
 ```
 
 ## Mint
