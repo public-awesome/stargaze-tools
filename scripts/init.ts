@@ -4,7 +4,7 @@ import { calculateFee, coins, GasPrice } from '@cosmjs/stargate';
 import { toStars } from '../src/utils';
 
 const config = require('./config');
-const MINT_FEE = coins('100000000', 'ustars');
+const NEW_COLLECTION_FEE = coins('1000000000', 'ustars');
 
 function isValidHttpUrl(uri: string) {
   let url;
@@ -100,7 +100,7 @@ async function main() {
     msg,
     config.name,
     instantiateFee,
-    { funds: MINT_FEE }
+    { funds: NEW_COLLECTION_FEE }
   );
   const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');
   console.info(
