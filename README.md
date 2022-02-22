@@ -68,6 +68,26 @@ Mint `num` NFTs to yourself.
 yarn run batch-mint [num]
 ```
 
+## Whitelist
+
+Instantiate a whitelist contract:
+
+```sh
+yarn run whitelist
+```
+
+The output of the above command should give you a whitelist contract address. Edit `config.js` and update the `whitelist` field with this value. Next, set this address in your minter contract with:
+
+```sh
+yarn run minter --whitelist [whitelist_address]
+```
+
+To add addresses to the whitelist, use:
+
+```sh
+yarn run whitelist --add [stars1..., stars2..., etc.]
+```
+
 # More documentation
 
 A more comprehensive guide is available at [Stargaze Docs](https://docs.stargaze.zone/guides/readme).
