@@ -30,7 +30,7 @@ async function init() {
 
   const msg = {
     members: whitelist,
-    end_time: config.endTime,
+    end_time: config.whitelistEndTime,
   };
 
   const result = await client.instantiate(
