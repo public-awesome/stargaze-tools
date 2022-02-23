@@ -3,7 +3,7 @@ import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
 import { calculateFee, coins, GasPrice } from '@cosmjs/stargate';
 
 const config = require('./config');
-const { toStars, isValidHttpUrl } = require('./src/utils');
+const { isValidHttpUrl } = require('./src/utils');
 
 const NEW_COLLECTION_FEE = coins('1000000000', 'ustars');
 const gasPrice = GasPrice.fromString('0ustars');
@@ -37,6 +37,15 @@ function isValidIpfsUrl(uri: string) {
   return url.protocol === 'ipfs:';
 }
 
+function clean(obj: any) {
+  for (var propName in obj) {
+    if (obj[propName] === null || obj[propName] === undefined) {
+      delete obj[propName];
+    }
+  }
+  return obj;
+}
+
 async function init() {
   if (!isValidIpfsUrl(config.baseTokenUri)) {
     throw new Error('Invalid base token URI');
@@ -46,15 +55,9 @@ async function init() {
     throw new Error('Too many tokens');
   }
 
-  const whitelist =
-    config.whitelist.length > 0
-      ? (function (tmpWhitelist: Array<string> = config.whitelist) {
-          tmpWhitelist.forEach(function (addr, index) {
-            tmpWhitelist[index] = toStars(addr);
-          });
-          return tmpWhitelist;
-        })()
-      : null;
+  if (!isValidHttpUrl(config.contractUri)) {
+    throw new Error('ContractUri is required');
+  }
 
   const startTime: Expiration | null =
     config.startTime == ''
@@ -65,19 +68,9 @@ async function init() {
             (new Date(config.startTime).getTime() * 1_000_000).toString(),
         };
 
-  const whitelistEndTime: Expiration | null =
-    config.whitelistEndTime == ''
-      ? null
-      : {
-          // time expressed in nanoseconds (1 millionth of a millisecond)
-          at_time: (
-            new Date(config.whitelistEndTime).getTime() * 1_000_000
-          ).toString(),
-        };
-
   const instantiateFee = calculateFee(950_000, gasPrice);
 
-  const msg = {
+  const tempMsg = {
     base_token_uri: config.baseTokenUri,
     num_tokens: config.numTokens,
     sg721_code_id: config.sg721CodeId,
@@ -89,13 +82,12 @@ async function init() {
         contract_uri: config.contractUri,
         creator: config.account,
         royalties: {
-          payment_address: config.royaltyAddress,
+          payment_address: config.royaltyPaymentAddress,
           share: config.royaltyShare,
         },
       },
     },
-    whitelist_addresses: whitelist,
-    whitelist_expiration: whitelistEndTime,
+    whitelist: config.whitelistContract,
     start_time: startTime,
     unit_price: {
       amount: (config.unitPrice * 1000000).toString(),
@@ -103,11 +95,15 @@ async function init() {
     },
   };
 
-  if (!msg.sg721_instantiate_msg.config.royalties) {
-    console.log('Instantiating with royalties');
-  } else {
-    msg.sg721_instantiate_msg.config.royalties = undefined;
+  if (
+    tempMsg.sg721_instantiate_msg.config.royalties.payment_address ===
+      undefined &&
+    tempMsg.sg721_instantiate_msg.config.royalties.share === undefined
+  ) {
+    tempMsg.sg721_instantiate_msg.config.royalties = null;
   }
+  const msg = clean(tempMsg);
+  console.log(JSON.stringify(msg, null, 2));
 
   const result = await client.instantiate(
     config.account,
