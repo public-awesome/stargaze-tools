@@ -19,6 +19,8 @@ module.exports = {
   symbol: 'SYM',
   // Project description
   description: 'An awesome NFT series',
+  // Path to image to use as the main image for the collection
+  image: 'images/1.png',
   // The URI containing JSON metadata about your contract
   // Please follow: https://docs.opensea.io/docs/contract-level-metadata
   contractUri: 'ipfs://...',
@@ -36,7 +38,7 @@ module.exports = {
   // The address for royalites to go to (may be the same as creator)
   royaltyAddress: 'stars1...',
   // Royalty share: 1 = 100%, 0.1 = 10%
-  royaltyShare: '0.5',
+  royaltyShare: '0.1',
   // The date when the sale goes live
   // If whitelist is enabled, only whitelisted addresses will be able to purchase
   startTime: '25 Dec 2021 00:00:00 GMT',
