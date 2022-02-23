@@ -19,6 +19,8 @@ module.exports = {
   symbol: 'SYM',
   // Project description
   description: 'An awesome NFT series',
+  // Path to image to use as the main image for the collection
+  image: 'images/1.png',
   // The URI containing JSON metadata about your contract
   // Please follow: https://docs.opensea.io/docs/contract-level-metadata
   contractUri: 'ipfs://...',
