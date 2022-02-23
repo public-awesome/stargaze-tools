@@ -29,9 +29,9 @@ module.exports = {
   // The base URI to be used to programatically mint tokens
   baseTokenUri: '',
   // The number of tokens to mint
-  numTokens: 0,
-  // The price (in STARS) for your NFTs
-  unitPrice: 1,
+  numTokens: 1,
+  // The price (in STARS) for your NFTs (minimum 100 STARS)
+  unitPrice: 100,
   // The minter contract address
   // Get this after running `yarn run init`
   minter: 'stars1...',

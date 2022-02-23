@@ -1,9 +1,10 @@
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
 import { calculateFee, coins, GasPrice } from '@cosmjs/stargate';
-import { toStars, isValidHttpUrl } from '../src/utils';
 
 const config = require('./config');
+const { toStars, isValidHttpUrl } = require('./src/utils');
+
 const NEW_COLLECTION_FEE = coins('1000000000', 'ustars');
 const gasPrice = GasPrice.fromString('0ustars');
 const executeFee = calculateFee(300_000, gasPrice);
@@ -12,14 +13,6 @@ export declare type Expiration = {
   readonly at_time: string;
 };
 
-function isValidHttpUrl(uri: string) {
-  let url;
-
-  try {
-    url = new URL(uri);
-  } catch (_) {
-    return false;
-  }
 const wallet = await DirectSecp256k1HdWallet.fromMnemonic(config.mnemonic, {
   prefix: 'stars',
 });
@@ -69,9 +62,7 @@ async function init() {
       : {
           at_time:
             // time expressed in nanoseconds (1 millionth of a millisecond)
-            (
-              new Date(config.startTime).getTime() * 1_000_000
-            ).toString(),
+            (new Date(config.startTime).getTime() * 1_000_000).toString(),
         };
 
   const whitelistEndTime: Expiration | null =
