@@ -55,15 +55,9 @@ async function init() {
     throw new Error('Too many tokens');
   }
 
-  const whitelist =
-    config.whitelist.length > 0
-      ? (function (tmpWhitelist: Array<string> = config.whitelist) {
-          tmpWhitelist.forEach(function (addr, index) {
-            tmpWhitelist[index] = toStars(addr);
-          });
-          return tmpWhitelist;
-        })()
-      : null;
+  if (!isValidHttpUrl(config.contractUri)) {
+    throw new Error('ContractUri is required');
+  }
 
   const startTime: Expiration | null =
     config.startTime == ''
@@ -72,16 +66,6 @@ async function init() {
           at_time:
             // time expressed in nanoseconds (1 millionth of a millisecond)
             (new Date(config.startTime).getTime() * 1_000_000).toString(),
-        };
-
-  const whitelistEndTime: Expiration | null =
-    config.whitelistEndTime == ''
-      ? null
-      : {
-          // time expressed in nanoseconds (1 millionth of a millisecond)
-          at_time: (
-            new Date(config.whitelistEndTime).getTime() * 1_000_000
-          ).toString(),
         };
 
   const instantiateFee = calculateFee(950_000, gasPrice);
@@ -111,11 +95,6 @@ async function init() {
     },
   };
   console.log(tempMsg);
-
-  // if (!msg.sg721_instantiate_msg.config.contract_uri) {
-  //   console.log('Instantiating without contractUri');
-  //   msg.sg721_instantiate_msg.config.contract_uri = null;
-  // }
 
   // if (!msg.sg721_instantiate_msg.config.royalties) {
   //   console.log('Instantiating with royalties');
