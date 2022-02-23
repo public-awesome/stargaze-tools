@@ -87,7 +87,7 @@ async function init() {
         },
       },
     },
-    whitelist: config.whitelist,
+    whitelist: config.whitelistContract,
     start_time: startTime,
     unit_price: {
       amount: (config.unitPrice * 1000000).toString(),
