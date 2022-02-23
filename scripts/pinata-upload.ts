@@ -29,8 +29,6 @@ export async function pinataUpload() {
     name: config.name,
     description: config.description,
     image: `ipfs://${result.IpfsHash}`,
-    seller_fee_basis_points: config.royaltyShare * 100,
-    fee_recipient: config.address,
   };
 
   // Upload collection metadata to IPFS
