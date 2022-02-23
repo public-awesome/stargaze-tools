@@ -37,6 +37,15 @@ function isValidIpfsUrl(uri: string) {
   return url.protocol === 'ipfs:';
 }
 
+function clean(obj: any) {
+  for (var propName in obj) {
+    if (obj[propName] === null || obj[propName] === undefined) {
+      delete obj[propName];
+    }
+  }
+  return obj;
+}
+
 async function init() {
   if (!isValidIpfsUrl(config.baseTokenUri)) {
     throw new Error('Invalid base token URI');
@@ -77,7 +86,7 @@ async function init() {
 
   const instantiateFee = calculateFee(950_000, gasPrice);
 
-  const msg = {
+  const tempMsg = {
     base_token_uri: config.baseTokenUri,
     num_tokens: config.numTokens,
     sg721_code_id: config.sg721CodeId,
@@ -94,20 +103,28 @@ async function init() {
         },
       },
     },
-    whitelist_addresses: whitelist,
-    whitelist_expiration: whitelistEndTime,
+    whitelist: config.whitelist,
     start_time: startTime,
     unit_price: {
       amount: (config.unitPrice * 1000000).toString(),
       denom: 'ustars',
     },
   };
+  console.log(tempMsg);
 
-  if (!msg.sg721_instantiate_msg.config.royalties) {
-    console.log('Instantiating with royalties');
-  } else {
-    msg.sg721_instantiate_msg.config.royalties = undefined;
-  }
+  // if (!msg.sg721_instantiate_msg.config.contract_uri) {
+  //   console.log('Instantiating without contractUri');
+  //   msg.sg721_instantiate_msg.config.contract_uri = null;
+  // }
+
+  // if (!msg.sg721_instantiate_msg.config.royalties) {
+  //   console.log('Instantiating with royalties');
+  // } else {
+  //   msg.sg721_instantiate_msg.config.royalties = undefined;
+  // }
+  const msg = clean(tempMsg);
+
+  console.log(msg);
 
   const result = await client.instantiate(
     config.account,
