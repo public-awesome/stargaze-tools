@@ -1,9 +1,10 @@
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
 import { calculateFee, GasPrice } from '@cosmjs/stargate';
-import { toStars, isValidHttpUrl } from '../src/utils';
 
 const config = require('./config');
+const { toStars } = require('./src/utils');
+
 const gasPrice = GasPrice.fromString('0ustars');
 
 const wallet = await DirectSecp256k1HdWallet.fromMnemonic(config.mnemonic, {
