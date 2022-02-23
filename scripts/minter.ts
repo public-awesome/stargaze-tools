@@ -82,7 +82,7 @@ async function init() {
         contract_uri: config.contractUri,
         creator: config.account,
         royalties: {
-          payment_address: config.royaltyAddress,
+          payment_address: config.royaltyPaymentAddress,
           share: config.royaltyShare,
         },
       },
@@ -95,15 +95,15 @@ async function init() {
     },
   };
 
-  console.log(tempMsg.sg721_instantiate_msg.config.royalties);
-
-  // if (!tempMsg.sg721_instantiate_msg.config.royalties) {
-  //   console.log('Instantiating with royalties');
-  // } else {
-  //   tempMsg.sg721_instantiate_msg.config.royalties = null;
-  // }
+  if (
+    tempMsg.sg721_instantiate_msg.config.royalties.payment_address ===
+      undefined &&
+    tempMsg.sg721_instantiate_msg.config.royalties.share === undefined
+  ) {
+    tempMsg.sg721_instantiate_msg.config.royalties = null;
+  }
   const msg = clean(tempMsg);
-  console.log(msg);
+  console.log(JSON.stringify(msg, null, 2));
 
   const result = await client.instantiate(
     config.account,
