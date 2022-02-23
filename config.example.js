@@ -35,7 +35,7 @@ module.exports = {
   // The minter contract address
   // Get this after running `yarn run minter`
   minter: 'stars1...',
-  // The address for royalites to go to (may be the same as creator)
+  // The address for royalites to go to (may be the same as `account`)
   royaltyAddress: 'stars1...',
   // Royalty share: 1 = 100%, 0.1 = 10%
   royaltyShare: '0.1',

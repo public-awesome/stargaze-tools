@@ -3,7 +3,7 @@ import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
 import { calculateFee, coins, GasPrice } from '@cosmjs/stargate';
 
 const config = require('./config');
-const { toStars, isValidHttpUrl } = require('./src/utils');
+const { isValidHttpUrl } = require('./src/utils');
 
 const NEW_COLLECTION_FEE = coins('1000000000', 'ustars');
 const gasPrice = GasPrice.fromString('0ustars');
@@ -94,15 +94,15 @@ async function init() {
       denom: 'ustars',
     },
   };
-  console.log(tempMsg);
 
-  // if (!msg.sg721_instantiate_msg.config.royalties) {
+  console.log(tempMsg.sg721_instantiate_msg.config.royalties);
+
+  // if (!tempMsg.sg721_instantiate_msg.config.royalties) {
   //   console.log('Instantiating with royalties');
   // } else {
-  //   msg.sg721_instantiate_msg.config.royalties = undefined;
+  //   tempMsg.sg721_instantiate_msg.config.royalties = null;
   // }
   const msg = clean(tempMsg);
-
   console.log(msg);
 
   const result = await client.instantiate(
