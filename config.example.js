@@ -33,7 +33,7 @@ module.exports = {
   // The price (in STARS) for your NFTs (minimum 100 STARS)
   unitPrice: 100,
   // The minter contract address
-  // Get this after running `yarn run init`
+  // Get this after running `yarn run minter`
   minter: 'stars1...',
   // The address for royalites to go to (may be the same as creator)
   royaltyAddress: 'stars1...',
