@@ -41,13 +41,13 @@ module.exports = {
   royaltyShare: '0.1',
   // The date when the sale goes live
   // If whitelist is enabled, only whitelisted addresses will be able to purchase
-  startTime: '25 Dec 2021 00:00:00 GMT',
+  startTime: '01 Mar 2022 17:00:00 GMT',
 
   //// WHITELIST CONTRACT ////
   // A list of whitelisted addresses that will be able to purchase the sale early
   whitelist: ['stars1..', 'stars1...'],
   // The date when the whitelist only purchasing period ends and everyone can buy
-  whitelistEndTime: '26 Dec 2021 00:00:00 GMT',
+  whitelistEndTime: '02 Mar 2022 15:00:00 GMT',
   // The contract address for your whitelist contract
   // Get this after running `yarn run whitelist`
   whitelistContract: 'stars1...',
