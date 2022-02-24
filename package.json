@@ -4,11 +4,15 @@
   "main": "index.js",
   "license": "MIT",
   "devDependencies": {
-    "@cosmjs/cli": "^0.27.1"
+    "@cosmjs/cli": "^0.27.1",
+    "@types/mime": "^2.0.3"
   },
   "dependencies": {
     "@pinata/sdk": "^1.1.23",
+    "files-from-path": "^0.2.3",
     "ipfs-car": "^0.6.1",
+    "mime": "^3.0.0",
+    "nft.storage": "^6.0.0",
     "ts-node": "^10.5.0",
     "typescript": "^4.5.5"
   },
@@ -18,6 +22,7 @@
     "account": "cosmwasm-cli --init scripts/account.ts --code 'process.exit(0)'",
     "minter": "cosmwasm-cli --init scripts/minter.ts --code 'process.exit(0)'",
     "mint": "cosmwasm-cli --init scripts/mint.ts --code 'process.exit(0)'",
+    "nft-storage-upload": "ts-node scripts/nft-storage-upload.ts",
     "batch-mint": "cosmwasm-cli --init scripts/mint-batch.ts --code 'process.exit(0)'",
     "whitelist": "cosmwasm-cli --init scripts/whitelist.ts --code 'process.exit(0)'",
     "load": "cosmwasm-cli --init scripts/load.ts",
