@@ -71,7 +71,8 @@ export async function nftStorageUpload() {
       metadata.image = `ipfs://${images[index]}`;
 
       // Write updated metadata to tmp folder
-      fs.writeFileSync(`${tmpFolder}/${index}`, JSON.stringify(metadata));
+      // We add 1, because token IDs start at 1
+      fs.writeFileSync(`${tmpFolder}/${index + 1}`, JSON.stringify(metadata));
     });
 
     // Upload tmpFolder
