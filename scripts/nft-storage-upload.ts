@@ -1,38 +1,37 @@
+import { getFilesFromPath } from 'files-from-path';
 import fs from 'fs';
+import mime from 'mime';
+import { NFTStorage, Blob, File } from 'nft.storage';
 import os from 'os';
 import path from 'path';
-import pinataSDK from '@pinata/sdk';
 import { checkFiles } from '../src/validation';
 
 // Load config
 const config = require('../config');
 
-// Configure Pinata
-const apiKey = config.pinataApiKey;
-const secretKey = config.pinataSecretKey;
-const pinata = pinataSDK(apiKey, secretKey);
+// Configure NFT.storage
+const token = config.nftStorageApiKey;
+const client = new NFTStorage({ token });
 
-export async function pinataUpload() {
+export async function nftStorageUpload() {
   // Config
   console.log(
-    'Deploying files to IPFS via Pinata using the following configuration:'
+    'Deploying files to IPFS via NFT.storage using the following configuration:'
   );
   console.log(config);
 
   // Upload collection showcase image + metadata
-  const readableStreamForFile = fs.createReadStream(config.image);
-  const result = await pinata.pinFileToIPFS(readableStreamForFile);
+  const content = await fs.promises.readFile(config.image);
+  const type = mime.getType(config.image);
 
-  // Create collection metadata
-  // https://docs.opensea.io/docs/contract-level-metadata
-  const collectionMetadata = {
+  const contractMetadata = await client.store({
     name: config.name,
     description: config.description,
-    image: `ipfs://${result.IpfsHash}`,
-  };
+    image: new File([content], path.basename(config.image), { type } as any),
+  });
 
-  // Upload collection metadata to IPFS
-  const collectionInfo = await pinata.pinJSONToIPFS(collectionMetadata);
+  // Set contract uri
+  let contractUri = contractMetadata.url;
 
   const imagesBasePath = path.join(__dirname, '../images');
   const metadataBasePath = path.join(__dirname, '../metadata');
@@ -46,13 +45,14 @@ export async function pinataUpload() {
 
   // Upload each image to IPFS and store hash in array
   const imagePromises = images.map(async (image) => {
-    // Create readable stream
-    const readableStreamForFile = fs.createReadStream(
-      `${imagesBasePath}/${image}`
-    );
+    const imagePath = `${imagesBasePath}/${image}`;
+    const readableFile = await fs.promises.readFile(imagePath);
+    const type = mime.getType(imagePath);
 
     // Upload to IPFS
-    return await pinata.pinFileToIPFS(readableStreamForFile);
+    return await client.storeBlob(
+      new File([readableFile], path.basename(imagePath), { type } as any)
+    );
   });
 
   // Wait for all images to be uploaded
@@ -68,7 +68,7 @@ export async function pinataUpload() {
       );
 
       // Set image to upload image IPFS hash
-      metadata.image = `ipfs://${images[index].IpfsHash}`;
+      metadata.image = `ipfs://${images[index]}`;
 
       // Write updated metadata to tmp folder
       // We add 1, because token IDs start at 1
@@ -76,13 +76,14 @@ export async function pinataUpload() {
     });
 
     // Upload tmpFolder
-    const result = await pinata.pinFromFS(tmpFolder);
+    const files = await getFilesFromPath(tmpFolder);
+    const result = await client.storeDirectory(files as any);
+
+    // Project will have been uploaded into a randomly name folder
+    const projectPath = tmpFolder.split('/').pop();
 
     // Set base token uri
-    const baseTokenUri = `ipfs://${result.IpfsHash}`;
-
-    // Set contract uri
-    const contractUri = `ipfs://${collectionInfo.IpfsHash}`;
+    const baseTokenUri = `ipfs://${result}/${projectPath}`;
 
     console.log('Set these fields in your config.js file: ');
     console.log('baseTokenUri: ', baseTokenUri);
@@ -95,4 +96,4 @@ export async function pinataUpload() {
   });
 }
 
-pinataUpload();
+nftStorageUpload();

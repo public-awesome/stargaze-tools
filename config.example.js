@@ -55,6 +55,10 @@ module.exports = {
   //// API CONFIG ////
   // The RPC endpoint to query and send Stargaze transactions to
   rpcEndpoint: 'https://rpc.big-bang-1.stargaze-apis.com/',
+  // NFT.storage endpoint
+  nftStorageEndpoint: 'https://api.nft.storage',
+  // NFT.storage API key
+  nftStorageApiKey: '',
   // Pinata API Key (optional)
   pinataApiKey: '',
   // Pinata Secret Key (optional)
