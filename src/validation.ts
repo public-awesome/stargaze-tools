@@ -4,7 +4,7 @@ export const checkFiles = (images: string[], metadata: string[]) => {
     throw Error("Images files must have matching number of metadata files");
   }
 
-  function parseFileName(path: string | null): string {
+  function parseFileName(path: string | null): number {
     // Check file name is not null
     if (!path) {
       throw Error("File cannot be null");
@@ -12,28 +12,34 @@ export const checkFiles = (images: string[], metadata: string[]) => {
 
     // Extract fileName from path
     const fileName = path.match(
-      /([a-zA-Z0-9\s_\\.\-:])+(.png|.jpg|.gif|.json)$/i
+      /([a-zA-Z0-9\s_\\.\-:]+)(.png|.jpg|.gif|.json)$/i
     )![1];
 
     // Check that file name is an Integer
     if (isNaN(parseInt(fileName, 10))) {
       throw Error("Filenames must be numbers");
     }
-    return fileName;
+    return parseInt(fileName, 10);
   }
 
+  // We need to ensure that the files are numerically sorted (as opposed to lexicographically)
+  const sortedImages = [...images.map(parseFileName)].sort(function (a, b) {
+    return a - b;
+  });
+  const sortedMetadata = [...metadata.map(parseFileName)].sort(function (a, b) {
+    return a - b;
+  });
+  let lastValue;
   // Check each image is sequentially named with a number and has a matching metadata file
-  for (let i = 0; i < images.length; i++) {
-    let image = parseFileName(images[i]);
-    let json = parseFileName(metadata[i]);
+  for (let i = 0; i < sortedImages.length; i++) {
+    const image = sortedImages[i];
+    const json = sortedMetadata[i];
     if (image !== json) {
       throw Error("Images must have matching JSON files");
     }
-    if (i !== 0) {
-      let previousImage = parseFileName(images[i - 1]);
-      if (image < previousImage) {
-        throw Error("Images must be sequential");
-      }
+    if (lastValue && lastValue + 1 !== image) {
+      throw Error("Images must be sequential");
     }
+    lastValue = image;
   }
 };
