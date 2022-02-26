@@ -13,17 +13,9 @@ export declare type Expiration = {
   readonly at_time: string;
 };
 
-const wallet = await DirectSecp256k1HdWallet.fromMnemonic(config.mnemonic, {
-  prefix: 'stars',
-});
-
 if (!isValidHttpUrl(config.rpcEndpoint)) {
   throw new Error('Invalid RPC endpoint');
 }
-const client = await SigningCosmWasmClient.connectWithSigner(
-  config.rpcEndpoint,
-  wallet
-);
 
 function isValidIpfsUrl(uri: string) {
   let url;
@@ -103,45 +95,73 @@ async function init() {
     tempMsg.sg721_instantiate_msg.config.royalties = null;
   }
   const msg = clean(tempMsg);
-  console.log(JSON.stringify(msg, null, 2));
 
-  const result = await client.instantiate(
-    config.account,
-    config.minterCodeId,
-    msg,
-    config.name,
-    instantiateFee,
-    { funds: NEW_COLLECTION_FEE }
-  );
-  const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');
-  console.info(
-    'The `wasm` event emitted by the contract execution:',
-    wasmEvent
-  );
+  // Check if Mnemonic is in config
+  if (config.mnemonic && config.mnemonic !== '' && config.mnemonic !== null) {
+    const wallet = await DirectSecp256k1HdWallet.fromMnemonic(config.mnemonic, {
+      prefix: 'stars',
+    });
+
+    const client = await SigningCosmWasmClient.connectWithSigner(
+      config.rpcEndpoint,
+      wallet
+    );
+
+    console.log(JSON.stringify(msg, null, 2));
+
+    const result = await client.instantiate(
+      config.account,
+      config.minterCodeId,
+      msg,
+      config.name,
+      instantiateFee,
+      { funds: NEW_COLLECTION_FEE }
+    );
+    const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');
+    console.info(
+      'The `wasm` event emitted by the contract execution:',
+      wasmEvent
+    );
+  } else {
+    console.log(JSON.stringify(msg, null, 2));
+  }
 }
 
 async function setWhitelist(whitelist: string) {
-  console.log('Setting whitelist contract: ', whitelist);
+  // Check if Mnemonic is in config
+  if (config.mnemonic && config.mnemonic !== '' && config.mnemonic !== null) {
+    const wallet = await DirectSecp256k1HdWallet.fromMnemonic(config.mnemonic, {
+      prefix: 'stars',
+    });
 
-  const msg = { set_whitelist: { whitelist } };
-  console.log(msg);
+    const client = await SigningCosmWasmClient.connectWithSigner(
+      config.rpcEndpoint,
+      wallet
+    );
 
-  const result = await client.execute(
-    config.account,
-    config.minter,
-    msg,
-    executeFee,
-    'set whitelist'
-  );
-  const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');
-  console.info(
-    'The `wasm` event emitted by the contract execution:',
-    wasmEvent
-  );
+    console.log('Setting whitelist contract: ', whitelist);
+
+    const msg = { set_whitelist: { whitelist } };
+    console.log(msg);
+
+    const result = await client.execute(
+      config.account,
+      config.minter,
+      msg,
+      executeFee,
+      'set whitelist'
+    );
+    const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');
+    console.info(
+      'The `wasm` event emitted by the contract execution:',
+      wasmEvent
+    );
+  } else {
+    throw Error('This feature requires setting a Mnemonic in config.js');
+  }
 }
 
 const args = process.argv.slice(6);
-// console.log(args);
 if (args.length == 0) {
   await init();
 } else if (args.length == 2 && args[0] == '--whitelist') {

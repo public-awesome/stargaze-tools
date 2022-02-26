@@ -128,7 +128,6 @@ async function showConfig() {
 }
 
 const args = process.argv.slice(6);
-// console.log(args);
 if (args.length == 0) {
   await init();
 } else if (args.length == 2 && args[0] == '--add') {
