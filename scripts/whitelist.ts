@@ -83,11 +83,11 @@ async function add(add: string) {
   const executeFee = calculateFee(600_000, gasPrice);
   const result = await client.execute(
     config.account,
-    config.minter,
+    config.whitelistContract,
     {
-      update_whitelist: {
-        add_addresses: addAddresses,
-        remove_addresses: [],
+      update_members: {
+        add: addAddresses,
+        remove: [],
       },
     },
     executeFee,
@@ -99,7 +99,7 @@ async function add(add: string) {
     wasmEvent
   );
 
-  let res = await client.queryContractSmart(config.whitelist, {
+  let res = await client.queryContractSmart(config.whitelistContract, {
     members: {},
   });
   console.log(res);
