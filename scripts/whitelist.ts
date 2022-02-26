@@ -48,7 +48,6 @@ async function init() {
       // time expressed in nanoseconds (1 millionth of a millisecond)
       (new Date(config.whitelistEndTime).getTime() * 1_000_000).toString(),
   };
-  //   console.log('whitelist end time: ' + whitelistEndTime?.at_time);
 
   const msg = {
     members: whitelist,
