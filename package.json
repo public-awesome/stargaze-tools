@@ -5,6 +5,7 @@
   "license": "MIT",
   "devDependencies": {
     "@cosmjs/cli": "^0.27.1",
+    "@stargazezone/types": "^0.1.0",
     "@types/mime": "^2.0.3"
   },
   "dependencies": {
@@ -27,6 +28,7 @@
     "whitelist": "cosmwasm-cli --init scripts/whitelist.ts --code 'process.exit(0)'",
     "query": "cosmwasm-cli --init scripts/query.ts",
     "pinata-upload": "ts-node scripts/pinata-upload.ts",
-    "pinata-clean": "ts-node scripts/pinata-clean.ts"
+    "pinata-clean": "ts-node scripts/pinata-clean.ts",
+    "ts": "tsc --noEmit --incremental"
   }
 }

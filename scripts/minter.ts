@@ -1,6 +1,7 @@
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
 import { calculateFee, coins, GasPrice } from '@cosmjs/stargate';
+import { InstantiateMsg } from '@stargazezone/types/contracts/minter/instantiate_msg';
 
 const config = require('./config');
 const { isValidHttpUrl } = require('./src/utils');
@@ -62,7 +63,7 @@ async function init() {
 
   const instantiateFee = calculateFee(950_000, gasPrice);
 
-  const tempMsg = {
+  const tempMsg: InstantiateMsg = {
     base_token_uri: config.baseTokenUri,
     num_tokens: config.numTokens,
     sg721_code_id: config.sg721CodeId,
@@ -88,11 +89,12 @@ async function init() {
   };
 
   if (
-    tempMsg.sg721_instantiate_msg.config.royalties.payment_address ===
+    tempMsg?.sg721_instantiate_msg?.config?.royalties.payment_address ===
       undefined &&
-    tempMsg.sg721_instantiate_msg.config.royalties.share === undefined
+    tempMsg?.sg721_instantiate_msg?.config?.royalties.share === undefined
   ) {
-    tempMsg.sg721_instantiate_msg.config.royalties = null;
+    if (tempMsg?.sg721_instantiate_msg?.config)
+      tempMsg.sg721_instantiate_msg.config.royalties = null;
   }
   const msg = clean(tempMsg);
 

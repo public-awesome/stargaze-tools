@@ -42,3 +42,6 @@ coverage/
 config.js
 
 .env
+
+# ts
+*tsbuildinfo
