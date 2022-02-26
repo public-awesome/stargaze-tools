@@ -100,7 +100,7 @@ async function add(add: string) {
     wasmEvent
   );
 
-  let res = await client.queryContractSmart(config.whitelist, {
+  let res = await client.queryContractSmart(config.whitelistContract, {
     members: {},
   });
   console.log(res);
