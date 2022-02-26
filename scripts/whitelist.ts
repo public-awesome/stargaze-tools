@@ -1,12 +1,12 @@
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
-import { calculateFee, GasPrice } from '@cosmjs/stargate';
+import { calculateFee, coins, GasPrice } from '@cosmjs/stargate';
 
 const config = require('./config');
 const { toStars } = require('./src/utils');
+const WHITELIST_CREATION_FEE = coins('100000000', 'ustars');
 
 const gasPrice = GasPrice.fromString('0ustars');
-
 const wallet = await DirectSecp256k1HdWallet.fromMnemonic(config.mnemonic, {
   prefix: 'stars',
 });
@@ -14,8 +14,18 @@ const client = await SigningCosmWasmClient.connectWithSigner(
   config.rpcEndpoint,
   wallet
 );
+export declare type Expiration = {
+  readonly at_time: string;
+};
 
 async function init() {
+  if (config.whitelistStartTime == '') {
+    throw new Error('invalid whitelistStartTime');
+  }
+  if (config.whitelistEndTime == '') {
+    throw new Error('invalid whitelistEndTime');
+  }
+
   const whitelist =
     config.whitelist.length > 0
       ? (function (tmpWhitelist: Array<string> = config.whitelist) {
@@ -28,9 +38,23 @@ async function init() {
 
   const instantiateFee = calculateFee(950_000, gasPrice);
 
+  const whitelistStartTime: Expiration = {
+    at_time:
+      // time expressed in nanoseconds (1 millionth of a millisecond)
+      (new Date(config.whitelistStartTime).getTime() * 1_000_000).toString(),
+  };
+  console.log('whitelist start time: ' + whitelistStartTime?.at_time);
+  const whitelistEndTime: Expiration = {
+    at_time:
+      // time expressed in nanoseconds (1 millionth of a millisecond)
+      (new Date(config.whitelistEndTime).getTime() * 1_000_000).toString(),
+  };
+  console.log('whitelist end time: ' + whitelistEndTime?.at_time);
+
   const msg = {
     members: whitelist,
-    end_time: config.whitelistEndTime,
+    start_time: whitelistStartTime,
+    end_time: whitelistEndTime,
   };
 
   const result = await client.instantiate(
@@ -38,7 +62,8 @@ async function init() {
     config.whitelistCodeId,
     msg,
     'whitelist',
-    instantiateFee
+    instantiateFee,
+    { funds: WHITELIST_CREATION_FEE }
   );
   const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');
   console.info(
