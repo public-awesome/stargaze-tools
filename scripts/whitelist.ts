@@ -84,11 +84,11 @@ async function add(add: string) {
   const executeFee = calculateFee(600_000, gasPrice);
   const result = await client.execute(
     config.account,
-    config.whitelistContract,
+    config.minter,
     {
-      update_members: {
-        add: addAddresses,
-        remove: [],
+      update_whitelist: {
+        add_addresses: addAddresses,
+        remove_addresses: [],
       },
     },
     executeFee,
