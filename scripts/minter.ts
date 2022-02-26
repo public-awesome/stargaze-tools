@@ -55,7 +55,7 @@ async function init() {
     throw new Error('Too many tokens');
   }
 
-  if (!isValidHttpUrl(config.contractUri)) {
+  if (!isValidIpfsUrl(config.contractUri)) {
     throw new Error('ContractUri is required');
   }
 
