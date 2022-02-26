@@ -46,6 +46,7 @@ export async function pinataUpload() {
 
   // Upload each image to IPFS and store hash in array
   const uploadedImages: { IpfsHash: any }[] = [];
+  let index = 1;
   for (let image of images) {
     // Create readable stream
     const readableStreamForFile = fs.createReadStream(
@@ -54,8 +55,9 @@ export async function pinataUpload() {
 
     // Upload to IPFS
     await pinata.pinFileToIPFS(readableStreamForFile).then((i) => {
-      console.log(`Uploaded Image: ${image} / ${images.length}`);
+      console.log(`Uploaded Image: ${image}  ${index}/${images.length}`);
       console.log(i);
+      index++;
       uploadedImages.push(i);
     });
   }
