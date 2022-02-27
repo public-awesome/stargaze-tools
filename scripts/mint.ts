@@ -4,7 +4,7 @@ import { calculateFee, coins, GasPrice } from '@cosmjs/stargate';
 const toStars = require('./src/utils');
 
 const config = require('./config');
-const MINT_FEE = coins('100000000', 'ustars');
+const MINT_FEE = coins(config.unitPrice * 1000000, 'ustars');
 const gasPrice = GasPrice.fromString('0ustars');
 const executeFee = calculateFee(300_000, gasPrice);
 
