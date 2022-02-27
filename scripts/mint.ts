@@ -4,7 +4,6 @@ import { calculateFee, coins, GasPrice } from '@cosmjs/stargate';
 const toStars = require('./src/utils');
 
 const config = require('./config');
-const MINT_FEE = coins('100000000', 'ustars');
 const gasPrice = GasPrice.fromString('0ustars');
 const executeFee = calculateFee(300_000, gasPrice);
 
@@ -25,8 +24,7 @@ async function mintSender() {
     config.minter,
     msg,
     executeFee,
-    'mint to sender',
-    MINT_FEE
+    'mint to sender'
   );
   const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');
   console.info(
@@ -47,8 +45,7 @@ async function mintTo(recipient: string) {
     config.minter,
     msg,
     executeFee,
-    'mint to',
-    MINT_FEE
+    'mint to'
   );
   const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');
   console.info(
@@ -71,8 +68,7 @@ async function mintFor(tokenId: string, recipient: string) {
     config.minter,
     msg,
     executeFee,
-    'mint for',
-    MINT_FEE
+    'mint for'
   );
   const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');
   console.info(
