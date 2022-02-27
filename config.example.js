@@ -36,6 +36,7 @@ module.exports = {
   // Get this after running `yarn run minter`
   minter: 'stars1...',
   // The address for royalites to go to (may be the same as `account`)
+  // Comment out both below if not using royalites
   royaltyPaymentAddress: 'stars1...',
   // Royalty share: 1 = 100%, 0.1 = 10%
   royaltyShare: '0.1',
@@ -45,6 +46,7 @@ module.exports = {
 
   //// WHITELIST CONTRACT ////
   // A list of whitelisted addresses that will be able to purchase the sale early
+  // Comment out if not using a whilelist
   whitelist: ['stars1..', 'stars1...'],
   // The date when the whitelist only purchasing period ends and everyone can buy
   whitelistStartTime: '02 Mar 2022 22:00:00 GMT',
