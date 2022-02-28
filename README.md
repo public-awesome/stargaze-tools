@@ -82,6 +82,16 @@ To add addresses to the whitelist, use:
 yarn run whitelist --add [stars1..., stars2..., etc.]
 ```
 
+## Query sg721
+
+You can run queries against an instantiated sg721 contract with:
+
+```sh
+yarn run query
+```
+
+For all possible queries, see the [query types](https://github.com/public-awesome/cw-nfts/blob/main/contracts/cw721-base/src/msg.rs#L76).
+
 # More documentation
 
 A more comprehensive guide is available at [Stargaze Docs](https://docs.stargaze.zone/guides/readme).
