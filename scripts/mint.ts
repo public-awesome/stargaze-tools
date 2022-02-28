@@ -1,7 +1,7 @@
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
 import { calculateFee, coins, GasPrice } from '@cosmjs/stargate';
-const toStars = require('./src/utils');
+const { toStars } = require('./src/utils');
 
 const config = require('./config');
 const gasPrice = GasPrice.fromString('0ustars');
@@ -14,24 +14,6 @@ const client = await SigningCosmWasmClient.connectWithSigner(
   config.rpcEndpoint,
   wallet
 );
-
-async function mintSender() {
-  const msg = { mint: {} };
-  console.log(msg);
-
-  const result = await client.execute(
-    config.account,
-    config.minter,
-    msg,
-    executeFee,
-    'mint to sender'
-  );
-  const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');
-  console.info(
-    'The `wasm` event emitted by the contract execution:',
-    wasmEvent
-  );
-}
 
 async function mintTo(recipient: string) {
   const starsRecipient = toStars(recipient);
@@ -80,7 +62,7 @@ async function mintFor(tokenId: string, recipient: string) {
 const args = process.argv.slice(6);
 // console.log(args);
 if (args.length == 0) {
-  await mintSender();
+  console.log('No arguments provided, need --to or --for');
 } else if (args.length == 2 && args[0] == '--to') {
   await mintTo(args[1]);
 } else if (args.length == 3 && args[0] == '--for') {
