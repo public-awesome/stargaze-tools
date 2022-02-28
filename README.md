@@ -62,7 +62,7 @@ Mint `num` NFTs to yourself.
 yarn run batch-mint [num]
 ```
 
-## Whitelist
+## Whitelist (optional)
 
 Instantiate a whitelist contract:
 
