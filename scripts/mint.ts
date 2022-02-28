@@ -15,24 +15,6 @@ const client = await SigningCosmWasmClient.connectWithSigner(
   wallet
 );
 
-async function mintSender() {
-  const msg = { mint: {} };
-  console.log(msg);
-
-  const result = await client.execute(
-    config.account,
-    config.minter,
-    msg,
-    executeFee,
-    'mint to sender'
-  );
-  const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');
-  console.info(
-    'The `wasm` event emitted by the contract execution:',
-    wasmEvent
-  );
-}
-
 async function mintTo(recipient: string) {
   const starsRecipient = toStars(recipient);
   console.log('Minting to: ', starsRecipient);
@@ -80,7 +62,7 @@ async function mintFor(tokenId: string, recipient: string) {
 const args = process.argv.slice(6);
 // console.log(args);
 if (args.length == 0) {
-  await mintSender();
+  console.log('No arguments provided, need --to or --for');
 } else if (args.length == 2 && args[0] == '--to') {
   await mintTo(args[1]);
 } else if (args.length == 3 && args[0] == '--for') {
