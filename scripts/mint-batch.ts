@@ -13,7 +13,7 @@ async function main(numMints: string) {
     config.rpcEndpoint,
     wallet
   );
-  const executeFee = calculateFee(300_000, gasPrice);
+  const executeFee = calculateFee(900_000, gasPrice);
   const result = await client.execute(
     config.account,
     config.minter,
