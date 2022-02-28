@@ -1,7 +1,7 @@
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
 import { calculateFee, coins, GasPrice } from '@cosmjs/stargate';
-const toStars = require('./src/utils');
+const { toStars } = require('./src/utils');
 
 const config = require('./config');
 const gasPrice = GasPrice.fromString('0ustars');
