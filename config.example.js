@@ -36,6 +36,9 @@ module.exports = {
   // The minter contract address
   // Get this after running `yarn run minter`
   minter: 'stars1...',
+  // SG721 contract address
+  // Get this after running `yarn run minter`
+  sg721: 'stars1...',
   // The address for royalites to go to (may be the same as `account`)
   // Comment out both below if not using royalites
   royaltyPaymentAddress: 'stars1...',
