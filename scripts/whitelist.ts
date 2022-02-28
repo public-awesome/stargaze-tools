@@ -59,6 +59,8 @@ async function init() {
     },
   };
 
+  console.log('Instantiating whitelist...');
+
   const result = await client.instantiate(
     config.account,
     config.whitelistCodeId,
