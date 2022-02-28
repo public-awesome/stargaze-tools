@@ -53,6 +53,10 @@ async function init() {
     members: whitelist,
     start_time: whitelistStartTime,
     end_time: whitelistEndTime,
+    unit_price: {
+      amount: (config.whitelistPrice * 1000000).toString(),
+      denom: 'ustars',
+    },
   };
 
   const result = await client.instantiate(
