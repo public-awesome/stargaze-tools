@@ -19,10 +19,10 @@ export declare type Expiration = {
 };
 
 async function init() {
-  if (config.whitelistStartTime == '') {
+  if (!config.whitelistStartTime || config.whitelistStartTime == '') {
     throw new Error('invalid whitelistStartTime');
   }
-  if (config.whitelistEndTime == '') {
+  if (!config.whitelistEndTime || config.whitelistEndTime == '') {
     throw new Error('invalid whitelistEndTime');
   }
   const whitelist =
