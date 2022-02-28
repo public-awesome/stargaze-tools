@@ -40,12 +40,6 @@ yarn run minter
 
 ## Mint
 
-### Mint to yourself
-
-```sh
-yarn run mint
-```
-
 ### Mint to an address
 
 ```sh
