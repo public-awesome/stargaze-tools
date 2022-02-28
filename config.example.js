@@ -28,10 +28,10 @@ module.exports = {
 
   //// MINTER CONTRACT ////
   // The base URI to be used to programatically mint tokens
-  baseTokenUri: '',
+  baseTokenUri: 'ipfs://...',
   // The number of tokens to mint
-  numTokens: 1,
-  // The price (in STARS) for your NFTs (minimum 100 STARS)
+  numTokens: 100,
+  // The price (in STARS) for your NFTs (minimum 50 STARS)
   unitPrice: 100,
   // The minter contract address
   // Get this after running `yarn run minter`
@@ -55,6 +55,8 @@ module.exports = {
   // The contract address for your whitelist contract
   // Get this after running `yarn run whitelist`
   whitelistContract: 'stars1...',
+  // The price (in STARS) for the whitelist (minimum 25 STARS)
+  whitelistPrice: 50,
 
   //// API CONFIG ////
   // The RPC endpoint to query and send Stargaze transactions to
@@ -70,9 +72,9 @@ module.exports = {
 
   //// CONTRACT CODE IDs ////
   // The code ID for sg721
-  sg721CodeId: 25,
+  sg721CodeId: 33,
   // The code ID for the minter contract
-  minterCodeId: 26,
+  minterCodeId: 34,
   // The code ID for the whitelist contract
-  whitelistCodeId: 27,
+  whitelistCodeId: 35,
 };
