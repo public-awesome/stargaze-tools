@@ -22,7 +22,7 @@ This outputs an address you can use to instantiate your minter contract.
 
 ## Get funds from faucet
 
-Ask for funds from the [Discord bot](https://discord.gg/EUpDph5k).
+Ask for funds from the `#faucet` channel in [Discord Stargaze](https://discord.gg/stargaze).
 
 ```
 $request [address]
