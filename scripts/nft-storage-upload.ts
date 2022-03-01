@@ -43,57 +43,46 @@ export async function nftStorageUpload() {
   // Validation
   checkFiles(images, metadata);
 
-  // Upload each image to IPFS and store hash in array
-  const imagePromises = images.map(async (image) => {
-    const imagePath = `${imagesBasePath}/${image}`;
-    const readableFile = await fs.promises.readFile(imagePath);
-    const type = mime.getType(imagePath);
+  // Upload images folder
+  const imageFiles = await getFilesFromPath(imagesBasePath);
+  const imagesBaseUri = await client.storeDirectory(imageFiles as any);
 
-    // Upload to IPFS
-    return await client.storeBlob(
-      new File([readableFile], path.basename(imagePath), { type } as any)
+  // Create temp upload folder for metadata
+  const tmpFolder = fs.mkdtempSync(path.join(os.tmpdir(), 'galaxy'));
+
+  // Update metadata with IPFS hashes
+  metadata.map(async (file, index: number) => {
+    // Read JSON file
+    let metadata = JSON.parse(
+      fs.readFileSync(`${metadataBasePath}/${file}`, 'utf8')
     );
+
+    // Set image to upload image IPFS hash
+    metadata.image = `ipfs://${imagesBaseUri}/images/${images[index]}`;
+
+    // Write updated metadata to tmp folder
+    // We add 1, because token IDs start at 1
+    fs.writeFileSync(`${tmpFolder}/${index + 1}`, JSON.stringify(metadata));
   });
 
-  // Wait for all images to be uploaded
-  await Promise.all(imagePromises).then(async (images) => {
-    // Create temp upload folder for metadata
-    const tmpFolder = fs.mkdtempSync(path.join(os.tmpdir(), 'galaxy'));
+  // Upload tmpFolder
+  const files = await getFilesFromPath(tmpFolder);
+  const result = await client.storeDirectory(files as any);
 
-    // Update metadata with IPFS hashes
-    metadata.map(async (file, index: number) => {
-      // Read JSON file
-      let metadata = JSON.parse(
-        fs.readFileSync(`${metadataBasePath}/${file}`, 'utf8')
-      );
+  // Project will have been uploaded into a randomly name folder
+  const projectPath = tmpFolder.split('/').pop();
 
-      // Set image to upload image IPFS hash
-      metadata.image = `ipfs://${images[index]}`;
+  // Set base token uri
+  const baseTokenUri = `ipfs://${result}/${projectPath}`;
 
-      // Write updated metadata to tmp folder
-      // We add 1, because token IDs start at 1
-      fs.writeFileSync(`${tmpFolder}/${index + 1}`, JSON.stringify(metadata));
-    });
+  console.log('Set these fields in your config.js file: ');
+  console.log('baseTokenUri: ', baseTokenUri);
+  console.log('contractUri: ', contractUri);
 
-    // Upload tmpFolder
-    const files = await getFilesFromPath(tmpFolder);
-    const result = await client.storeDirectory(files as any);
-
-    // Project will have been uploaded into a randomly name folder
-    const projectPath = tmpFolder.split('/').pop();
-
-    // Set base token uri
-    const baseTokenUri = `ipfs://${result}/${projectPath}`;
-
-    console.log('Set these fields in your config.js file: ');
-    console.log('baseTokenUri: ', baseTokenUri);
-    console.log('contractUri: ', contractUri);
-
-    return {
-      baseTokenUri,
-      contractUri,
-    };
-  });
+  return {
+    baseTokenUri,
+    contractUri,
+  };
 }
 
 nftStorageUpload();
