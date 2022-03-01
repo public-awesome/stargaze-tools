@@ -23,6 +23,7 @@ export async function nftStorageUpload() {
 
   const content = await fs.promises.readFile(config.image);
   const type = mime.getType(config.image);
+  const imageType = path.extname(config.image);
 
   const contractMetadata = await client.store({
     name: config.name,
@@ -32,6 +33,7 @@ export async function nftStorageUpload() {
 
   // Set contract uri
   let contractUri = contractMetadata.url;
+  console.log(`Contract: ${contractUri}`);
 
   const imagesBasePath = path.join(__dirname, '../images');
   const metadataBasePath = path.join(__dirname, '../metadata');
@@ -68,8 +70,8 @@ export async function nftStorageUpload() {
     let metadata = JSON.parse(metaFile);
 
     // Set image to upload image IPFS hash
-    metadata.image = `ipfs://${imagesCid}/${images[index - 1]}`;
-
+    metadata.image = `ipfs://${imagesCid}/${index}${imageType}]}`;
+    console.log(JSON.stringify(metadata));
     fs.writeFileSync(`${tmpFolder}/${index}`, JSON.stringify(metadata));
   });
 
