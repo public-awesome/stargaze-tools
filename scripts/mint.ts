@@ -10,7 +10,7 @@ const { toStars } = require('./src/utils');
 
 const config = require('./config');
 const gasPrice = GasPrice.fromString('0ustars');
-const executeFee = calculateFee(300_000, gasPrice);
+const executeFee = calculateFee(800_000, gasPrice);
 
 const wallet = await DirectSecp256k1HdWallet.fromMnemonic(config.mnemonic, {
   prefix: 'stars',
@@ -22,9 +22,9 @@ const client = await SigningCosmWasmClient.connectWithSigner(
 
 async function mint() {
   const starsRecipient = toStars(config.account);
-  console.log('general mint: ', starsRecipient);
+  console.log('whitelist mint: ', starsRecipient);
 
-  const mintFee = coins(config.whitelistPrice * 1000000, 'ustars');
+  const mintFee = coins((config.whitelistPrice * 1000000).toString(), 'ustars');
   const msg = { mint: {} };
   console.log(msg);
 
