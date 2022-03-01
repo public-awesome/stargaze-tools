@@ -39,6 +39,11 @@ module.exports = {
   // External_link is optional. Gif compatible
   //   external_link:
   // 'https://c.tenor.com/o656qFKDzeUAAAAC/rick-astley-never-gonna-give-you-up.gif',
+  // The address for royalites to go to (may be the same as `account`)
+  // Comment out both below if not using royalites
+  // royaltyPaymentAddress: 'stars1...',
+  // Royalty share: 1 = 100%, 0.1 = 10%
+  // royaltyShare: '0.1',
 
   //// WHITELIST CONTRACT (OPTIONAL) ////
   // A list of whitelisted addresses that will be able to purchase the sale early
@@ -62,11 +67,6 @@ module.exports = {
   numTokens: 100,
   // The price (in STARS) for your NFTs (minimum 50 STARS)
   unitPrice: 100,
-  // The address for royalites to go to (may be the same as `account`)
-  // Comment out both below if not using royalites
-  royaltyPaymentAddress: 'stars1...',
-  // Royalty share: 1 = 100%, 0.1 = 10%
-  royaltyShare: '0.1',
   // The date when the sale goes live
   // If whitelist is enabled, only whitelisted addresses will be able to purchase
   startTime: '02 Mar 2022 22:00:00 GMT',
