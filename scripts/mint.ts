@@ -117,6 +117,8 @@ const args = process.argv.slice(6);
 // console.log(args);
 if (args.length == 0) {
   console.log('No arguments provided, need --to or --for');
+} else if (args.length == 1 && args[0] == '--test-whitelist') {
+  await mint();
 } else if (args.length == 2 && args[0] == '--to') {
   await mintTo(args[1]);
 } else if (args.length == 4 && args[0] == '--to') {
