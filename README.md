@@ -32,6 +32,26 @@ $request [address]
 
 Edit `config.js` with your project configuration.
 
+## Whitelist (optional)
+
+Instantiate a whitelist contract:
+
+```sh
+yarn run whitelist
+```
+
+The output of the above command should give you a whitelist contract address. Edit `config.js` and update the `whitelist` field with this value. Next, set this address in your minter contract with:
+
+```sh
+yarn run minter --whitelist [whitelist_address]
+```
+
+To add addresses to the whitelist, use:
+
+```sh
+yarn run whitelist --add [stars1..., stars2..., etc.]
+```
+
 ## Initialize an NFT minting contract
 
 ```sh
@@ -65,26 +85,6 @@ yarn run mint --to [address] --batch [num]
 ```
 
 Same as `mint --to` but mints the next [num] tokens sequentially to the given address.
-
-## Whitelist (optional)
-
-Instantiate a whitelist contract:
-
-```sh
-yarn run whitelist
-```
-
-The output of the above command should give you a whitelist contract address. Edit `config.js` and update the `whitelist` field with this value. Next, set this address in your minter contract with:
-
-```sh
-yarn run minter --whitelist [whitelist_address]
-```
-
-To add addresses to the whitelist, use:
-
-```sh
-yarn run whitelist --add [stars1..., stars2..., etc.]
-```
 
 ## Query sg721
 
