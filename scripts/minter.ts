@@ -51,6 +51,10 @@ async function init() {
     throw new Error('Invalid base token URI');
   }
 
+  if (!isValidIpfsUrl(config.image) && !isValidHttpUrl(config.image)) {
+    throw new Error('Image link is not valid. Must be IPFS or http(s)');
+  }
+
   if (config.numTokens > 10_000) {
     throw new Error('Too many tokens');
   }
