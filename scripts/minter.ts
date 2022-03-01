@@ -55,10 +55,6 @@ async function init() {
     throw new Error('Too many tokens');
   }
 
-  if (!isValidIpfsUrl(config.contractUri)) {
-    throw new Error('ContractUri is required');
-  }
-
   const startTime: Expiration | null =
     config.startTime == ''
       ? null
