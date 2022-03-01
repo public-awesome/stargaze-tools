@@ -47,6 +47,8 @@ module.exports = {
   // whitelistEndTime: '02 Mar 2022 22:00:00 GMT',
   // The price (in STARS) for the whitelist (minimum 25 STARS)
   // whitelistPrice: 50,
+  // The Per Address Limit during whitelist period this can be different than the main public limit
+  // whitelistPerAddressLimit: 1,
   // The contract address for your whitelist contract
   // Get this after running `yarn run whitelist`
   // whitelistContract: 'stars1...',

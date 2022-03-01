@@ -25,15 +25,24 @@ async function init() {
   if (!config.whitelistEndTime || config.whitelistEndTime == '') {
     throw new Error('invalid whitelistEndTime');
   }
-  const whitelist =
-    config.whitelist.length > 0
+  if (
+    !config.whitelistPerAddressLimit ||
+    config.whitelistPerAddressLimit <= 0
+  ) {
+    throw new Error('invalid whitelistPerAddressLimit in config.js');
+  }
+
+  // whitelist can start with empty values and added later
+  let whitelist = config.whitelist || [];
+  whitelist =
+    whitelist.length > 0
       ? (function (tmpWhitelist: Array<string> = config.whitelist) {
           tmpWhitelist.forEach(function (addr, index) {
             tmpWhitelist[index] = toStars(addr);
           });
           return tmpWhitelist;
         })()
-      : null;
+      : [];
 
   const instantiateFee = calculateFee(950_000, gasPrice);
 
@@ -57,6 +66,7 @@ async function init() {
       amount: (config.whitelistPrice * 1000000).toString(),
       denom: 'ustars',
     },
+    per_address_limit: config.whitelistPerAddressLimit,
   };
 
   console.log('Instantiating whitelist...');
@@ -110,12 +120,21 @@ async function add(add: string) {
   console.log(res);
 }
 
+async function showConfig() {
+  let res = await client.queryContractSmart(config.whitelistContract, {
+    config: {},
+  });
+  console.log(res);
+}
+
 const args = process.argv.slice(6);
 // console.log(args);
 if (args.length == 0) {
   await init();
 } else if (args.length == 2 && args[0] == '--add') {
   await add(args[1]);
+} else if (args.length == 1 && args[0] == '--show-config') {
+  await showConfig();
 } else {
   console.log('Invalid arguments');
 }
