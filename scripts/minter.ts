@@ -93,11 +93,11 @@ async function init() {
   };
 
   if (
-    tempMsg.sg721_instantiate_msg.config.royalties.payment_address ===
+    tempMsg.sg721_instantiate_msg.collection_info.royalties.payment_address ===
       undefined &&
-    tempMsg.sg721_instantiate_msg.config.royalties.share === undefined
+    tempMsg.sg721_instantiate_msg.collection_info.royalties.share === undefined
   ) {
-    tempMsg.sg721_instantiate_msg.config.royalties = null;
+    tempMsg.sg721_instantiate_msg.collection_info.royalties = null;
   }
   const msg = clean(tempMsg);
   console.log(JSON.stringify(msg, null, 2));
