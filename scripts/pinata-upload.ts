@@ -2,6 +2,7 @@ import fs from 'fs';
 import os from 'os';
 import path from 'path';
 import pinataSDK from '@pinata/sdk';
+import { naturalCompare } from '../src/sort';
 import { checkFiles } from '../src/validation';
 
 // Load config
@@ -41,28 +42,15 @@ export async function pinataUpload() {
   const images = fs.readdirSync(imagesBasePath);
   const metadata = fs.readdirSync(metadataBasePath);
 
+  // Sort files (need to be in natural order)
+  images.sort(naturalCompare);
+  metadata.sort(naturalCompare);
+
   // Validation
   checkFiles(images, metadata);
 
-  // Upload each image to IPFS and store hash in array
-  const uploadedImages: { IpfsHash: any }[] = [];
-  let index = 1;
-  for (let image of images) {
-    // Create readable stream
-    const readableStreamForFile = fs.createReadStream(
-      `${imagesBasePath}/${image}`
-    );
-
-    // Upload to IPFS
-    await pinata.pinFileToIPFS(readableStreamForFile).then((i) => {
-      console.log(`Uploaded Image: ${image}  ${index}/${images.length}`);
-      console.log(i);
-      index++;
-      uploadedImages.push(i);
-    });
-  }
-
-  // Wait for all images to be uploaded
+  // Upload images folder
+  const imagesBaseUri = await pinata.pinFromFS(imagesBasePath);
 
   // Create temp upload folder for metadata
   const tmpFolder = fs.mkdtempSync(path.join(os.tmpdir(), 'galaxy'));
@@ -75,7 +63,7 @@ export async function pinataUpload() {
     );
 
     // Set image to upload image IPFS hash
-    metadata.image = `ipfs://${uploadedImages[index].IpfsHash}`;
+    metadata.image = `ipfs://${imagesBaseUri.IpfsHash}/${images[index]}`;
 
     // Write updated metadata to tmp folder
     // We add 1, because token IDs start at 1
