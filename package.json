@@ -24,7 +24,6 @@
     "mint": "cosmwasm-cli --init scripts/mint.ts --code 'process.exit(0)'",
     "nft-storage-upload": "ts-node scripts/nft-storage-upload.ts",
     "nft-storage-clean": "ts-node scripts/nft-storage-clean.ts",
-    "batch-mint": "cosmwasm-cli --init scripts/mint-batch.ts --code 'process.exit(0)'",
     "whitelist": "cosmwasm-cli --init scripts/whitelist.ts --code 'process.exit(0)'",
     "query": "cosmwasm-cli --init scripts/query.ts",
     "pinata-upload": "ts-node scripts/pinata-upload.ts",

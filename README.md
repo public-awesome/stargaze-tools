@@ -40,27 +40,31 @@ yarn run minter
 
 ## Mint
 
-### Mint to an address
-
-```sh
-yarn run mint --to [address]
-```
-
-`[address]` can be any Cosmos address. It'll be converted automatically into a Stargaze address.
-
 ### Mint a specific NFT to an address
 
 ```sh
 yarn run mint --for [token_id] [address]
 ```
 
-### Batch mint
+`[address]` can be any Cosmos address. It'll be converted automatically into a Stargaze address.
 
-Mint `num` NFTs to yourself.
+### Mint to an address
 
 ```sh
-yarn run batch-mint [num]
+yarn run mint --to [address]
 ```
+
+This mints the next available token ID to the given address.
+
+### Batch mint
+
+Mint `num` NFTs to an address.
+
+```sh
+yarn run mint --to [address] --batch [num]
+```
+
+Same as `mint --to` but mints the next [num] tokens sequentially to the given address.
 
 ## Whitelist (optional)
 
