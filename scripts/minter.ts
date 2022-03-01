@@ -51,12 +51,12 @@ async function init() {
     throw new Error('Invalid base token URI');
   }
 
-  if (config.numTokens > 10_000) {
-    throw new Error('Too many tokens');
+  if (!isValidIpfsUrl(config.image) && !isValidHttpUrl(config.image)) {
+    throw new Error('Image link is not valid. Must be IPFS or http(s)');
   }
 
-  if (!isValidIpfsUrl(config.contractUri)) {
-    throw new Error('ContractUri is required');
+  if (config.numTokens > 10_000) {
+    throw new Error('Too many tokens');
   }
 
   const startTime: Expiration | null =
@@ -78,9 +78,10 @@ async function init() {
       name: config.name,
       symbol: config.symbol,
       minter: config.account,
-      config: {
-        contract_uri: config.contractUri,
-        creator: config.account,
+      collection_info: {
+        description: config.description,
+        image: config.image,
+        external_link: config.external_link,
         royalties: {
           payment_address: config.royaltyPaymentAddress,
           share: config.royaltyShare,
@@ -96,11 +97,11 @@ async function init() {
   };
 
   if (
-    tempMsg.sg721_instantiate_msg.config.royalties.payment_address ===
+    tempMsg.sg721_instantiate_msg.collection_info.royalties.payment_address ===
       undefined &&
-    tempMsg.sg721_instantiate_msg.config.royalties.share === undefined
+    tempMsg.sg721_instantiate_msg.collection_info.royalties.share === undefined
   ) {
-    tempMsg.sg721_instantiate_msg.config.royalties = null;
+    tempMsg.sg721_instantiate_msg.collection_info.royalties = null;
   }
   const msg = clean(tempMsg);
   console.log(JSON.stringify(msg, null, 2));

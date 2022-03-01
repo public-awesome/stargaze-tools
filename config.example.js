@@ -31,12 +31,14 @@ module.exports = {
   symbol: 'SYM',
   // Project description
   description: 'An awesome NFT series',
-  // Path to image to use as the main image for the collection
+  // Link to image to use as the main image for the collection.
+  // Either IPFS or valid http links allowed. Gif compatible.
   // (at least 500 x 500 pixels)
-  image: 'images/1.png',
-  // The URI containing JSON metadata about your contract
-  // Please follow: https://docs.opensea.io/docs/contract-level-metadata
-  contractUri: 'ipfs://...',
+  image:
+    'ipfs://bafybeigi3bwpvyvsmnbj46ra4hyffcxdeaj6ntfk5jpic5mx27x6ih2qvq/images/1.png',
+  // External_link is optional. Gif compatible
+  //   external_link:
+  // 'https://c.tenor.com/o656qFKDzeUAAAAC/rick-astley-never-gonna-give-you-up.gif',
 
   //// WHITELIST CONTRACT (OPTIONAL) ////
   // A list of whitelisted addresses that will be able to purchase the sale early
