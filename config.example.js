@@ -58,12 +58,6 @@ module.exports = {
   numTokens: 100,
   // The price (in STARS) for your NFTs (minimum 50 STARS)
   unitPrice: 100,
-  // The minter contract address
-  // Get this after running `yarn run minter`
-  minter: 'stars1...',
-  // SG721 contract address
-  // Get this after running `yarn run minter`
-  sg721: 'stars1...',
   // The address for royalites to go to (may be the same as `account`)
   // Comment out both below if not using royalites
   royaltyPaymentAddress: 'stars1...',
@@ -72,6 +66,12 @@ module.exports = {
   // The date when the sale goes live
   // If whitelist is enabled, only whitelisted addresses will be able to purchase
   startTime: '02 Mar 2022 22:00:00 GMT',
+  // The minter contract address
+  // Get this after running `yarn run minter`
+  minter: 'stars1...',
+  // SG721 contract address
+  // Get this after running `yarn run minter`
+  sg721: 'stars1...',
 
   //// CONTRACT CODE IDs ////
   // The code ID for sg721
