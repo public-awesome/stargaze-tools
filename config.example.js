@@ -31,9 +31,12 @@ module.exports = {
   symbol: 'SYM',
   // Project description
   description: 'An awesome NFT series',
-  // Path to image to use as the main image for the collection
+  // Path to image to use as the main image for the collection. gif compatible
   // (at least 500 x 500 pixels)
   image: 'images/1.png',
+  // external_link is optional. gif compatible
+  //   external_link:
+  // 'https://c.tenor.com/o656qFKDzeUAAAAC/rick-astley-never-gonna-give-you-up.gif',
   // The URI containing JSON metadata about your contract
   // Please follow: https://docs.opensea.io/docs/contract-level-metadata
   contractUri: 'ipfs://...',
