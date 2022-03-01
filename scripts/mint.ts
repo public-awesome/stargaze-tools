@@ -3,7 +3,7 @@ import {
   MsgExecuteContractEncodeObject,
 } from '@cosmjs/cosmwasm-stargate';
 import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
-import { calculateFee, GasPrice } from '@cosmjs/stargate';
+import { coins, calculateFee, GasPrice } from '@cosmjs/stargate';
 import { MsgExecuteContract } from 'cosmjs-types/cosmwasm/wasm/v1/tx';
 import { toUtf8 } from '@cosmjs/encoding';
 const { toStars } = require('./src/utils');
@@ -19,6 +19,29 @@ const client = await SigningCosmWasmClient.connectWithSigner(
   config.rpcEndpoint,
   wallet
 );
+
+async function mint() {
+  const starsRecipient = toStars(config.account);
+  console.log('general mint: ', starsRecipient);
+
+  const mintFee = coins(config.whitelistPrice * 1000000, 'ustars');
+  const msg = { mint: {} };
+  console.log(msg);
+
+  const result = await client.execute(
+    config.account,
+    config.minter,
+    msg,
+    executeFee,
+    'mint',
+    mintFee
+  );
+  const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');
+  console.info(
+    'The `wasm` event emitted by the contract execution:',
+    wasmEvent
+  );
+}
 
 async function mintTo(recipient: string) {
   const starsRecipient = toStars(recipient);
