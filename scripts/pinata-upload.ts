@@ -2,6 +2,7 @@ import fs from 'fs';
 import os from 'os';
 import path from 'path';
 import pinataSDK from '@pinata/sdk';
+import { naturalCompare } from '../src/sort';
 import { checkFiles } from '../src/validation';
 
 // Load config
@@ -40,6 +41,10 @@ export async function pinataUpload() {
   // Get list of images and metadata
   const images = fs.readdirSync(imagesBasePath);
   const metadata = fs.readdirSync(metadataBasePath);
+
+  // Sort files (need to be in natural order)
+  images.sort(naturalCompare);
+  metadata.sort(naturalCompare);
 
   // Validation
   checkFiles(images, metadata);

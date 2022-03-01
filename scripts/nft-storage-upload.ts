@@ -4,6 +4,7 @@ import mime from 'mime';
 import { NFTStorage, Blob, File } from 'nft.storage';
 import os from 'os';
 import path from 'path';
+import { naturalCompare } from '../src/sort';
 import { checkFiles } from '../src/validation';
 
 // Load config
@@ -39,6 +40,10 @@ export async function nftStorageUpload() {
   // Get list of images and metadata
   const images = fs.readdirSync(imagesBasePath);
   const metadata = fs.readdirSync(metadataBasePath);
+
+  // Sort files (need to be in natural order)
+  images.sort(naturalCompare);
+  metadata.sort(naturalCompare);
 
   // Validation
   checkFiles(images, metadata);
