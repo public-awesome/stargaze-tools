@@ -37,9 +37,6 @@ module.exports = {
   // external_link is optional. gif compatible
   //   external_link:
   // 'https://c.tenor.com/o656qFKDzeUAAAAC/rick-astley-never-gonna-give-you-up.gif',
-  // The URI containing JSON metadata about your contract
-  // Please follow: https://docs.opensea.io/docs/contract-level-metadata
-  contractUri: 'ipfs://...',
 
   //// WHITELIST CONTRACT (OPTIONAL) ////
   // A list of whitelisted addresses that will be able to purchase the sale early
