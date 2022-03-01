@@ -74,9 +74,10 @@ async function init() {
       name: config.name,
       symbol: config.symbol,
       minter: config.account,
-      config: {
-        contract_uri: config.contractUri,
-        creator: config.account,
+      collection_info: {
+        description: config.description,
+        image: config.image,
+        external_link: config.external_link,
         royalties: {
           payment_address: config.royaltyPaymentAddress,
           share: config.royaltyShare,
