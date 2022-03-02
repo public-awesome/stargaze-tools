@@ -21,19 +21,6 @@ export async function nftStorageUpload() {
   );
   console.log(config);
 
-  // Upload collection showcase image + metadata
-  const content = await fs.promises.readFile(config.image);
-  const type = mime.getType(config.image);
-
-  const contractMetadata = await client.store({
-    name: config.name,
-    description: config.description,
-    image: new File([content], path.basename(config.image), { type } as any),
-  });
-
-  // Set contract uri
-  let contractUri = contractMetadata.url;
-
   const imagesBasePath = path.join(__dirname, '../images');
   const metadataBasePath = path.join(__dirname, '../metadata');
 
@@ -80,13 +67,11 @@ export async function nftStorageUpload() {
   // Set base token uri
   const baseTokenUri = `ipfs://${result}/${projectPath}`;
 
-  console.log('Set these fields in your config.js file: ');
+  console.log('Set this field in your config.js file: ');
   console.log('baseTokenUri: ', baseTokenUri);
-  console.log('contractUri: ', contractUri);
 
   return {
     baseTokenUri,
-    contractUri,
   };
 }
 
