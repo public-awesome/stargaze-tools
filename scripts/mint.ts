@@ -83,7 +83,7 @@ async function batchMint(recipient: string, num: number) {
   const result = await client.signAndBroadcast(
     config.account,
     Array(num).fill(executeContractMsg),
-    calculateFee(100_000 * num, gasPrice),
+    calculateFee(200_000 * num, gasPrice),
     'batch mint'
   );
 
