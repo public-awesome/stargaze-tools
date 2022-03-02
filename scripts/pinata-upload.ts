@@ -20,21 +20,6 @@ export async function pinataUpload() {
   );
   console.log(config);
 
-  // Upload collection showcase image + metadata
-  const readableStreamForFile = fs.createReadStream(config.image);
-  const collectionResult = await pinata.pinFileToIPFS(readableStreamForFile);
-
-  // Create collection metadata
-  // https://docs.opensea.io/docs/contract-level-metadata
-  const collectionMetadata = {
-    name: config.name,
-    description: config.description,
-    image: `ipfs://${collectionResult.IpfsHash}`,
-  };
-
-  // Upload collection metadata to IPFS
-  const collectionInfo = await pinata.pinJSONToIPFS(collectionMetadata);
-
   const imagesBasePath = path.join(__dirname, '../images');
   const metadataBasePath = path.join(__dirname, '../metadata');
 
@@ -76,16 +61,11 @@ export async function pinataUpload() {
   // Set base token uri
   const baseTokenUri = `ipfs://${result.IpfsHash}`;
 
-  // Set contract uri
-  const contractUri = `ipfs://${collectionInfo.IpfsHash}`;
-
-  console.log('Set these fields in your config.js file: ');
+  console.log('Set this field in your config.js file: ');
   console.log('baseTokenUri: ', baseTokenUri);
-  console.log('contractUri: ', contractUri);
 
   return {
     baseTokenUri,
-    contractUri,
   };
 }
 
