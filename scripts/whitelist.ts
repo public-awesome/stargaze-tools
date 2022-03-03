@@ -32,7 +32,7 @@ async function init() {
     throw new Error('invalid whitelistPerAddressLimit in config.js');
   }
 
-  // whitelist can start with empty values and added later
+  // Whitelist can start with empty values and added later
   let whitelist = config.whitelist || [];
   whitelist =
     whitelist.length > 0
@@ -48,13 +48,13 @@ async function init() {
 
   const whitelistStartTime: Expiration = {
     at_time:
-      // time expressed in nanoseconds (1 millionth of a millisecond)
+      // Time expressed in nanoseconds (1 millionth of a millisecond)
       (new Date(config.whitelistStartTime).getTime() * 1_000_000).toString(),
   };
   //   console.log('whitelist start time: ' + whitelistStartTime?.at_time);
   const whitelistEndTime: Expiration = {
     at_time:
-      // time expressed in nanoseconds (1 millionth of a millisecond)
+      // Time expressed in nanoseconds (1 millionth of a millisecond)
       (new Date(config.whitelistEndTime).getTime() * 1_000_000).toString(),
   };
 
@@ -121,8 +121,7 @@ async function add(add: string) {
 }
 
 async function addFile() {
-  // open addresses.csv, import list of addresses
-  // validate addrs
+  // Open addresses.csv, import list of addresses
   const addrs: Array<string> = [
     'stars15prsrqly5clpx0pshr5mp8qsurnrczx8w4l9fm',
     'stars1qgvetk44zx8w5ww7vvug5zvp05ds93l82sr3lw',
@@ -137,9 +136,11 @@ async function addFile() {
   if (uniqueValidatedAddrs.length > 5000) {
     throw new Error('Whitelist max members exceeded');
   }
-  // create msgs and batch 50 msgs per tx
-  // execute txs
-  // query and display members
+  // Create msgs and batch 50 msgs per tx
+  // Execute txs
+  // Query txs and disply responses
+  // Query and display members
+  console.log('Finished adding whitelist');
 }
 
 async function showConfig() {
