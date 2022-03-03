@@ -1,10 +1,16 @@
-import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
+import {
+  SigningCosmWasmClient,
+  MsgExecuteContractEncodeObject,
+} from '@cosmjs/cosmwasm-stargate';
 import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
 import { calculateFee, coins, GasPrice } from '@cosmjs/stargate';
+import { MsgExecuteContract } from 'cosmjs-types/cosmwasm/wasm/v1/tx';
+import { toUtf8 } from '@cosmjs/encoding';
 
 const config = require('./config');
 const { toStars } = require('./src/utils');
 const WHITELIST_CREATION_FEE = coins('100000000', 'ustars');
+const MSG_ADD_ADDR_LIMIT = 2;
 
 const gasPrice = GasPrice.fromString('0ustars');
 const wallet = await DirectSecp256k1HdWallet.fromMnemonic(config.mnemonic, {
@@ -133,10 +139,44 @@ async function addFile() {
     validatedAddrs.push(toStars(addr));
   });
   let uniqueValidatedAddrs = [...new Set(validatedAddrs)];
-  if (uniqueValidatedAddrs.length > 5000) {
-    throw new Error('Whitelist max members exceeded');
+  if (uniqueValidatedAddrs.length > 500) {
+    throw new Error(
+      'Too many whitelist addrs added in a transaction. Max 500.'
+    );
   }
-  // Create msgs and batch 50 msgs per tx
+  console.log(
+    'Whitelist addresses validated and deduped. member number: ' +
+      uniqueValidatedAddrs.length
+  );
+
+  // Create msgs and batch MSG_ADD_ADDR_LIMIT msgs per tx
+  const chunkedAddrs = await splitAddrs(
+    uniqueValidatedAddrs,
+    MSG_ADD_ADDR_LIMIT
+  );
+  let executeContractMsgs: Array<MsgExecuteContractEncodeObject> = [];
+  chunkedAddrs.forEach((addrs: Array<string>) => {
+    const addAddrsMsg = { update_members: { add: addrs, remove: [] } };
+    const executeContractMsg: MsgExecuteContractEncodeObject = {
+      typeUrl: '/cosmwasm.wasm.v1.MsgExecuteContract',
+      value: MsgExecuteContract.fromPartial({
+        sender: config.account,
+        contract: config.whitelistContract,
+        msg: toUtf8(JSON.stringify(addAddrsMsg)),
+        funds: [...[]],
+      }),
+    };
+    executeContractMsgs.push(executeContractMsg);
+  });
+
+  const result = await client.signAndBroadcast(
+    config.account,
+    executeContractMsgs,
+    calculateFee(200_000 * executeContractMsgs.length, gasPrice),
+    'batch add addrs to whitelist'
+  );
+
+  console.log('Tx hash: ', result.transactionHash);
   // Execute txs
   // Query txs and disply responses
   // Query and display members
@@ -148,6 +188,15 @@ async function showConfig() {
     config: {},
   });
   console.log(res);
+}
+
+async function splitAddrs(addrs: Array<string>, size: number) {
+  let newArr: Array<Array<string>> = [];
+  for (let i = 0; i < addrs.length; i += size) {
+    const sliceAddrs = addrs.slice(i, i + size);
+    newArr.push(sliceAddrs);
+  }
+  return newArr;
 }
 
 const args = process.argv.slice(6);
