@@ -120,6 +120,16 @@ async function add(add: string) {
   console.log(res);
 }
 
+async function addFile(fileName: string) {
+  // open csv file, import list of addresses
+  // validate addrs
+  // dedupe
+  // simple validate under whitelist max size
+  // create msgs and batch 50 msgs per tx
+  // execute txs
+  // query and display members
+}
+
 async function showConfig() {
   let res = await client.queryContractSmart(config.whitelistContract, {
     config: {},
@@ -133,6 +143,8 @@ if (args.length == 0) {
   await init();
 } else if (args.length == 2 && args[0] == '--add') {
   await add(args[1]);
+} else if (args.length == 2 && args[0] == '--add-file') {
+  await addFile(args[1]);
 } else if (args.length == 1 && args[0] == '--show-config') {
   await showConfig();
 } else {
