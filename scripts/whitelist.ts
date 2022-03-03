@@ -10,7 +10,7 @@ import { toUtf8 } from '@cosmjs/encoding';
 const config = require('./config');
 const { toStars } = require('./src/utils');
 const WHITELIST_CREATION_FEE = coins('100000000', 'ustars');
-const MSG_ADD_ADDR_LIMIT = 2;
+const MSG_ADD_ADDR_LIMIT = 50;
 
 const gasPrice = GasPrice.fromString('0ustars');
 const wallet = await DirectSecp256k1HdWallet.fromMnemonic(config.mnemonic, {
@@ -139,7 +139,7 @@ async function addFile() {
     validatedAddrs.push(toStars(addr));
   });
   let uniqueValidatedAddrs = [...new Set(validatedAddrs)];
-  if (uniqueValidatedAddrs.length > 500) {
+  if (uniqueValidatedAddrs.length > 1000) {
     throw new Error(
       'Too many whitelist addrs added in a transaction. Max 500.'
     );
@@ -177,10 +177,11 @@ async function addFile() {
   );
 
   console.log('Tx hash: ', result.transactionHash);
-  // Execute txs
-  // Query txs and disply responses
-  // Query and display members
-  console.log('Finished adding whitelist');
+
+  let res = await client.queryContractSmart(config.whitelistContract, {
+    members: {},
+  });
+  console.log(res);
 }
 
 async function showConfig() {
