@@ -24,11 +24,3 @@ export const isValidHttpUrl = (uri: string) => {
 
   return url.protocol === 'http:' || url.protocol === 'https:';
 };
-
-export function validateAddr(addr: string): boolean {
-  // validate non-contract addresses
-  return (
-    checkPrefixAndLength('stars', addr, 44) ||
-    checkPrefixAndLength('stars', addr, 64)
-  );
-}
