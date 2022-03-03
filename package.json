@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@pinata/sdk": "^1.1.23",
+    "csv-parser": "^3.0.0",
     "files-from-path": "^0.2.3",
     "ipfs-car": "^0.6.1",
     "mime": "^3.0.0",
