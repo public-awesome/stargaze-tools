@@ -120,11 +120,23 @@ async function add(add: string) {
   console.log(res);
 }
 
-async function addFile(fileName: string) {
-  // open csv file, import list of addresses
+async function addFile() {
+  // open addresses.csv, import list of addresses
   // validate addrs
-  // dedupe
-  // simple validate under whitelist max size
+  const addrs: Array<string> = [
+    'stars15prsrqly5clpx0pshr5mp8qsurnrczx8w4l9fm',
+    'stars1qgvetk44zx8w5ww7vvug5zvp05ds93l82sr3lw',
+    'stars1njygkj045y30mqe369hrheelfkcgzx06aw0xrp',
+    'stars17f38ffw3jks2gyfz6ka46p390c9vk7d2tzvv7r',
+  ];
+  let validatedAddrs: Array<string> = [];
+  addrs.forEach((addr) => {
+    validatedAddrs.push(toStars(addr));
+  });
+  let uniqueValidatedAddrs = [...new Set(validatedAddrs)];
+  if (uniqueValidatedAddrs.length > 5000) {
+    throw new Error('Whitelist max members exceeded');
+  }
   // create msgs and batch 50 msgs per tx
   // execute txs
   // query and display members
@@ -143,8 +155,8 @@ if (args.length == 0) {
   await init();
 } else if (args.length == 2 && args[0] == '--add') {
   await add(args[1]);
-} else if (args.length == 2 && args[0] == '--add-file') {
-  await addFile(args[1]);
+} else if (args.length == 1 && args[0] == '--add-file') {
+  await addFile();
 } else if (args.length == 1 && args[0] == '--show-config') {
   await showConfig();
 } else {
