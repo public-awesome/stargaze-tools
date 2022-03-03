@@ -1,6 +1,10 @@
-import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
-import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
-import { calculateFee, coins, GasPrice } from '@cosmjs/stargate';
+import {
+  calculateFee,
+  coins,
+  GasPrice,
+  DirectSecp256k1HdWallet,
+  SigningCosmWasmClient,
+} from 'cosmwasm';
 
 const config = require('./config');
 const { toStars } = require('./src/utils');

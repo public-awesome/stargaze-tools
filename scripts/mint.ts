@@ -1,11 +1,13 @@
 import {
   SigningCosmWasmClient,
   MsgExecuteContractEncodeObject,
-} from '@cosmjs/cosmwasm-stargate';
-import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
-import { coins, calculateFee, GasPrice } from '@cosmjs/stargate';
+  DirectSecp256k1HdWallet,
+  coins,
+  calculateFee,
+  GasPrice,
+  toUtf8,
+} from 'cosmwasm';
 import { MsgExecuteContract } from 'cosmjs-types/cosmwasm/wasm/v1/tx';
-import { toUtf8 } from '@cosmjs/encoding';
 const { toStars } = require('./src/utils');
 
 const config = require('./config');

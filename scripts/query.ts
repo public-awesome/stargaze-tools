@@ -1,4 +1,4 @@
-import { CosmWasmClient } from '@cosmjs/cosmwasm-stargate';
+import { CosmWasmClient } from 'cosmwasm';
 const config = require('./config');
 
 const client = await CosmWasmClient.connect(config.rpcEndpoint);

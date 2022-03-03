@@ -1,9 +1,9 @@
-import { Bech32 } from '@cosmjs/encoding';
+import { toBech32, fromBech32 } from 'cosmwasm';
 
 export const toStars = (addr: string) => {
   if (!addr.startsWith('stars')) {
-    const { data } = Bech32.decode(addr);
-    const starsAddr = Bech32.encode('stars', data);
+    const { data } = fromBech32(addr);
+    const starsAddr = toBech32('stars', data);
     addr = starsAddr;
   }
   return addr;
