@@ -67,6 +67,8 @@ module.exports = {
   numTokens: 100,
   // The price (in STARS) for your NFTs (minimum 50 STARS)
   unitPrice: 100,
+  // The max amount of NFTs an address can mint
+  perAddressLimit: 1,
   // The date when the sale goes live
   // If whitelist is enabled, only whitelisted addresses will be able to purchase
   startTime: '02 Mar 2022 22:00:00 GMT',
