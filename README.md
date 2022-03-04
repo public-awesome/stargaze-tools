@@ -1,6 +1,6 @@
 # Stargaze Tools
 
-## WORK IN PROGRESS -- NOT READY FOR PRODUCTION USE YET
+## WORK IN PROGRESS -- TESTNET USE ONLY
 
 Stargaze Tools is a set of tools for launching a project and minting on Stargaze.
 
