@@ -26,7 +26,8 @@ if (!isValidHttpUrl(config.rpcEndpoint)) {
 }
 const client = await SigningCosmWasmClient.connectWithSigner(
   config.rpcEndpoint,
-  wallet
+  wallet,
+  { gasPrice }
 );
 
 function isValidIpfsUrl(uri: string) {
@@ -72,8 +73,6 @@ async function init() {
             (new Date(config.startTime).getTime() * 1_000_000).toString(),
         };
 
-  const instantiateFee = calculateFee(950_000, gasPrice);
-
   const tempMsg = {
     base_token_uri: config.baseTokenUri,
     num_tokens: config.numTokens,
@@ -116,7 +115,7 @@ async function init() {
     config.minterCodeId,
     msg,
     config.name,
-    instantiateFee,
+    'auto',
     { funds: NEW_COLLECTION_FEE }
   );
   const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');

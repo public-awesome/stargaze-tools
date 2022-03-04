@@ -12,14 +12,14 @@ const { toStars } = require('./src/utils');
 
 const config = require('./config');
 const gasPrice = GasPrice.fromString('0ustars');
-const executeFee = calculateFee(800_000, gasPrice);
 
 const wallet = await DirectSecp256k1HdWallet.fromMnemonic(config.mnemonic, {
   prefix: 'stars',
 });
 const client = await SigningCosmWasmClient.connectWithSigner(
   config.rpcEndpoint,
-  wallet
+  wallet,
+  { gasPrice }
 );
 
 async function test_whitelist() {
@@ -34,7 +34,7 @@ async function test_whitelist() {
     config.account,
     config.minter,
     msg,
-    executeFee,
+    'auto',
     'mint',
     mintFee
   );
@@ -56,7 +56,7 @@ async function mintTo(recipient: string) {
     config.account,
     config.minter,
     msg,
-    executeFee,
+    'auto',
     'mint to'
   );
   const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');
@@ -105,7 +105,7 @@ async function mintFor(tokenId: string, recipient: string) {
     config.account,
     config.minter,
     msg,
-    executeFee,
+    'auto',
     'mint for'
   );
   const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');
