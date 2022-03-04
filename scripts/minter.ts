@@ -64,6 +64,10 @@ async function init() {
     throw new Error('Too many tokens');
   }
 
+  if (!config.perAddressLimit || config.perAddressLimit === 0) {
+    throw new Error('perAddressLimit must be defined and greater than 0');
+  }
+
   const startTime: Expiration | null =
     config.startTime == ''
       ? null
@@ -92,6 +96,7 @@ async function init() {
         },
       },
     },
+    per_address_limit: config.perAddressLimit,
     whitelist: config.whitelistContract,
     start_time: startTime,
     unit_price: {
