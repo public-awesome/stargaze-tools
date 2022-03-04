@@ -16,7 +16,8 @@ const wallet = await DirectSecp256k1HdWallet.fromMnemonic(config.mnemonic, {
 });
 const client = await SigningCosmWasmClient.connectWithSigner(
   config.rpcEndpoint,
-  wallet
+  wallet,
+  { gasPrice }
 );
 export declare type Expiration = {
   readonly at_time: string;
@@ -48,8 +49,6 @@ async function init() {
         })()
       : [];
 
-  const instantiateFee = calculateFee(950_000, gasPrice);
-
   const whitelistStartTime: Expiration = {
     at_time:
       // time expressed in nanoseconds (1 millionth of a millisecond)
@@ -80,7 +79,7 @@ async function init() {
     config.whitelistCodeId,
     msg,
     'whitelist',
-    instantiateFee,
+    'auto',
     { funds: WHITELIST_CREATION_FEE }
   );
   const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');
@@ -99,17 +98,15 @@ async function add(add: string) {
     console.log('add addresses: ', addAddresses.join(','));
   }
 
-  const executeFee = calculateFee(600_000, gasPrice);
   const result = await client.execute(
     config.account,
     config.whitelistContract,
     {
-      update_members: {
-        add: addAddresses,
-        remove: [],
+      add_members: {
+        to_add: addAddresses,
       },
     },
-    executeFee,
+    'auto',
     'update whitelist'
   );
   const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');
