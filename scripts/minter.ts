@@ -83,6 +83,7 @@ async function init() {
       symbol: config.symbol,
       minter: config.account,
       collection_info: {
+        creator: config.account,
         description: config.description,
         image: config.image,
         external_link: config.external_link,
