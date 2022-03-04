@@ -102,9 +102,8 @@ async function add(add: string) {
     config.account,
     config.whitelistContract,
     {
-      update_members: {
-        add: addAddresses,
-        remove: [],
+      add_members: {
+        to_add: addAddresses,
       },
     },
     'auto',
