@@ -6,9 +6,10 @@ import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
 import { calculateFee, coins, GasPrice } from '@cosmjs/stargate';
 import { MsgExecuteContract } from 'cosmjs-types/cosmwasm/wasm/v1/tx';
 import { toUtf8 } from '@cosmjs/encoding';
+import * as fs from 'fs';
+import * as path from 'path';
+import { parse } from 'csv-parse';
 
-const csv = require('csv-parser');
-const fs = require('fs');
 const config = require('./config');
 const { toStars } = require('./src/utils');
 const WHITELIST_CREATION_FEE = coins('100000000', 'ustars');
@@ -128,17 +129,47 @@ async function add(add: string) {
   console.log(res);
 }
 
-async function addFile() {
+const addFile = () => {
+  type Whitelist = {
+    address: string;
+  };
+  const __dirname = process.cwd();
+  const csvFilePath = path.resolve(__dirname, './whitelist_addresses.csv');
+
+  const headers = ['address'];
+
+  const fileContent = fs.readFileSync(csvFilePath, { encoding: 'utf-8' });
+  console.log('before parse');
+  parse(
+    fileContent,
+    {
+      delimiter: ',',
+      columns: headers,
+    },
+    (error, result: Whitelist[]) => {
+      if (error) {
+        console.error(error);
+      }
+
+      console.log('Result', result);
+    }
+  );
+
+  console.log('after parse');
+};
+
+async function addaionFile() {
   // Open addresses.csv, import list of addresses
-  const results: string[] = [];
-
-  fs.createReadStream('data.csv')
-    .pipe(csv())
-    .on('data', (data: string) => results.push(data))
-    .on('end', () => {
-      console.log(results);
-    });
-
+  //   const results: string[] = [];
+  //   __dirname = process.cwd();
+  //   //   console.log('process.cwd() : ', process.cwd());
+  //   fs.createReadStream(__dirname + 'data.csv')
+  //     .pipe(csv())
+  //     .on('data', (data) => results.push(data))
+  //     .on('end', () => {
+  //       console.log(results);
+  //     });
+  //   console.log(results);
   //   const addrs: Array<string> = [
   //     'stars15prsrqly5clpx0pshr5mp8qsurnrczx8w4l9fm',
   //     'stars1qgvetk44zx8w5ww7vvug5zvp05ds93l82sr3lw',
@@ -159,7 +190,6 @@ async function addFile() {
   //     'Whitelist addresses validated and deduped. member number: ' +
   //       uniqueValidatedAddrs.length
   //   );
-
   //   // Create msgs and batch MSG_ADD_ADDR_LIMIT msgs per tx
   //   const chunkedAddrs = await splitAddrs(
   //     uniqueValidatedAddrs,
@@ -179,16 +209,13 @@ async function addFile() {
   //     };
   //     executeContractMsgs.push(executeContractMsg);
   //     });
-
   //   const result = await client.signAndBroadcast(
   //     config.account,
   //     executeContractMsgs,
   //     calculateFee(200_000 * executeContractMsgs.length, gasPrice),
   //     'batch add addrs to whitelist'
   //   );
-
   //   console.log('Tx hash: ', result.transactionHash);
-
   //   let res = await client.queryContractSmart(config.whitelistContract, {
   //     members: {},
   //   });
@@ -211,16 +238,17 @@ async function splitAddrs(addrs: Array<string>, size: number) {
   return newArr;
 }
 
-const args = process.argv.slice(6);
-// console.log(args);
-if (args.length == 0) {
-  await init();
-} else if (args.length == 2 && args[0] == '--add') {
-  await add(args[1]);
-} else if (args.length == 1 && args[0] == '--add-file') {
-  await addFile();
-} else if (args.length == 1 && args[0] == '--show-config') {
-  await showConfig();
-} else {
-  console.log('Invalid arguments');
-}
+addFile();
+// const args = process.argv.slice(6);
+// // console.log(args);
+// if (args.length == 0) {
+//   await init();
+// } else if (args.length == 2 && args[0] == '--add') {
+//   await add(args[1]);
+// } else if (args.length == 1 && args[0] == '--add-file') {
+//   await addFile();
+// } else if (args.length == 1 && args[0] == '--show-config') {
+//   await showConfig();
+// } else {
+//   console.log('Invalid arguments');
+// }
