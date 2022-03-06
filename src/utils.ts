@@ -4,9 +4,10 @@ export const toStars = (addr: string) => {
   if (!addr.startsWith('stars')) {
     const { data } = Bech32.decode(addr);
     const starsAddr = Bech32.encode('stars', data);
-    // wallet address length 44, contract address length 64
-    if (data.length != 44 && data.length != 64) {
-      throw new Error('Invalid address: ' + addr);
+    let { data: data2 } = Bech32.decode(starsAddr);
+    // wallet address length 44, contract address length 64, cosmos 20
+    if (![44, 64, 20].includes(data2.length)) {
+      throw new Error('Invalid address: ' + addr + ' ' + starsAddr);
     }
     addr = starsAddr;
   }
