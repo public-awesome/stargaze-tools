@@ -104,6 +104,8 @@ async function splitAddrs(addrs: Array<string>, size: number) {
   return newArr;
 }
 
-async function calculateWhitelistUpgradeFee() {}
+async function calculateWhitelistUpgradeFee() {
+  // When whitelist amount goes to 1001, 2001, 3001, etc the increase whitelist transaction must include the upgrade fee.
+}
 
 addFile();

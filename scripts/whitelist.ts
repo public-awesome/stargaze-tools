@@ -129,99 +129,6 @@ async function add(add: string) {
   console.log(res);
 }
 
-const addFile = () => {
-  type Whitelist = {
-    address: string;
-  };
-  const __dirname = process.cwd();
-  const csvFilePath = path.resolve(__dirname, './whitelist_addresses.csv');
-
-  const headers = ['address'];
-
-  const fileContent = fs.readFileSync(csvFilePath, { encoding: 'utf-8' });
-  console.log('before parse');
-  parse(
-    fileContent,
-    {
-      delimiter: ',',
-      columns: headers,
-    },
-    (error, result: Whitelist[]) => {
-      if (error) {
-        console.error(error);
-      }
-
-      console.log('Result', result);
-    }
-  );
-
-  console.log('after parse');
-};
-
-async function addaionFile() {
-  // Open addresses.csv, import list of addresses
-  //   const results: string[] = [];
-  //   __dirname = process.cwd();
-  //   //   console.log('process.cwd() : ', process.cwd());
-  //   fs.createReadStream(__dirname + 'data.csv')
-  //     .pipe(csv())
-  //     .on('data', (data) => results.push(data))
-  //     .on('end', () => {
-  //       console.log(results);
-  //     });
-  //   console.log(results);
-  //   const addrs: Array<string> = [
-  //     'stars15prsrqly5clpx0pshr5mp8qsurnrczx8w4l9fm',
-  //     'stars1qgvetk44zx8w5ww7vvug5zvp05ds93l82sr3lw',
-  //     'stars1njygkj045y30mqe369hrheelfkcgzx06aw0xrp',
-  //     'stars17f38ffw3jks2gyfz6ka46p390c9vk7d2tzvv7r',
-  //   ];
-  //   let validatedAddrs: Array<string> = [];
-  //   addrs.forEach((addr) => {
-  //     validatedAddrs.push(toStars(addr));
-  //   });
-  //   let uniqueValidatedAddrs = [...new Set(validatedAddrs)];
-  //   if (uniqueValidatedAddrs.length > 1000) {
-  //     throw new Error(
-  //       'Too many whitelist addrs added in a transaction. Max 500.'
-  //     );
-  //   }
-  //   console.log(
-  //     'Whitelist addresses validated and deduped. member number: ' +
-  //       uniqueValidatedAddrs.length
-  //   );
-  //   // Create msgs and batch MSG_ADD_ADDR_LIMIT msgs per tx
-  //   const chunkedAddrs = await splitAddrs(
-  //     uniqueValidatedAddrs,
-  //     MSG_ADD_ADDR_LIMIT
-  //   );
-  //   let executeContractMsgs: Array<MsgExecuteContractEncodeObject> = [];
-  //   chunkedAddrs.forEach((addrs: Array<string>) => {
-  //     const addAddrsMsg = { update_members: { add: addrs, remove: [] } };
-  //     const executeContractMsg: MsgExecuteContractEncodeObject = {
-  //       typeUrl: '/cosmwasm.wasm.v1.MsgExecuteContract',
-  //       value: MsgExecuteContract.fromPartial({
-  //         sender: config.account,
-  //         contract: config.whitelistContract,
-  //         msg: toUtf8(JSON.stringify(addAddrsMsg)),
-  //         funds: [...[]],
-  //       }),
-  //     };
-  //     executeContractMsgs.push(executeContractMsg);
-  //     });
-  //   const result = await client.signAndBroadcast(
-  //     config.account,
-  //     executeContractMsgs,
-  //     calculateFee(200_000 * executeContractMsgs.length, gasPrice),
-  //     'batch add addrs to whitelist'
-  //   );
-  //   console.log('Tx hash: ', result.transactionHash);
-  //   let res = await client.queryContractSmart(config.whitelistContract, {
-  //     members: {},
-  //   });
-  //   console.log(res);
-}
-
 async function showConfig() {
   let res = await client.queryContractSmart(config.whitelistContract, {
     config: {},
@@ -229,26 +136,14 @@ async function showConfig() {
   console.log(res);
 }
 
-async function splitAddrs(addrs: Array<string>, size: number) {
-  let newArr: Array<Array<string>> = [];
-  for (let i = 0; i < addrs.length; i += size) {
-    const sliceAddrs = addrs.slice(i, i + size);
-    newArr.push(sliceAddrs);
-  }
-  return newArr;
+const args = process.argv.slice(6);
+console.log(args);
+if (args.length == 0) {
+  await init();
+} else if (args.length == 2 && args[0] == '--add') {
+  await add(args[1]);
+} else if (args.length == 1 && args[0] == '--show-config') {
+  await showConfig();
+} else {
+  console.log('Invalid arguments');
 }
-
-addFile();
-// const args = process.argv.slice(6);
-// // console.log(args);
-// if (args.length == 0) {
-//   await init();
-// } else if (args.length == 2 && args[0] == '--add') {
-//   await add(args[1]);
-// } else if (args.length == 1 && args[0] == '--add-file') {
-//   await addFile();
-// } else if (args.length == 1 && args[0] == '--show-config') {
-//   await showConfig();
-// } else {
-//   console.log('Invalid arguments');
-// }
