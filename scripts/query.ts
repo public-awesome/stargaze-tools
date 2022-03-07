@@ -9,3 +9,8 @@ console.log('account balance:', balance);
 
 const numTokens = await client.queryContractSmart(sg721, { num_tokens: {} });
 console.log('num tokens:', numTokens);
+
+const collectionInfo = await client.queryContractSmart(sg721, {
+  collection_info: {},
+});
+console.log('collection info:', collectionInfo);

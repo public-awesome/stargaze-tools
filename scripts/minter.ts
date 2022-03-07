@@ -85,7 +85,7 @@ async function init() {
         description: config.description,
         image: config.image,
         external_link: config.external_link,
-        royalties: {
+        royalty_info: {
           payment_address: config.royaltyPaymentAddress,
           share: config.royaltyShare,
         },
@@ -101,11 +101,12 @@ async function init() {
   };
 
   if (
-    tempMsg.sg721_instantiate_msg.collection_info.royalties.payment_address ===
-      undefined &&
-    tempMsg.sg721_instantiate_msg.collection_info.royalties.share === undefined
+    tempMsg.sg721_instantiate_msg.collection_info.royalty_info
+      .payment_address === undefined &&
+    tempMsg.sg721_instantiate_msg.collection_info.royalty_info.share ===
+      undefined
   ) {
-    tempMsg.sg721_instantiate_msg.collection_info.royalties = null;
+    tempMsg.sg721_instantiate_msg.collection_info.royalty_info = null;
   }
   const msg = clean(tempMsg);
   console.log(JSON.stringify(msg, null, 2));
