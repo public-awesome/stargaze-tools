@@ -19,9 +19,9 @@ const client = await SigningCosmWasmClient.connectWithSigner(
   wallet,
   { gasPrice }
 );
-export declare type Expiration = {
-  readonly at_time: string;
-};
+
+export type Uint64 = string;
+export type Timestamp = Uint64;
 
 async function init() {
   if (!config.whitelistStartTime || config.whitelistStartTime == '') {
@@ -49,17 +49,14 @@ async function init() {
         })()
       : [];
 
-  const whitelistStartTime: Expiration = {
-    at_time:
-      // time expressed in nanoseconds (1 millionth of a millisecond)
-      (new Date(config.whitelistStartTime).getTime() * 1_000_000).toString(),
-  };
-  //   console.log('whitelist start time: ' + whitelistStartTime?.at_time);
-  const whitelistEndTime: Expiration = {
-    at_time:
-      // time expressed in nanoseconds (1 millionth of a millisecond)
-      (new Date(config.whitelistEndTime).getTime() * 1_000_000).toString(),
-  };
+  // time expressed in nanoseconds (1 millionth of a millisecond)
+  const whitelistStartTime: Timestamp = (
+    new Date(config.whitelistStartTime).getTime() * 1_000_000
+  ).toString();
+
+  const whitelistEndTime: Timestamp = (
+    new Date(config.whitelistEndTime).getTime() * 1_000_000
+  ).toString();
 
   const msg = {
     members: whitelist,
