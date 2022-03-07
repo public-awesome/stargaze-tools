@@ -67,6 +67,7 @@ async function init() {
       denom: 'ustars',
     },
     per_address_limit: config.whitelistPerAddressLimit,
+    member_limit: config.whitelistMemberLimit,
   };
 
   console.log('Instantiating whitelist...');

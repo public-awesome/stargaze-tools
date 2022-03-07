@@ -55,7 +55,9 @@ module.exports = {
   // The price (in STARS) for the whitelist (minimum 25 STARS)
   // whitelistPrice: 50,
   // The Per Address Limit during whitelist period this can be different than the main public limit
-  // whitelistPerAddressLimit: 1,
+  // whitelistPerAddressLimit: 5,
+  // The number of members in the whitelist (max 5000, each 1000 is 100 STARS)
+  // whitelistMemberLimit: 100,
   // The contract address for your whitelist contract
   // Get this after running `yarn whitelist`
   // whitelistContract: 'stars1...',
