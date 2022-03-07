@@ -1,16 +1,21 @@
 import { CosmWasmClient } from 'cosmwasm';
-const config = require('./config');
 
-const client = await CosmWasmClient.connect(config.rpcEndpoint);
-const sg721 = config.sg721;
+const config = require('../config');
 
-const balance = await client.getBalance(config.account, 'ustars');
-console.log('account balance:', balance);
+async function queryInfo() {
+  const client = await CosmWasmClient.connect(config.rpcEndpoint);
+  const sg721 = config.sg721;
 
-const numTokens = await client.queryContractSmart(sg721, { num_tokens: {} });
-console.log('num tokens:', numTokens);
+  const balance = await client.getBalance(config.account, 'ustars');
+  console.log('account balance:', balance);
 
-const collectionInfo = await client.queryContractSmart(sg721, {
-  collection_info: {},
-});
-console.log('collection info:', collectionInfo);
+  const numTokens = await client.queryContractSmart(sg721, { num_tokens: {} });
+  console.log('num tokens:', numTokens);
+
+  const collectionInfo = await client.queryContractSmart(sg721, {
+    collection_info: {},
+  });
+  console.log('collection info:', collectionInfo);
+}
+
+queryInfo();
