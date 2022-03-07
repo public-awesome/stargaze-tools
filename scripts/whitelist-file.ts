@@ -13,7 +13,7 @@ import { parse } from 'csv-parse';
 const config = require('./config');
 const { toStars } = require('./src/utils');
 const WHITELIST_CREATION_FEE = coins('100000000', 'ustars');
-const MSG_ADD_ADDR_LIMIT = 50;
+const MSG_ADD_ADDR_LIMIT = 500;
 
 const gasPrice = GasPrice.fromString('0ustars');
 const wallet = await DirectSecp256k1HdWallet.fromMnemonic(config.mnemonic, {
@@ -51,7 +51,7 @@ async function addFile() {
         validatedAddrs.push(toStars(addr));
       });
       let uniqueValidatedAddrs = [...new Set(validatedAddrs)];
-      if (uniqueValidatedAddrs.length > 1000) {
+      if (uniqueValidatedAddrs.length > 500) {
         throw new Error(
           'Too many whitelist addrs added in a transaction. Max 1000 at a time.'
         );
@@ -82,7 +82,7 @@ async function addFile() {
       const result = await client.signAndBroadcast(
         config.account,
         executeContractMsgs,
-        calculateFee(200_000 * executeContractMsgs.length, gasPrice),
+        calculateFee(2_000_000 * executeContractMsgs.length, gasPrice),
         'batch add addrs to whitelist'
       );
 
@@ -102,10 +102,6 @@ async function splitAddrs(addrs: Array<string>, size: number) {
     newArr.push(sliceAddrs);
   }
   return newArr;
-}
-
-async function calculateWhitelistUpgradeFee() {
-  // When whitelist amount goes to 1001, 2001, 3001, etc the increase whitelist transaction must include the upgrade fee.
 }
 
 addFile();
