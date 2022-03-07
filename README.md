@@ -15,7 +15,7 @@ yarn install
 ## Create an account on testnet
 
 ```sh
-yarn run account
+yarn account
 ```
 
 This outputs an address you can use to instantiate your minter contract.
@@ -35,7 +35,7 @@ Edit `config.js` with your project configuration.
 ## Initialize an NFT minting contract
 
 ```sh
-yarn run minter
+yarn minter
 ```
 
 ## Mint
@@ -43,7 +43,7 @@ yarn run minter
 ### Mint a specific NFT to an address
 
 ```sh
-yarn run mint --for [token_id] [address]
+yarn mint --for [token_id] [address]
 ```
 
 `[address]` can be any Cosmos address. It'll be converted automatically into a Stargaze address.
@@ -51,7 +51,7 @@ yarn run mint --for [token_id] [address]
 ### Mint to an address
 
 ```sh
-yarn run mint --to [address]
+yarn mint --to [address]
 ```
 
 This mints the next available token ID to the given address.
@@ -61,7 +61,7 @@ This mints the next available token ID to the given address.
 Mint `num` NFTs to an address.
 
 ```sh
-yarn run mint --to [address] --batch [num]
+yarn mint --to [address] --batch [num]
 ```
 
 Same as `mint --to` but mints the next [num] tokens sequentially to the given address.
@@ -71,19 +71,19 @@ Same as `mint --to` but mints the next [num] tokens sequentially to the given ad
 Instantiate a whitelist contract:
 
 ```sh
-yarn run whitelist
+yarn whitelist
 ```
 
 The output of the above command should give you a whitelist contract address. Edit `config.js` and update the `whitelist` field with this value. Next, set this address in your minter contract with:
 
 ```sh
-yarn run minter --whitelist [whitelist_address]
+yarn minter --whitelist [whitelist_address]
 ```
 
 To add addresses to the whitelist, use:
 
 ```sh
-yarn run whitelist --add [stars1..., stars2..., etc.]
+yarn whitelist --add [stars1..., stars2..., etc.]
 ```
 
 ## Query sg721
@@ -91,7 +91,7 @@ yarn run whitelist --add [stars1..., stars2..., etc.]
 You can run queries against an instantiated sg721 contract with:
 
 ```sh
-yarn run query
+yarn query
 ```
 
 For all possible queries, see the [query types](https://github.com/public-awesome/cw-nfts/blob/main/contracts/cw721-base/src/msg.rs#L76).
