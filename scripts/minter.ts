@@ -1,6 +1,10 @@
-import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
-import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
-import { calculateFee, coins, GasPrice } from '@cosmjs/stargate';
+import {
+  SigningCosmWasmClient,
+  DirectSecp256k1HdWallet,
+  calculateFee,
+  coins,
+  GasPrice,
+} from 'cosmwasm';
 
 const config = require('./config');
 const { isValidHttpUrl } = require('./src/utils');
@@ -9,9 +13,8 @@ const NEW_COLLECTION_FEE = coins('1000000000', 'ustars');
 const gasPrice = GasPrice.fromString('0ustars');
 const executeFee = calculateFee(300_000, gasPrice);
 
-export declare type Expiration = {
-  readonly at_time: string;
-};
+export type Uint64 = string;
+export type Timestamp = Uint64;
 
 const wallet = await DirectSecp256k1HdWallet.fromMnemonic(config.mnemonic, {
   prefix: 'stars',
@@ -22,7 +25,8 @@ if (!isValidHttpUrl(config.rpcEndpoint)) {
 }
 const client = await SigningCosmWasmClient.connectWithSigner(
   config.rpcEndpoint,
-  wallet
+  wallet,
+  { gasPrice }
 );
 
 function isValidIpfsUrl(uri: string) {
@@ -59,16 +63,14 @@ async function init() {
     throw new Error('Too many tokens');
   }
 
-  const startTime: Expiration | null =
-    config.startTime == ''
-      ? null
-      : {
-          at_time:
-            // time expressed in nanoseconds (1 millionth of a millisecond)
-            (new Date(config.startTime).getTime() * 1_000_000).toString(),
-        };
+  if (!config.perAddressLimit || config.perAddressLimit === 0) {
+    throw new Error('perAddressLimit must be defined and greater than 0');
+  }
 
-  const instantiateFee = calculateFee(950_000, gasPrice);
+  // time expressed in nanoseconds (1 millionth of a millisecond)
+  const startTime: Timestamp = (
+    new Date(config.startTime).getTime() * 1_000_000
+  ).toString();
 
   const tempMsg = {
     base_token_uri: config.baseTokenUri,
@@ -79,15 +81,17 @@ async function init() {
       symbol: config.symbol,
       minter: config.account,
       collection_info: {
+        creator: config.account,
         description: config.description,
         image: config.image,
         external_link: config.external_link,
-        royalties: {
+        royalty_info: {
           payment_address: config.royaltyPaymentAddress,
           share: config.royaltyShare,
         },
       },
     },
+    per_address_limit: config.perAddressLimit,
     whitelist: config.whitelistContract,
     start_time: startTime,
     unit_price: {
@@ -97,11 +101,12 @@ async function init() {
   };
 
   if (
-    tempMsg.sg721_instantiate_msg.collection_info.royalties.payment_address ===
-      undefined &&
-    tempMsg.sg721_instantiate_msg.collection_info.royalties.share === undefined
+    tempMsg.sg721_instantiate_msg.collection_info.royalty_info
+      .payment_address === undefined &&
+    tempMsg.sg721_instantiate_msg.collection_info.royalty_info.share ===
+      undefined
   ) {
-    tempMsg.sg721_instantiate_msg.collection_info.royalties = null;
+    tempMsg.sg721_instantiate_msg.collection_info.royalty_info = null;
   }
   const msg = clean(tempMsg);
   console.log(JSON.stringify(msg, null, 2));
@@ -111,7 +116,7 @@ async function init() {
     config.minterCodeId,
     msg,
     config.name,
-    instantiateFee,
+    'auto',
     { funds: NEW_COLLECTION_FEE }
   );
   const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');

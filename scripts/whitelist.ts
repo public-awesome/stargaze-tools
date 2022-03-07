@@ -1,14 +1,16 @@
-import {
-  SigningCosmWasmClient,
-  MsgExecuteContractEncodeObject,
-} from '@cosmjs/cosmwasm-stargate';
-import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
-import { calculateFee, coins, GasPrice } from '@cosmjs/stargate';
 import { MsgExecuteContract } from 'cosmjs-types/cosmwasm/wasm/v1/tx';
 import { toUtf8 } from '@cosmjs/encoding';
 import * as fs from 'fs';
 import * as path from 'path';
 import { parse } from 'csv-parse';
+import {
+  calculateFee,
+  coins,
+  GasPrice,
+  DirectSecp256k1HdWallet,
+  SigningCosmWasmClient,
+  MsgExecuteContractEncodeObject,
+} from 'cosmwasm';
 
 const config = require('./config');
 const { toStars } = require('./src/utils');
@@ -21,11 +23,12 @@ const wallet = await DirectSecp256k1HdWallet.fromMnemonic(config.mnemonic, {
 });
 const client = await SigningCosmWasmClient.connectWithSigner(
   config.rpcEndpoint,
-  wallet
+  wallet,
+  { gasPrice }
 );
-export declare type Expiration = {
-  readonly at_time: string;
-};
+
+export type Uint64 = string;
+export type Timestamp = Uint64;
 
 async function init() {
   if (!config.whitelistStartTime || config.whitelistStartTime == '') {
@@ -53,19 +56,14 @@ async function init() {
         })()
       : [];
 
-  const instantiateFee = calculateFee(950_000, gasPrice);
+  // time expressed in nanoseconds (1 millionth of a millisecond)
+  const whitelistStartTime: Timestamp = (
+    new Date(config.whitelistStartTime).getTime() * 1_000_000
+  ).toString();
 
-  const whitelistStartTime: Expiration = {
-    at_time:
-      // Time expressed in nanoseconds (1 millionth of a millisecond)
-      (new Date(config.whitelistStartTime).getTime() * 1_000_000).toString(),
-  };
-  //   console.log('whitelist start time: ' + whitelistStartTime?.at_time);
-  const whitelistEndTime: Expiration = {
-    at_time:
-      // Time expressed in nanoseconds (1 millionth of a millisecond)
-      (new Date(config.whitelistEndTime).getTime() * 1_000_000).toString(),
-  };
+  const whitelistEndTime: Timestamp = (
+    new Date(config.whitelistEndTime).getTime() * 1_000_000
+  ).toString();
 
   const msg = {
     members: whitelist,
@@ -85,7 +83,7 @@ async function init() {
     config.whitelistCodeId,
     msg,
     'whitelist',
-    instantiateFee,
+    'auto',
     { funds: WHITELIST_CREATION_FEE }
   );
   const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');
@@ -104,17 +102,15 @@ async function add(add: string) {
     console.log('add addresses: ', addAddresses.join(','));
   }
 
-  const executeFee = calculateFee(600_000, gasPrice);
   const result = await client.execute(
     config.account,
     config.whitelistContract,
     {
-      update_members: {
-        add: addAddresses,
-        remove: [],
+      add_members: {
+        to_add: addAddresses,
       },
     },
-    executeFee,
+    'auto',
     'update whitelist'
   );
   const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');

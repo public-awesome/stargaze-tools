@@ -1,12 +1,11 @@
-import { Bech32 } from '@cosmjs/encoding';
+import { toBech32, fromBech32 } from 'cosmwasm';
 
 export const toStars = (addr: string) => {
   if (!addr.startsWith('stars')) {
-    const { data } = Bech32.decode(addr);
-    const starsAddr = Bech32.encode('stars', data);
-    let { data: data2 } = Bech32.decode(starsAddr);
+    const { data } = fromBech32(addr);
+    const starsAddr = toBech32('stars', data);
     // wallet address length 44, contract address length 64, cosmos 20
-    if (![44, 64, 20].includes(data2.length)) {
+    if (![44, 64, 20].includes(data.length)) {
       throw new Error('Invalid address: ' + addr + ' ' + starsAddr);
     }
     addr = starsAddr;

@@ -67,6 +67,8 @@ module.exports = {
   numTokens: 100,
   // The price (in STARS) for your NFTs (minimum 50 STARS)
   unitPrice: 100,
+  // The max amount of NFTs an address can mint
+  perAddressLimit: 1,
   // The date when the sale goes live
   // If whitelist is enabled, only whitelisted addresses will be able to purchase
   startTime: '02 Mar 2022 22:00:00 GMT',
@@ -79,9 +81,9 @@ module.exports = {
 
   //// CONTRACT CODE IDs ////
   // The code ID for sg721
-  sg721CodeId: 68,
+  sg721CodeId: 89,
   // The code ID for the minter contract
-  minterCodeId: 69,
+  minterCodeId: 90,
   // The code ID for the whitelist contract
-  whitelistCodeId: 70,
+  whitelistCodeId: 91,
 };
