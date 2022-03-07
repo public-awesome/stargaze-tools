@@ -57,7 +57,7 @@ module.exports = {
   // The Per Address Limit during whitelist period this can be different than the main public limit
   // whitelistPerAddressLimit: 1,
   // The contract address for your whitelist contract
-  // Get this after running `yarn run whitelist`
+  // Get this after running `yarn whitelist`
   // whitelistContract: 'stars1...',
 
   //// MINTER CONTRACT ////
@@ -73,10 +73,10 @@ module.exports = {
   // If whitelist is enabled, only whitelisted addresses will be able to purchase
   startTime: '02 Mar 2022 22:00:00 GMT',
   // The minter contract address
-  // Get this after running `yarn run minter`
+  // Get this after running `yarn minter`
   minter: 'stars1...',
   // SG721 contract address
-  // Get this after running `yarn run minter`
+  // Get this after running `yarn minter`
   sg721: 'stars1...',
 
   //// CONTRACT CODE IDs ////
