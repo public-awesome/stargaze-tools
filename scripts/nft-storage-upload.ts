@@ -1,7 +1,6 @@
 import { getFilesFromPath } from 'files-from-path';
 import fs from 'fs';
-import mime from 'mime';
-import { NFTStorage, Blob, File } from 'nft.storage';
+import { NFTStorage } from 'nft.storage';
 import os from 'os';
 import path from 'path';
 import { naturalCompare } from '../src/sort';

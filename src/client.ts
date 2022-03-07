@@ -1,8 +1,6 @@
 import {
   SigningCosmWasmClient,
   DirectSecp256k1HdWallet,
-  calculateFee,
-  coins,
   GasPrice,
 } from 'cosmwasm';
 import { isValidHttpUrl } from './utils';
