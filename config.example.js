@@ -81,9 +81,9 @@ module.exports = {
 
   //// CONTRACT CODE IDs ////
   // The code ID for sg721
-  sg721CodeId: 76,
+  sg721CodeId: 83,
   // The code ID for the minter contract
-  minterCodeId: 77,
+  minterCodeId: 84,
   // The code ID for the whitelist contract
-  whitelistCodeId: 78,
+  whitelistCodeId: 85,
 };
