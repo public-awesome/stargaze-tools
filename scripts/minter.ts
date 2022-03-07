@@ -13,9 +13,8 @@ const NEW_COLLECTION_FEE = coins('1000000000', 'ustars');
 const gasPrice = GasPrice.fromString('0ustars');
 const executeFee = calculateFee(300_000, gasPrice);
 
-export declare type Expiration = {
-  readonly at_time: string;
-};
+export type Uint64 = string;
+export type Timestamp = Uint64;
 
 const wallet = await DirectSecp256k1HdWallet.fromMnemonic(config.mnemonic, {
   prefix: 'stars',
@@ -68,14 +67,10 @@ async function init() {
     throw new Error('perAddressLimit must be defined and greater than 0');
   }
 
-  const startTime: Expiration | null =
-    config.startTime == ''
-      ? null
-      : {
-          at_time:
-            // time expressed in nanoseconds (1 millionth of a millisecond)
-            (new Date(config.startTime).getTime() * 1_000_000).toString(),
-        };
+  // time expressed in nanoseconds (1 millionth of a millisecond)
+  const startTime: Timestamp = (
+    new Date(config.startTime).getTime() * 1_000_000
+  ).toString();
 
   const tempMsg = {
     base_token_uri: config.baseTokenUri,
