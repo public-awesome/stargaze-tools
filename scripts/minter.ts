@@ -1,33 +1,15 @@
-import {
-  SigningCosmWasmClient,
-  DirectSecp256k1HdWallet,
-  calculateFee,
-  coins,
-  GasPrice,
-} from 'cosmwasm';
+import { InstantiateMsg } from '@stargazezone/types/contracts/minter/instantiate_msg';
+import { coins } from 'cosmwasm';
+import inquirer from 'inquirer';
+import { getClient } from '../src/client';
+import { isValidHttpUrl } from '../src/utils';
 
-const config = require('./config');
-const { isValidHttpUrl } = require('./src/utils');
+const config = require('../config');
 
 const NEW_COLLECTION_FEE = coins('1000000000', 'ustars');
-const gasPrice = GasPrice.fromString('0ustars');
-const executeFee = calculateFee(300_000, gasPrice);
 
 export type Uint64 = string;
 export type Timestamp = Uint64;
-
-const wallet = await DirectSecp256k1HdWallet.fromMnemonic(config.mnemonic, {
-  prefix: 'stars',
-});
-
-if (!isValidHttpUrl(config.rpcEndpoint)) {
-  throw new Error('Invalid RPC endpoint');
-}
-const client = await SigningCosmWasmClient.connectWithSigner(
-  config.rpcEndpoint,
-  wallet,
-  { gasPrice }
-);
 
 function isValidIpfsUrl(uri: string) {
   let url;
@@ -67,12 +49,14 @@ async function init() {
     throw new Error('perAddressLimit must be defined and greater than 0');
   }
 
+  const client = await getClient();
+
   // time expressed in nanoseconds (1 millionth of a millisecond)
   const startTime: Timestamp = (
     new Date(config.startTime).getTime() * 1_000_000
   ).toString();
 
-  const tempMsg = {
+  const tempMsg: InstantiateMsg = {
     base_token_uri: config.baseTokenUri,
     num_tokens: config.numTokens,
     sg721_code_id: config.sg721CodeId,
@@ -101,15 +85,28 @@ async function init() {
   };
 
   if (
-    tempMsg.sg721_instantiate_msg.collection_info.royalty_info
-      .payment_address === undefined &&
-    tempMsg.sg721_instantiate_msg.collection_info.royalty_info.share ===
+    tempMsg.sg721_instantiate_msg.collection_info?.royalty_info
+      ?.payment_address === undefined &&
+    tempMsg.sg721_instantiate_msg.collection_info?.royalty_info?.share ===
       undefined
   ) {
     tempMsg.sg721_instantiate_msg.collection_info.royalty_info = null;
   }
   const msg = clean(tempMsg);
+
+  // Get confirmation before preceding
+  console.log(
+    'Please confirm the settings for your minter and collection. THERE IS NO WAY TO UPDATE THIS ONCE IT IS ON CHAIN.'
+  );
   console.log(JSON.stringify(msg, null, 2));
+  const answer = await inquirer.prompt([
+    {
+      message: 'Ready to submit the transaction?',
+      name: 'confirmation',
+      type: 'confirm',
+    },
+  ]);
+  if (!answer.confirmation) return;
 
   const result = await client.instantiate(
     config.account,
@@ -127,16 +124,32 @@ async function init() {
 }
 
 async function setWhitelist(whitelist: string) {
+  const client = await getClient();
+
+  if (!config.minter) {
+    throw Error(
+      '"minter" must be set to a minter contract address in config.js'
+    );
+  }
+
   console.log('Setting whitelist contract: ', whitelist);
 
   const msg = { set_whitelist: { whitelist } };
   console.log(msg);
+  const answer = await inquirer.prompt([
+    {
+      message: 'Ready to submit the transaction?',
+      name: 'confirmation',
+      type: 'confirm',
+    },
+  ]);
+  if (!answer.confirmation) return;
 
   const result = await client.execute(
     config.account,
     config.minter,
     msg,
-    executeFee,
+    'auto',
     'set whitelist'
   );
   const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');
@@ -146,12 +159,11 @@ async function setWhitelist(whitelist: string) {
   );
 }
 
-const args = process.argv.slice(6);
-// console.log(args);
+const args = process.argv.slice(2);
 if (args.length == 0) {
-  await init();
+  init();
 } else if (args.length == 2 && args[0] == '--whitelist') {
-  await setWhitelist(args[1]);
+  setWhitelist(args[1]);
 } else {
   console.log('Invalid arguments');
 }

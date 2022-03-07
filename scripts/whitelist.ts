@@ -1,24 +1,12 @@
-import {
-  calculateFee,
-  coins,
-  GasPrice,
-  DirectSecp256k1HdWallet,
-  SigningCosmWasmClient,
-} from 'cosmwasm';
+import { InstantiateMsg } from '@stargazezone/types/contracts/whitelist/instantiate_msg';
+import { coins } from 'cosmwasm';
+import inquirer from 'inquirer';
+import { toStars } from '../src/utils';
+import { getClient } from '../src/client';
 
-const config = require('./config');
-const { toStars } = require('./src/utils');
+const config = require('../config');
+
 const WHITELIST_CREATION_FEE = coins('100000000', 'ustars');
-
-const gasPrice = GasPrice.fromString('0ustars');
-const wallet = await DirectSecp256k1HdWallet.fromMnemonic(config.mnemonic, {
-  prefix: 'stars',
-});
-const client = await SigningCosmWasmClient.connectWithSigner(
-  config.rpcEndpoint,
-  wallet,
-  { gasPrice }
-);
 
 export type Uint64 = string;
 export type Timestamp = Uint64;
@@ -36,6 +24,11 @@ async function init() {
   ) {
     throw new Error('invalid whitelistPerAddressLimit in config.js');
   }
+  if (!config.whitelistMemberLimit) {
+    throw new Error('whitelistMemberLimit required');
+  }
+
+  const client = await getClient();
 
   // whitelist can start with empty values and added later
   let whitelist = config.whitelist || [];
@@ -58,7 +51,7 @@ async function init() {
     new Date(config.whitelistEndTime).getTime() * 1_000_000
   ).toString();
 
-  const msg = {
+  const msg: InstantiateMsg = {
     members: whitelist,
     start_time: whitelistStartTime,
     end_time: whitelistEndTime,
@@ -69,6 +62,20 @@ async function init() {
     per_address_limit: config.whitelistPerAddressLimit,
     member_limit: config.whitelistMemberLimit,
   };
+
+  // Get confirmation before preceding
+  console.log(
+    'Please confirm the settings for your whitelist. THERE IS NO WAY TO UPDATE THIS ONCE IT IS ON CHAIN.'
+  );
+  console.log(JSON.stringify(msg, null, 2));
+  const answer = await inquirer.prompt([
+    {
+      message: 'Ready to submit the transaction?',
+      name: 'confirmation',
+      type: 'confirm',
+    },
+  ]);
+  if (!answer.confirmation) return;
 
   console.log('Instantiating whitelist...');
 
@@ -88,6 +95,8 @@ async function init() {
 }
 
 async function add(add: string) {
+  const client = await getClient();
+
   const addAddresses = add == '' ? null : add.split(',');
   if (addAddresses != null) {
     addAddresses.forEach(function (addr, index) {
@@ -95,6 +104,16 @@ async function add(add: string) {
     });
     console.log('add addresses: ', addAddresses.join(','));
   }
+
+  const answer = await inquirer.prompt([
+    {
+      message:
+        'Are yous sure your want to add these addresses to the whitelist?',
+      name: 'confirmation',
+      type: 'confirm',
+    },
+  ]);
+  if (!answer.confirmation) return;
 
   const result = await client.execute(
     config.account,
@@ -120,20 +139,21 @@ async function add(add: string) {
 }
 
 async function showConfig() {
+  const client = await getClient();
+
   let res = await client.queryContractSmart(config.whitelistContract, {
     config: {},
   });
   console.log(res);
 }
 
-const args = process.argv.slice(6);
-// console.log(args);
+const args = process.argv.slice(2);
 if (args.length == 0) {
-  await init();
+  init();
 } else if (args.length == 2 && args[0] == '--add') {
-  await add(args[1]);
+  add(args[1]);
 } else if (args.length == 1 && args[0] == '--show-config') {
-  await showConfig();
+  showConfig();
 } else {
   console.log('Invalid arguments');
 }
