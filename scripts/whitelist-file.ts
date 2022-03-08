@@ -62,7 +62,7 @@ async function addFile() {
         validatedAddrs.push(toStars(addr));
       });
       let uniqueValidatedAddrs = [...new Set(validatedAddrs)];
-      if (uniqueValidatedAddrs.length > 500) {
+      if (uniqueValidatedAddrs.length > MSG_ADD_ADDR_LIMIT) {
         throw new Error(
           'Too many whitelist addrs added in a transaction. Max ' +
             MSG_ADD_ADDR_LIMIT +
