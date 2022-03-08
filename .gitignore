@@ -43,3 +43,6 @@ config.js
 whitelist_addresses.csv
 
 .env
+
+# TS
+tsconfig.tsbuildinfo

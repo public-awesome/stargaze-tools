@@ -49,15 +49,17 @@ module.exports = {
   // A list of whitelisted addresses that will be able to purchase the sale early
   // Comment out if not using a whilelist
   // whitelist: ['stars1..', 'stars1...'],
-  // The date when the whitelist only purchasing period ends and everyone can buy
-  // whitelistStartTime: '02 Mar 2022 22:00:00 GMT',
-  // whitelistEndTime: '02 Mar 2022 22:00:00 GMT',
+  // The date when the whitelist only purchasing period ends and everyone can buy (in ISO format)
+  // whitelistStartTime: '2022-03-11T21:00:00.000Z',
+  // whitelistEndTime: '2022-03-13T21:00:00.000Z',
   // The price (in STARS) for the whitelist (minimum 25 STARS)
   // whitelistPrice: 50,
   // The Per Address Limit during whitelist period this can be different than the main public limit
-  // whitelistPerAddressLimit: 1,
+  // whitelistPerAddressLimit: 5,
+  // The number of members in the whitelist (max 5000, each 1000 is 100 STARS)
+  // whitelistMemberLimit: 100,
   // The contract address for your whitelist contract
-  // Get this after running `yarn run whitelist`
+  // Get this after running `yarn whitelist`
   // whitelistContract: 'stars1...',
 
   //// MINTER CONTRACT ////
@@ -71,19 +73,20 @@ module.exports = {
   perAddressLimit: 1,
   // The date when the sale goes live
   // If whitelist is enabled, only whitelisted addresses will be able to purchase
-  startTime: '02 Mar 2022 22:00:00 GMT',
+  // startTime in ISO format
+  startTime: '2022-03-11T21:00:00.000Z',
   // The minter contract address
-  // Get this after running `yarn run minter`
+  // Get this after running `yarn minter`
   minter: 'stars1...',
   // SG721 contract address
-  // Get this after running `yarn run minter`
+  // Get this after running `yarn minter`
   sg721: 'stars1...',
 
   //// CONTRACT CODE IDs ////
   // The code ID for sg721
-  sg721CodeId: 89,
+  sg721CodeId: 95,
   // The code ID for the minter contract
-  minterCodeId: 90,
+  minterCodeId: 96,
   // The code ID for the whitelist contract
-  whitelistCodeId: 91,
+  whitelistCodeId: 97,
 };

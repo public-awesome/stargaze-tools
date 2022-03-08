@@ -1,28 +1,13 @@
-import {
-  SigningCosmWasmClient,
-  MsgExecuteContractEncodeObject,
-  DirectSecp256k1HdWallet,
-  coins,
-  calculateFee,
-  GasPrice,
-  toUtf8,
-} from 'cosmwasm';
+import { MsgExecuteContractEncodeObject, coins, toUtf8 } from 'cosmwasm';
 import { MsgExecuteContract } from 'cosmjs-types/cosmwasm/wasm/v1/tx';
-const { toStars } = require('./src/utils');
+import { getClient } from '../src/client';
+import { toStars } from '../src/utils';
 
-const config = require('./config');
-const gasPrice = GasPrice.fromString('0ustars');
-
-const wallet = await DirectSecp256k1HdWallet.fromMnemonic(config.mnemonic, {
-  prefix: 'stars',
-});
-const client = await SigningCosmWasmClient.connectWithSigner(
-  config.rpcEndpoint,
-  wallet,
-  { gasPrice }
-);
+const config = require('../config');
 
 async function test_whitelist() {
+  const client = await getClient();
+
   const starsRecipient = toStars(config.account);
   console.log('whitelist mint: ', starsRecipient);
 
@@ -46,6 +31,8 @@ async function test_whitelist() {
 }
 
 async function mintTo(recipient: string) {
+  const client = await getClient();
+
   const starsRecipient = toStars(recipient);
   console.log('Minting to: ', starsRecipient);
 
@@ -67,6 +54,8 @@ async function mintTo(recipient: string) {
 }
 
 async function batchMint(recipient: string, num: number) {
+  const client = await getClient();
+
   const starsRecipient = toStars(recipient);
   console.log('Minting ' + num + ' tokens to:', starsRecipient);
 
@@ -85,7 +74,7 @@ async function batchMint(recipient: string, num: number) {
   const result = await client.signAndBroadcast(
     config.account,
     Array(num).fill(executeContractMsg),
-    calculateFee(200_000 * num, gasPrice),
+    'auto',
     'batch mint'
   );
 
@@ -93,6 +82,8 @@ async function batchMint(recipient: string, num: number) {
 }
 
 async function mintFor(tokenId: string, recipient: string) {
+  const client = await getClient();
+
   const starsRecipient = toStars(recipient);
   console.log('Minting token ' + tokenId + ' for', starsRecipient);
 
@@ -115,22 +106,21 @@ async function mintFor(tokenId: string, recipient: string) {
   );
 }
 
-const args = process.argv.slice(6);
-// console.log(args);
+const args = process.argv.slice(2);
 if (args.length == 0) {
   console.log('No arguments provided, need --to or --for');
 } else if (args.length == 1 && args[0] == '--test-whitelist') {
-  await test_whitelist();
+  test_whitelist();
 } else if (args.length == 2 && args[0] == '--to') {
-  await mintTo(args[1]);
+  mintTo(args[1]);
 } else if (args.length == 4 && args[0] == '--to') {
   if (args[2] == '--batch') {
-    await batchMint(args[1], +args[3]);
+    batchMint(args[1], +args[3]);
   } else {
     console.log('Invalid arguments');
   }
 } else if (args.length == 3 && args[0] == '--for') {
-  await mintFor(args[1], args[2]);
+  mintFor(args[1], args[2]);
 } else {
   console.log('Invalid arguments');
 }
