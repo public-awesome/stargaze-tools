@@ -106,9 +106,9 @@ async function addFile() {
 
       console.log('Tx hash: ', result.transactionHash);
       let res = await client.queryContractSmart(config.whitelistContract, {
-        members: {},
+        members: { limit: 100 },
       });
-      console.log(res);
+      console.log('first 100 members:', res);
     }
   );
 }
