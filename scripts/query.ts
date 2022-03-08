@@ -16,6 +16,13 @@ async function queryInfo() {
     collection_info: {},
   });
   console.log('collection info:', collectionInfo);
-}
 
+  const whitelistMembers = await client.queryContractSmart(
+    config.whitelistContract,
+    {
+      members: { limit: 5000 },
+    }
+  );
+  console.log('whitelist info:', whitelistMembers);
+}
 queryInfo();
