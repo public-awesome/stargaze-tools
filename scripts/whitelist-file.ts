@@ -18,6 +18,7 @@ import { toUtf8 } from '@cosmjs/encoding';
 import * as fs from 'fs';
 import * as path from 'path';
 import { parse } from 'csv-parse';
+import { assertIsDeliverTxSuccess } from '@cosmjs/stargate';
 
 const config = require('../config');
 const WHITELIST_CREATION_FEE = coins('100000000', 'ustars');
@@ -30,14 +31,14 @@ async function addFile() {
     prefix: 'stars',
   });
 
-  type Whitelist = {
+  interface Whitelist {
     address: string;
-  };
+  }
   const __dirname = process.cwd();
   const csvFilePath = path.resolve(__dirname, './whitelist_addresses.csv');
   const headers = ['address'];
   const fileContent = fs.readFileSync(csvFilePath, { encoding: 'utf-8' });
-  let addrs: Array<string> = [];
+  const addrs: Array<string> = [];
   const client = await getClient();
   if (!config.minter) {
     throw Error(
@@ -52,16 +53,16 @@ async function addFile() {
     },
     async (error, fileContents: Whitelist[]) => {
       if (error) {
-        console.error(error);
+        throw error;
       }
-      fileContents.map((fileContents) => addrs.push(fileContents.address));
+      fileContents.map((row) => addrs.push(row.address));
       console.log(addrs);
 
-      let validatedAddrs: Array<string> = [];
+      const validatedAddrs: Array<string> = [];
       addrs.forEach((addr) => {
         validatedAddrs.push(toStars(addr));
       });
-      let uniqueValidatedAddrs = [...new Set(validatedAddrs)];
+      let uniqueValidatedAddrs = [...new Set(validatedAddrs)].sort();
       if (uniqueValidatedAddrs.length > MSG_ADD_ADDR_LIMIT) {
         throw new Error(
           'Too many whitelist addrs added in a transaction. Max ' +
@@ -83,7 +84,7 @@ async function addFile() {
           sender: config.account,
           contract: config.whitelistContract,
           msg: toUtf8(JSON.stringify(msg)),
-          funds: [...[]],
+          funds: [],
         }),
       };
 
@@ -107,6 +108,7 @@ async function addFile() {
         'auto',
         'batch add addrs to whitelist'
       );
+      assertIsDeliverTxSuccess(result);
 
       console.log('Tx hash: ', result.transactionHash);
       let res = await client.queryContractSmart(config.whitelistContract, {
