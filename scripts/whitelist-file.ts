@@ -1,3 +1,7 @@
+// Simple upload 500 addresses to whitelist using whitelist_addresses.csv.
+// Accepts cosmos, stars addresses.
+// If you run into an error with `member_limit`, run `yarn whitelist --increase-member-limit`
+
 import { ExecuteMsg } from '@stargazezone/types/contracts/whitelist/execute_msg';
 import {
   coins,
