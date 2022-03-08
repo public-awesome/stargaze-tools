@@ -1,30 +1,31 @@
+import { ExecuteMsg } from '@stargazezone/types/contracts/whitelist/execute_msg';
 import {
-  SigningCosmWasmClient,
+  coins,
+  DirectSecp256k1HdWallet,
+  GasPrice,
   MsgExecuteContractEncodeObject,
-} from '@cosmjs/cosmwasm-stargate';
-import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
-import { calculateFee, coins, GasPrice } from '@cosmjs/stargate';
+  SigningCosmWasmClient,
+} from 'cosmwasm';
+import { toStars } from '../src/utils';
+import inquirer from 'inquirer';
+import { getClient } from '../src/client';
 import { MsgExecuteContract } from 'cosmjs-types/cosmwasm/wasm/v1/tx';
 import { toUtf8 } from '@cosmjs/encoding';
 import * as fs from 'fs';
 import * as path from 'path';
 import { parse } from 'csv-parse';
 
-const config = require('./config');
-const { toStars } = require('./src/utils');
+const config = require('../config');
 const WHITELIST_CREATION_FEE = coins('100000000', 'ustars');
 const MSG_ADD_ADDR_LIMIT = 500;
 
 const gasPrice = GasPrice.fromString('0ustars');
-const wallet = await DirectSecp256k1HdWallet.fromMnemonic(config.mnemonic, {
-  prefix: 'stars',
-});
-const client = await SigningCosmWasmClient.connectWithSigner(
-  config.rpcEndpoint,
-  wallet
-);
 
 async function addFile() {
+  const wallet = await DirectSecp256k1HdWallet.fromMnemonic(config.mnemonic, {
+    prefix: 'stars',
+  });
+
   type Whitelist = {
     address: string;
   };
@@ -33,6 +34,12 @@ async function addFile() {
   const headers = ['address'];
   const fileContent = fs.readFileSync(csvFilePath, { encoding: 'utf-8' });
   let addrs: Array<string> = [];
+  const client = await getClient();
+  if (!config.minter) {
+    throw Error(
+      '"minter" must be set to a minter contract address in config.js'
+    );
+  }
   await parse(
     fileContent,
     {
@@ -53,36 +60,47 @@ async function addFile() {
       let uniqueValidatedAddrs = [...new Set(validatedAddrs)];
       if (uniqueValidatedAddrs.length > 500) {
         throw new Error(
-          'Too many whitelist addrs added in a transaction. Max 1000 at a time.'
+          'Too many whitelist addrs added in a transaction. Max ' +
+            MSG_ADD_ADDR_LIMIT +
+            ' at a time.'
         );
       }
       console.log(
         'Whitelist addresses validated and deduped. member number: ' +
           uniqueValidatedAddrs.length
       );
-      const chunkedAddrs = await splitAddrs(
-        uniqueValidatedAddrs,
-        MSG_ADD_ADDR_LIMIT
-      );
 
-      let executeContractMsgs: Array<MsgExecuteContractEncodeObject> = [];
-      chunkedAddrs.forEach((addrs: Array<string>) => {
-        const addAddrsMsg = { update_members: { add: addrs, remove: [] } };
-        const executeContractMsg: MsgExecuteContractEncodeObject = {
-          typeUrl: '/cosmwasm.wasm.v1.MsgExecuteContract',
-          value: MsgExecuteContract.fromPartial({
-            sender: config.account,
-            contract: config.whitelistContract,
-            msg: toUtf8(JSON.stringify(addAddrsMsg)),
-            funds: [...[]],
-          }),
-        };
-        executeContractMsgs.push(executeContractMsg);
-      });
+      const msg: ExecuteMsg = {
+        add_members: { to_add: uniqueValidatedAddrs },
+      };
+      const executeContractMsg: MsgExecuteContractEncodeObject = {
+        typeUrl: '/cosmwasm.wasm.v1.MsgExecuteContract',
+        value: MsgExecuteContract.fromPartial({
+          sender: config.account,
+          contract: config.whitelistContract,
+          msg: toUtf8(JSON.stringify(msg)),
+          funds: [...[]],
+        }),
+      };
+
+      // Get confirmation before preceding
+      console.log(
+        'Please confirm the settings for adding whitelist file. THERE IS NO WAY TO UPDATE THIS ONCE IT IS ON CHAIN.'
+      );
+      console.log(JSON.stringify(msg, null, 2));
+      const answer = await inquirer.prompt([
+        {
+          message: 'Ready to submit the transaction?',
+          name: 'confirmation',
+          type: 'confirm',
+        },
+      ]);
+      if (!answer.confirmation) return;
+
       const result = await client.signAndBroadcast(
         config.account,
-        executeContractMsgs,
-        calculateFee(2_000_000 * executeContractMsgs.length, gasPrice),
+        [executeContractMsg],
+        'auto',
         'batch add addrs to whitelist'
       );
 
@@ -93,15 +111,6 @@ async function addFile() {
       console.log(res);
     }
   );
-}
-
-async function splitAddrs(addrs: Array<string>, size: number) {
-  let newArr: Array<Array<string>> = [];
-  for (let i = 0; i < addrs.length; i += size) {
-    const sliceAddrs = addrs.slice(i, i + size);
-    newArr.push(sliceAddrs);
-  }
-  return newArr;
 }
 
 addFile();
