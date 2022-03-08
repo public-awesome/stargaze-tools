@@ -1,4 +1,5 @@
 import { InstantiateMsg } from '@stargazezone/types/contracts/minter/instantiate_msg';
+import { Timestamp } from '@stargazezone/types/contracts/minter/shared-types';
 import { coins } from 'cosmwasm';
 import inquirer from 'inquirer';
 import { getClient } from '../src/client';
@@ -7,9 +8,6 @@ import { isValidHttpUrl } from '../src/utils';
 const config = require('../config');
 
 const NEW_COLLECTION_FEE = coins('1000000000', 'ustars');
-
-export type Uint64 = string;
-export type Timestamp = Uint64;
 
 function isValidIpfsUrl(uri: string) {
   let url;

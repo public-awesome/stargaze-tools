@@ -1,4 +1,5 @@
 import { InstantiateMsg } from '@stargazezone/types/contracts/whitelist/instantiate_msg';
+import { Timestamp } from '@stargazezone/types/contracts/minter/shared-types';
 import { coins } from 'cosmwasm';
 import inquirer from 'inquirer';
 import { toStars } from '../src/utils';
@@ -7,9 +8,6 @@ import { getClient } from '../src/client';
 const config = require('../config');
 
 const WHITELIST_CREATION_FEE = coins('100000000', 'ustars');
-
-export type Uint64 = string;
-export type Timestamp = Uint64;
 
 async function init() {
   if (!config.whitelistStartTime || config.whitelistStartTime == '') {
