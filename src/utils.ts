@@ -1,11 +1,14 @@
 import { toBech32, fromBech32 } from 'cosmwasm';
 
 export const toStars = (addr: string) => {
-  if (!addr.startsWith('stars')) {
-    const { data } = fromBech32(addr);
-    const starsAddr = toBech32('stars', data);
-    addr = starsAddr;
+  const { data } = fromBech32(addr);
+  const starsAddr = toBech32('stars', data);
+  // wallet address length 20, contract address length 32
+  if (![20, 32].includes(data.length)) {
+    throw new Error('Invalid address: ' + addr + ' ' + starsAddr);
   }
+  addr = starsAddr;
+
   return addr;
 };
 
