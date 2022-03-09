@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@pinata/sdk": "^1.1.23",
+    "csv-parse": "^5.0.4",
     "files-from-path": "^0.2.3",
     "inquirer": "^8.2.0",
     "ipfs-car": "^0.6.1",
@@ -30,6 +31,7 @@
     "pinata-clean": "ts-node scripts/pinata-clean.ts",
     "query": "ts-node scripts/query.ts",
     "ts": "tsc --noEmit --incremental",
-    "whitelist": "ts-node scripts/whitelist.ts"
+    "whitelist": "ts-node scripts/whitelist.ts",
+    "whitelist-file": "ts-node scripts/whitelist-file.ts"
   }
 }

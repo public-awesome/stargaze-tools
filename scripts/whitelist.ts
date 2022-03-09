@@ -28,7 +28,7 @@ async function init() {
 
   const client = await getClient();
 
-  // whitelist can start with empty values and added later
+  // Whitelist can start with empty values and added later
   let whitelist = config.whitelist || [];
   whitelist =
     whitelist.length > 0
@@ -106,7 +106,7 @@ async function add(add: string) {
   const answer = await inquirer.prompt([
     {
       message:
-        'Are yous sure your want to add these addresses to the whitelist?',
+        'Are you sure your want to add these addresses to the whitelist?',
       name: 'confirmation',
       type: 'confirm',
     },
@@ -136,6 +136,44 @@ async function add(add: string) {
   console.log(res);
 }
 
+async function increaseMemberLimit(newMemberLimit: string) {
+  const memberLimit: number = parseInt(newMemberLimit);
+  const client = await getClient();
+
+  const answer = await inquirer.prompt([
+    {
+      message:
+        'Are you sure your want to increase member limit for whitelist to ' +
+        memberLimit +
+        ' ?',
+      name: 'confirmation',
+      type: 'confirm',
+    },
+  ]);
+  if (!answer.confirmation) return;
+  const result = await client.execute(
+    config.account,
+    config.whitelistContract,
+    {
+      increase_member_limit: memberLimit,
+    },
+    'auto',
+    'update whitelist'
+  );
+
+  // execute this version if you get IncorrectCreationFee
+  //   const result = await client.execute(
+  //     config.account,
+  //     config.whitelistContract,
+  //     {
+  //       increase_member_limit: memberLimit,
+  //     },
+  //     'auto',
+  //     'update whitelist',
+  //     WHITELIST_CREATION_FEE
+  //   );
+}
+
 async function showConfig() {
   const client = await getClient();
 
@@ -150,6 +188,8 @@ if (args.length == 0) {
   init();
 } else if (args.length == 2 && args[0] == '--add') {
   add(args[1]);
+} else if (args.length == 2 && args[0] == '--increase-member-limit') {
+  increaseMemberLimit(args[1]);
 } else if (args.length == 1 && args[0] == '--show-config') {
   showConfig();
 } else {

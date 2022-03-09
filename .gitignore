@@ -40,6 +40,7 @@ coverage/
 
 # Config files
 config.js
+whitelist_addresses.csv
 
 .env
 
