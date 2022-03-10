@@ -130,6 +130,7 @@ async function setWhitelist(whitelist: string) {
     );
   }
 
+  console.log('Minter contract: ', config.minter);
   console.log('Setting whitelist contract: ', whitelist);
 
   const msg = { set_whitelist: { whitelist } };
