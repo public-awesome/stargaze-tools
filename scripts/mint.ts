@@ -13,7 +13,7 @@ async function test_whitelist() {
 
   const mintFee = coins((config.whitelistPrice * 1000000).toString(), 'ustars');
   const msg = { mint: {} };
-  console.log(msg);
+  console.log(JSON.stringify(msg, null, 2));
 
   const result = await client.execute(
     config.account,
@@ -38,7 +38,7 @@ async function mintTo(recipient: string) {
   console.log('Minting to: ', starsRecipient);
 
   const msg = { mint_to: { recipient: starsRecipient } };
-  console.log(msg);
+  console.log(JSON.stringify(msg, null, 2));
 
   const result = await client.execute(
     config.account,
@@ -93,7 +93,7 @@ async function mintFor(tokenId: string, recipient: string) {
   const msg = {
     mint_for: { token_id: Number(tokenId), recipient: starsRecipient },
   };
-  console.log(msg);
+  console.log(JSON.stringify(msg, null, 2));
 
   const result = await client.execute(
     config.account,
