@@ -34,6 +34,7 @@ async function mintTo(recipient: string) {
   const client = await getClient();
 
   const starsRecipient = toStars(recipient);
+  console.log('Minter contract: ', config.minter);
   console.log('Minting to: ', starsRecipient);
 
   const msg = { mint_to: { recipient: starsRecipient } };
@@ -57,6 +58,7 @@ async function batchMint(recipient: string, num: number) {
   const client = await getClient();
 
   const starsRecipient = toStars(recipient);
+  console.log('Minter contract: ', config.minter);
   console.log('Minting ' + num + ' tokens to:', starsRecipient);
 
   const msg = { mint_to: { recipient: starsRecipient } };
@@ -85,6 +87,7 @@ async function mintFor(tokenId: string, recipient: string) {
   const client = await getClient();
 
   const starsRecipient = toStars(recipient);
+  console.log('Minter contract: ', config.minter);
   console.log('Minting token ' + tokenId + ' for', starsRecipient);
 
   const msg = {
