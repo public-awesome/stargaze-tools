@@ -113,14 +113,17 @@ async function add(add: string) {
   ]);
   if (!answer.confirmation) return;
 
+  const msg = {
+    add_members: {
+      to_add: addAddresses,
+    },
+  };
+  console.log(JSON.stringify(msg, null, 2));
+
   const result = await client.execute(
     config.account,
     config.whitelistContract,
-    {
-      add_members: {
-        to_add: addAddresses,
-      },
-    },
+    msg,
     'auto',
     'update whitelist'
   );
