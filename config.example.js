@@ -82,11 +82,19 @@ module.exports = {
   // Get this after running `yarn minter`
   sg721: 'stars1...',
 
-  //// CONTRACT CODE IDs ////
+  //// CONTRACT CODE IDs: Big Bang Testnet ////
   // The code ID for sg721
   sg721CodeId: 95,
   // The code ID for the minter contract
   minterCodeId: 96,
   // The code ID for the whitelist contract
   whitelistCodeId: 97,
+
+  // //// CONTRACT CODE IDs: Mainnet ////
+  // // The code ID for sg721
+  // sg721CodeId: 1,
+  // // The code ID for the minter contract
+  // minterCodeId: 2,
+  // // The code ID for the whitelist contract
+  // whitelistCodeId: 3,
 };
