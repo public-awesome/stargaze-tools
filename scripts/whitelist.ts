@@ -83,7 +83,7 @@ async function init() {
     msg,
     'whitelist',
     'auto',
-    { funds: WHITELIST_CREATION_FEE }
+    { funds: WHITELIST_CREATION_FEE, admin: config.account }
   );
   const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');
   console.info(

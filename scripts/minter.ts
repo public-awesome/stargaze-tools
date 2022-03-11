@@ -112,7 +112,7 @@ async function init() {
     msg,
     config.name,
     'auto',
-    { funds: NEW_COLLECTION_FEE }
+    { funds: NEW_COLLECTION_FEE, admin: config.account }
   );
   const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');
   console.info(
