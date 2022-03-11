@@ -21,20 +21,23 @@ async function queryInfo() {
     collection_info: {},
   });
   console.log('collection info:', collectionInfo);
-  const whitelistConfig = await client.queryContractSmart(
-    config.whitelistContract,
-    {
-      config: {},
-    }
-  );
-  console.log('whitelist config:', whitelistConfig);
 
-  const whitelistMembers = await client.queryContractSmart(
-    config.whitelistContract,
-    {
-      members: { limit: 5000 },
-    }
-  );
-  console.log('whitelist members:', whitelistMembers);
+  if (config.whitelistContract) {
+    const whitelistConfig = await client.queryContractSmart(
+      config.whitelistContract,
+      {
+        config: {},
+      }
+    );
+    console.log('whitelist config:', whitelistConfig);
+
+    const whitelistMembers = await client.queryContractSmart(
+      config.whitelistContract,
+      {
+        members: { limit: 5000 },
+      }
+    );
+    console.log('whitelist members:', whitelistMembers);
+  }
 }
 queryInfo();
