@@ -154,12 +154,16 @@ async function increaseMemberLimit(newMemberLimit: string) {
     },
   ]);
   if (!answer.confirmation) return;
+
+  const msg = {
+    increase_member_limit: memberLimit,
+  };
+  console.log(JSON.stringify(msg, null, 2));
+
   const result = await client.execute(
     config.account,
     config.whitelistContract,
-    {
-      increase_member_limit: memberLimit,
-    },
+    msg,
     'auto',
     'update whitelist'
   );
