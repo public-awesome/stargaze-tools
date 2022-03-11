@@ -39,5 +39,10 @@ async function queryInfo() {
     );
     console.log('whitelist members:', whitelistMembers);
   }
+
+  const nfts = await client.queryContractSmart(sg721, {
+    tokens: { owner: config.account },
+  });
+  console.log(nfts);
 }
 queryInfo();
