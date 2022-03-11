@@ -13,8 +13,10 @@ module.exports = {
   account: 'stars1...',
 
   //// API CONFIG ////
-  // The RPC endpoint to query and send Stargaze transactions to
+  // The RPC endpoint for Stargaze, Big Bang Testnet
   rpcEndpoint: 'https://rpc.big-bang-1.stargaze-apis.com/',
+  // The RPC endpoint for Stargaze, mainnet
+  // rpcEndpoint: 'https://rpc.stargaze-apis.com/',
   // NFT.storage endpoint
   nftStorageEndpoint: 'https://api.nft.storage',
   // NFT.storage API key
