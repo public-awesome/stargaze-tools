@@ -41,7 +41,7 @@ async function queryInfo() {
   }
 
   const nfts = await client.queryContractSmart(sg721, {
-    tokens: { owner: config.account },
+    tokens: { owner: config.account, limit: 30 },
   });
   console.log(nfts);
 }
