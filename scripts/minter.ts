@@ -158,11 +158,50 @@ async function setWhitelist(whitelist: string) {
   );
 }
 
+async function setPerAddressLimit(limit: number) {
+  const client = await getClient();
+
+  if (!config.minter) {
+    throw Error(
+      '"minter" must be set to a minter contract address in config.js'
+    );
+  }
+
+  console.log('Minter contract: ', config.minter);
+  console.log('Setting per address limit: ', limit);
+
+  const msg = { update_per_address_limit: { per_address_limit: limit } };
+  console.log(msg);
+  const answer = await inquirer.prompt([
+    {
+      message: 'Ready to submit the transaction?',
+      name: 'confirmation',
+      type: 'confirm',
+    },
+  ]);
+  if (!answer.confirmation) return;
+
+  const result = await client.execute(
+    config.account,
+    config.minter,
+    msg,
+    'auto',
+    'set whitelist'
+  );
+  const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');
+  console.info(
+    'The `wasm` event emitted by the contract execution:',
+    wasmEvent
+  );
+}
+
 const args = process.argv.slice(2);
 if (args.length == 0) {
   init();
 } else if (args.length == 2 && args[0] == '--whitelist') {
   setWhitelist(args[1]);
+} else if (args.length == 2 && args[0] == '--per-address-limit') {
+  setPerAddressLimit(parseInt(args[1]));
 } else {
   console.log('Invalid arguments');
 }
