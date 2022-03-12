@@ -186,7 +186,7 @@ async function setPerAddressLimit(limit: number) {
     config.minter,
     msg,
     'auto',
-    'set whitelist'
+    'update per address limit'
   );
   const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');
   console.info(
