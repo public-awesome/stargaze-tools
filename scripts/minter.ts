@@ -4,6 +4,7 @@ import { coins } from 'cosmwasm';
 import inquirer from 'inquirer';
 import { getClient } from '../src/client';
 import { isValidHttpUrl } from '../src/utils';
+import { toStars } from '../src/utils';
 
 const config = require('../config');
 
@@ -163,6 +164,8 @@ async function setWhitelist(whitelist: string) {
 // Can not change if public mint already started.
 async function updateStartTime() {
   const client = await getClient();
+  const account = toStars(config.account);
+  const minter = toStars(config.minter);
 
   const answer = await inquirer.prompt([
     {
@@ -182,8 +185,8 @@ async function updateStartTime() {
   ).toString();
 
   const result = await client.execute(
-    config.account,
-    config.minter,
+    account,
+    minter,
     { update_start_time: publicStartTime },
     'auto',
     'update public mint start time'
