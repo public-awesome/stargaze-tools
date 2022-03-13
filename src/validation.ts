@@ -17,7 +17,7 @@ export const checkFiles = (images: string[], metadata: string[]) => {
 
     // Check that file name is an Integer
     if (isNaN(parseInt(fileName, 10))) {
-      throw Error('Filenames must be numbers');
+      throw Error('Filenames must be numbers. Invalid fileName: ' + fileName);
     }
     return parseInt(fileName, 10);
   }
