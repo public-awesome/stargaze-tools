@@ -158,11 +158,51 @@ async function setWhitelist(whitelist: string) {
   );
 }
 
+// Takes config.minter address and config.startTime
+// and tries to update existing minter start time.
+// Can not change if public mint already started.
+async function updateStartTime() {
+  const client = await getClient();
+
+  const answer = await inquirer.prompt([
+    {
+      message:
+        'Are you sure your want to change public mint start time to ' +
+        config.startTime +
+        ' ?',
+      name: 'confirmation',
+      type: 'confirm',
+    },
+  ]);
+  if (!answer.confirmation) return;
+
+  // time expressed in nanoseconds (1 millionth of a millisecond)
+  const publicStartTime: Timestamp = (
+    new Date(config.startTime).getTime() * 1_000_000
+  ).toString();
+
+  const result = await client.execute(
+    config.account,
+    config.minter,
+    { update_start_time: publicStartTime },
+    'auto',
+    'update public mint start time'
+  );
+
+  const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');
+  console.info(
+    'The `wasm` event emitted by the contract execution:',
+    wasmEvent
+  );
+}
+
 const args = process.argv.slice(2);
 if (args.length == 0) {
   init();
 } else if (args.length == 2 && args[0] == '--whitelist') {
   setWhitelist(args[1]);
+} else if (args.length == 1 && args[0] == '--update-start-time') {
+  updateStartTime();
 } else {
   console.log('Invalid arguments');
 }
