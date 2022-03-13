@@ -181,6 +181,44 @@ async function increaseMemberLimit(newMemberLimit: string) {
   //   );
 }
 
+// Takes config.whitelistContract address and config.whitelistStartTime
+// and tries to update existing whitelist start time.
+// Can not change if whitelist already started. Need to create a new whitelist
+async function updateStartTime() {
+  const client = await getClient();
+
+  const answer = await inquirer.prompt([
+    {
+      message:
+        'Are you sure your want to change whitelist start time to ' +
+        config.whitelistStartTime +
+        ' ?',
+      name: 'confirmation',
+      type: 'confirm',
+    },
+  ]);
+  if (!answer.confirmation) return;
+
+  // time expressed in nanoseconds (1 millionth of a millisecond)
+  const whitelistStartTime: Timestamp = (
+    new Date(config.whitelistStartTime).getTime() * 1_000_000
+  ).toString();
+
+  const result = await client.execute(
+    config.account,
+    config.whitelistContract,
+    { update_start_time: whitelistStartTime },
+    'auto',
+    'update whitelist start time'
+  );
+
+  const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');
+  console.info(
+    'The `wasm` event emitted by the contract execution:',
+    wasmEvent
+  );
+}
+
 async function showConfig() {
   const client = await getClient();
 
@@ -197,6 +235,8 @@ if (args.length == 0) {
   add(args[1]);
 } else if (args.length == 2 && args[0] == '--increase-member-limit') {
   increaseMemberLimit(args[1]);
+} else if (args.length == 1 && args[0] == '--update-start-time') {
+  updateStartTime();
 } else if (args.length == 1 && args[0] == '--show-config') {
   showConfig();
 } else {
