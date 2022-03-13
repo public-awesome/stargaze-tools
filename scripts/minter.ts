@@ -124,17 +124,20 @@ async function init() {
 
 async function setWhitelist(whitelist: string) {
   const client = await getClient();
+  const account = toStars(config.account);
+  const minter = toStars(config.minter);
+  const whitelistContract = toStars(whitelist);
 
-  if (!config.minter) {
+  if (!minter) {
     throw Error(
       '"minter" must be set to a minter contract address in config.js'
     );
   }
 
   console.log('Minter contract: ', config.minter);
-  console.log('Setting whitelist contract: ', whitelist);
+  console.log('Setting whitelist contract: ', whitelistContract);
 
-  const msg = { set_whitelist: { whitelist } };
+  const msg = { set_whitelist: { whitelistContract } };
   console.log(msg);
   const answer = await inquirer.prompt([
     {
@@ -146,8 +149,8 @@ async function setWhitelist(whitelist: string) {
   if (!answer.confirmation) return;
 
   const result = await client.execute(
-    config.account,
-    config.minter,
+    account,
+    minter,
     msg,
     'auto',
     'set whitelist'
