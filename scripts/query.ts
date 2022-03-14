@@ -7,7 +7,6 @@ async function queryInfo() {
   const client = await CosmWasmClient.connect(config.rpcEndpoint);
   const account = toStars(config.account);
   const minter = toStars(config.minter);
-  const sg721 = toStars(config.sg721);
 
   const balance = await client.getBalance(account, 'ustars');
   console.log('account balance:', balance);
@@ -17,6 +16,9 @@ async function queryInfo() {
   });
   console.log('minter configResponse: ', configResponse);
 
+  const sg721 = configResponse.sg721_address;
+  const whitelistContract = configResponse.whitelist;
+
   const numTokens = await client.queryContractSmart(sg721, { num_tokens: {} });
   console.log('num tokens:', numTokens);
 
@@ -25,18 +27,18 @@ async function queryInfo() {
   });
   console.log('collection info:', collectionInfo);
 
-  if (config.whitelistContract) {
-    const whitelistConfig = await client.queryContractSmart(
-      config.whitelistContract,
-      {
-        config: {},
-      }
-    );
+  if (whitelistContract) {
+    const whitelistConfig = await client.queryContractSmart(whitelistContract, {
+      config: {},
+    });
     console.log('whitelist config:', whitelistConfig);
 
-    const whitelistMembers = await client.queryContractSmart(config.whitelist, {
-      members: { limit: 5000 },
-    });
+    const whitelistMembers = await client.queryContractSmart(
+      whitelistContract,
+      {
+        members: { limit: 5000 },
+      }
+    );
     console.log('whitelist members:', whitelistMembers);
   }
 
