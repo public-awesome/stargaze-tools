@@ -94,6 +94,8 @@ async function init() {
 
 async function add(add: string) {
   const client = await getClient();
+  const account = toStars(config.account);
+  const whitelistContract = toStars(config.whitelistContract);
 
   const addAddresses = add == '' ? null : add.split(',');
   if (addAddresses != null) {
@@ -121,8 +123,8 @@ async function add(add: string) {
   console.log(JSON.stringify(msg, null, 2));
 
   const result = await client.execute(
-    config.account,
-    config.whitelistContract,
+    account,
+    whitelistContract,
     msg,
     'auto',
     'update whitelist'
@@ -141,6 +143,8 @@ async function add(add: string) {
 
 async function increaseMemberLimit(newMemberLimit: string) {
   const memberLimit: number = parseInt(newMemberLimit);
+  const account = toStars(config.account);
+  const whitelistContract = toStars(config.whitelistContract);
   const client = await getClient();
 
   const answer = await inquirer.prompt([
@@ -160,31 +164,66 @@ async function increaseMemberLimit(newMemberLimit: string) {
   };
   console.log(JSON.stringify(msg, null, 2));
 
-  const result = await client.execute(
-    config.account,
-    config.whitelistContract,
-    msg,
-    'auto',
-    'update whitelist'
-  );
+  const result = await client.execute(account, whitelistContract, msg, 'auto');
 
   // execute this version if you get IncorrectCreationFee
   //   const result = await client.execute(
-  //     config.account,
-  //     config.whitelistContract,
+  //     account,
+  //     whitelistContract,
   //     {
   //       increase_member_limit: memberLimit,
   //     },
   //     'auto',
-  //     'update whitelist',
+  //     undefined,
   //     WHITELIST_CREATION_FEE
   //   );
 }
 
+// Takes config.whitelistContract address and config.whitelistStartTime
+// and tries to update existing whitelist start time.
+// Can not change if whitelist already started. Need to create a new whitelist
+async function updateStartTime() {
+  const client = await getClient();
+  const account = toStars(config.account);
+  const whitelistContract = toStars(config.whitelistContract);
+
+  const answer = await inquirer.prompt([
+    {
+      message:
+        'Are you sure your want to change whitelist start time to ' +
+        config.whitelistStartTime +
+        ' ?',
+      name: 'confirmation',
+      type: 'confirm',
+    },
+  ]);
+  if (!answer.confirmation) return;
+
+  // time expressed in nanoseconds (1 millionth of a millisecond)
+  const whitelistStartTime: Timestamp = (
+    new Date(config.whitelistStartTime).getTime() * 1_000_000
+  ).toString();
+
+  const result = await client.execute(
+    account,
+    whitelistContract,
+    { update_start_time: whitelistStartTime },
+    'auto',
+    'update whitelist start time'
+  );
+
+  const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');
+  console.info(
+    'The `wasm` event emitted by the contract execution:',
+    wasmEvent
+  );
+}
+
 async function showConfig() {
   const client = await getClient();
+  const whitelistContract = toStars(config.whitelistContract);
 
-  let res = await client.queryContractSmart(config.whitelistContract, {
+  let res = await client.queryContractSmart(whitelistContract, {
     config: {},
   });
   console.log(res);
@@ -197,6 +236,8 @@ if (args.length == 0) {
   add(args[1]);
 } else if (args.length == 2 && args[0] == '--increase-member-limit') {
   increaseMemberLimit(args[1]);
+} else if (args.length == 1 && args[0] == '--update-start-time') {
+  updateStartTime();
 } else if (args.length == 1 && args[0] == '--show-config') {
   showConfig();
 } else {

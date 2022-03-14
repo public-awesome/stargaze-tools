@@ -169,15 +169,18 @@ async function setWhitelist(whitelist: string) {
 
 async function setPerAddressLimit(limit: number) {
   const client = await getClient();
+  const account = toStars(config.account);
+  const minter = toStars(config.minter);
+  const whitelistContract = toStars(config.whitelistContract);
 
-  if (!config.minter) {
+  if (!minter) {
     throw Error(
       '"minter" must be set to a minter contract address in config.js'
     );
   }
 
   console.log('Minter contract: ', config.minter);
-  console.log('Setting per address limit: ', limit);
+  console.log('Setting whitelist contract: ', whitelistContract);
 
   const msg = { update_per_address_limit: { per_address_limit: limit } };
   console.log(msg);
@@ -191,12 +194,51 @@ async function setPerAddressLimit(limit: number) {
   if (!answer.confirmation) return;
 
   const result = await client.execute(
-    config.account,
-    config.minter,
+    account,
+    minter,
     msg,
     'auto',
     'update per address limit'
   );
+  const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');
+  console.info(
+    'The `wasm` event emitted by the contract execution:',
+    wasmEvent
+  );
+}
+
+// Takes config.minter address and config.startTime
+// and tries to update existing minter start time.
+// Can not change if public mint already started.
+async function updateStartTime() {
+  const client = await getClient();
+  const account = toStars(config.account);
+  const minter = toStars(config.minter);
+
+  const answer = await inquirer.prompt([
+    {
+      message:
+        'Are you sure your want to change public mint start time to ' +
+        config.startTime +
+        ' ?',
+      name: 'confirmation',
+      type: 'confirm',
+    },
+  ]);
+  if (!answer.confirmation) return;
+
+  // time expressed in nanoseconds (1 millionth of a millisecond)
+  const publicStartTime: Timestamp = (
+    new Date(config.startTime).getTime() * 1_000_000
+  ).toString();
+
+  const result = await client.execute(
+    account,
+    minter,
+    { update_start_time: publicStartTime },
+    'auto'
+  );
+
   const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');
   console.info(
     'The `wasm` event emitted by the contract execution:',
@@ -209,6 +251,8 @@ if (args.length == 0) {
   init();
 } else if (args.length == 2 && args[0] == '--whitelist') {
   setWhitelist(args[1]);
+} else if (args.length == 1 && args[0] == '--update-start-time') {
+  updateStartTime();
 } else if (args.length == 2 && args[0] == '--per-address-limit') {
   setPerAddressLimit(parseInt(args[1]));
 } else {
