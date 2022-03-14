@@ -8,7 +8,6 @@ async function queryInfo() {
   const account = toStars(config.account);
   const minter = toStars(config.minter);
   const sg721 = toStars(config.sg721);
-  const whitelistContract = toStars(config.whitelistContract);
 
   const balance = await client.getBalance(account, 'ustars');
   console.log('account balance:', balance);
@@ -26,18 +25,18 @@ async function queryInfo() {
   });
   console.log('collection info:', collectionInfo);
 
-  if (whitelistContract) {
-    const whitelistConfig = await client.queryContractSmart(whitelistContract, {
-      config: {},
-    });
-    console.log('whitelist config:', whitelistConfig);
-
-    const whitelistMembers = await client.queryContractSmart(
-      whitelistContract,
+  if (config.whitelistContract) {
+    const whitelistConfig = await client.queryContractSmart(
+      config.whitelistContract,
       {
-        members: { limit: 5000 },
+        config: {},
       }
     );
+    console.log('whitelist config:', whitelistConfig);
+
+    const whitelistMembers = await client.queryContractSmart(config.whitelist, {
+      members: { limit: 5000 },
+    });
     console.log('whitelist members:', whitelistMembers);
   }
 
