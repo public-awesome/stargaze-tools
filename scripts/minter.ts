@@ -191,8 +191,7 @@ async function updateStartTime() {
     account,
     minter,
     { update_start_time: publicStartTime },
-    'auto',
-    'update public mint start time'
+    'auto'
   );
 
   const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');

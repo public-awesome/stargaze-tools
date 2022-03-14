@@ -164,13 +164,7 @@ async function increaseMemberLimit(newMemberLimit: string) {
   };
   console.log(JSON.stringify(msg, null, 2));
 
-  const result = await client.execute(
-    account,
-    whitelistContract,
-    msg,
-    'auto',
-    'update whitelist'
-  );
+  const result = await client.execute(account, whitelistContract, msg, 'auto');
 
   // execute this version if you get IncorrectCreationFee
   //   const result = await client.execute(
@@ -180,7 +174,7 @@ async function increaseMemberLimit(newMemberLimit: string) {
   //       increase_member_limit: memberLimit,
   //     },
   //     'auto',
-  //     'update whitelist',
+  //     undefined,
   //     WHITELIST_CREATION_FEE
   //   );
 }
