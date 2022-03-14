@@ -149,7 +149,7 @@ async function setWhitelist(whitelist: string) {
   console.log('Setting whitelist contract: ', whitelistContract);
 
   const msg = { set_whitelist: { whitelistContract } };
-  console.log(msg);
+  console.log(JSON.stringify(msg, null, 2));
   const answer = await inquirer.prompt([
     {
       message: 'Ready to submit the transaction?',
@@ -173,39 +173,35 @@ async function setWhitelist(whitelist: string) {
   );
 }
 
-async function setPerAddressLimit(limit: number) {
+async function updatePerAddressLimit() {
   const client = await getClient();
   const account = toStars(config.account);
   const minter = toStars(config.minter);
-  const whitelistContract = toStars(config.whitelistContract);
+  const limit: number = config.perAddressLimit;
 
   if (!minter) {
     throw Error(
       '"minter" must be set to a minter contract address in config.js'
     );
   }
-
   console.log('Minter contract: ', config.minter);
-  console.log('Setting whitelist contract: ', whitelistContract);
+
+  if (limit <= 0 || limit > 50) {
+    throw new Error('invalid perAddressLimit in config.js');
+  }
 
   const msg = { update_per_address_limit: { per_address_limit: limit } };
-  console.log(msg);
+  console.log(JSON.stringify(msg, null, 2));
   const answer = await inquirer.prompt([
     {
-      message: 'Ready to submit the transaction?',
+      message: 'Ready to update per address limit to ' + limit + '?',
       name: 'confirmation',
       type: 'confirm',
     },
   ]);
   if (!answer.confirmation) return;
 
-  const result = await client.execute(
-    account,
-    minter,
-    msg,
-    'auto',
-    'update per address limit'
-  );
+  const result = await client.execute(account, minter, msg, 'auto');
   const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');
   console.info(
     'The `wasm` event emitted by the contract execution:',
@@ -260,7 +256,7 @@ if (args.length == 0) {
 } else if (args.length == 1 && args[0] == '--update-start-time') {
   updateStartTime();
 } else if (args.length == 2 && args[0] == '--per-address-limit') {
-  setPerAddressLimit(parseInt(args[1]));
+  updatePerAddressLimit();
 } else {
   console.log('Invalid arguments');
 }
