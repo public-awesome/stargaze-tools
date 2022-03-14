@@ -1,8 +1,6 @@
 # Stargaze Tools
 
-## WORK IN PROGRESS -- TESTNET USE ONLY
-
-Stargaze Tools is a set of tools for launching a project and minting on Stargaze.
+Stargaze Tools is a set of tools for launching a collection and minting on Stargaze.
 
 ## Setup project
 
@@ -30,6 +28,7 @@ $request [address]
 
 ## Configure project
 
+Copy `config.example.js` to `config.js`.
 Edit `config.js` with your project configuration.
 
 ## Initialize an NFT minting contract

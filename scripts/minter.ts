@@ -3,8 +3,7 @@ import { Timestamp } from '@stargazezone/types/contracts/minter/shared-types';
 import { coins } from 'cosmwasm';
 import inquirer from 'inquirer';
 import { getClient } from '../src/client';
-import { isValidHttpUrl } from '../src/utils';
-import { toStars } from '../src/utils';
+import { isValidHttpUrl, toStars } from '../src/utils';
 
 const config = require('../config');
 
@@ -32,6 +31,12 @@ function clean(obj: any) {
 }
 
 async function init() {
+  const account = toStars(config.account);
+  const whitelistContract = config.whitelistContract
+    ? toStars(config.whitelistContract)
+    : null;
+  const royaltyPaymentAddress = toStars(config.royaltyPaymentAddress);
+
   if (!isValidIpfsUrl(config.baseTokenUri)) {
     throw new Error('Invalid base token URI');
   }
@@ -62,20 +67,20 @@ async function init() {
     sg721_instantiate_msg: {
       name: config.name,
       symbol: config.symbol,
-      minter: config.account,
+      minter: account,
       collection_info: {
-        creator: config.account,
+        creator: account,
         description: config.description,
         image: config.image,
         external_link: config.external_link,
         royalty_info: {
-          payment_address: config.royaltyPaymentAddress,
+          payment_address: royaltyPaymentAddress,
           share: config.royaltyShare,
         },
       },
     },
     per_address_limit: config.perAddressLimit,
-    whitelist: config.whitelistContract,
+    whitelist: whitelistContract,
     start_time: startTime,
     unit_price: {
       amount: (config.unitPrice * 1000000).toString(),
@@ -108,12 +113,12 @@ async function init() {
   if (!answer.confirmation) return;
 
   const result = await client.instantiate(
-    config.account,
+    account,
     config.minterCodeId,
     msg,
     config.name,
     'auto',
-    { funds: NEW_COLLECTION_FEE, admin: config.account }
+    { funds: NEW_COLLECTION_FEE, admin: account }
   );
   const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');
   console.info(
@@ -154,6 +159,46 @@ async function setWhitelist(whitelist: string) {
     msg,
     'auto',
     'set whitelist'
+  );
+  const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');
+  console.info(
+    'The `wasm` event emitted by the contract execution:',
+    wasmEvent
+  );
+}
+
+async function setPerAddressLimit(limit: number) {
+  const client = await getClient();
+  const account = toStars(config.account);
+  const minter = toStars(config.minter);
+  const whitelistContract = toStars(config.whitelistContract);
+
+  if (!minter) {
+    throw Error(
+      '"minter" must be set to a minter contract address in config.js'
+    );
+  }
+
+  console.log('Minter contract: ', config.minter);
+  console.log('Setting whitelist contract: ', whitelistContract);
+
+  const msg = { update_per_address_limit: { per_address_limit: limit } };
+  console.log(msg);
+  const answer = await inquirer.prompt([
+    {
+      message: 'Ready to submit the transaction?',
+      name: 'confirmation',
+      type: 'confirm',
+    },
+  ]);
+  if (!answer.confirmation) return;
+
+  const result = await client.execute(
+    account,
+    minter,
+    msg,
+    'auto',
+    'update per address limit'
   );
   const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');
   console.info(
@@ -208,6 +253,8 @@ if (args.length == 0) {
   setWhitelist(args[1]);
 } else if (args.length == 1 && args[0] == '--update-start-time') {
   updateStartTime();
+} else if (args.length == 2 && args[0] == '--per-address-limit') {
+  setPerAddressLimit(parseInt(args[1]));
 } else {
   console.log('Invalid arguments');
 }
