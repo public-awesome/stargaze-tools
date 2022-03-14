@@ -7,7 +7,7 @@ export const toStars = (addr: string) => {
     // https://medium.com/chainapsis/keplr-explained-coin-type-118-9781d26b2c4e
     const compatiblePrefixes = ['osmo', 'cosmos', 'stars', 'regen'];
     if (!compatiblePrefixes.includes(prefix)) {
-      throw new Error('Address not compatible with keplr: ' + addr);
+      throw new Error('Address not compatible with Keplr: ' + addr);
     }
     const starsAddr = toBech32('stars', data);
     // wallet address length 20, contract address length 32
