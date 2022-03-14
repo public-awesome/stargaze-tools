@@ -45,6 +45,11 @@ async function queryInfo() {
   const nfts = await client.queryContractSmart(sg721, {
     tokens: { owner: account, limit: 30 },
   });
-  console.log(nfts);
+  for (let id of nfts.tokens) {
+    const tokenInfo = await client.queryContractSmart(sg721, {
+      all_nft_info: { token_id: id },
+    });
+    console.log('tokenInfo:', tokenInfo);
+  }
 }
 queryInfo();
