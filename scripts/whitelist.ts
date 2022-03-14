@@ -66,6 +66,12 @@ async function init() {
     'Please confirm the settings for your whitelist. THERE IS NO WAY TO UPDATE THIS ONCE IT IS ON CHAIN.'
   );
   console.log(JSON.stringify(msg, null, 2));
+  console.log(
+    'Cost of whitelist instantiation: ' +
+      WHITELIST_CREATION_FEE[0].amount +
+      ' ' +
+      WHITELIST_CREATION_FEE[0].denom
+  );
   const answer = await inquirer.prompt([
     {
       message: 'Ready to submit the transaction?',

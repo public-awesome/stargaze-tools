@@ -103,6 +103,12 @@ async function init() {
     'Please confirm the settings for your minter and collection. THERE IS NO WAY TO UPDATE THIS ONCE IT IS ON CHAIN.'
   );
   console.log(JSON.stringify(msg, null, 2));
+  console.log(
+    'Cost of minter instantiation: ' +
+      NEW_COLLECTION_FEE[0].amount +
+      ' ' +
+      NEW_COLLECTION_FEE[0].denom
+  );
   const answer = await inquirer.prompt([
     {
       message: 'Ready to submit the transaction?',
