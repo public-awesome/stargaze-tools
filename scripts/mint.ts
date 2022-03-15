@@ -109,6 +109,50 @@ async function mintFor(tokenId: string, recipient: string) {
   );
 }
 
+async function mintForRange(tokenIdRange: string, recipient: string) {
+  const starsRecipient = toStars(recipient);
+
+  // Parse string from "1,10" -> "1" and "10"
+  let split = tokenIdRange.split(",");
+  let start = parseInt(split[0]), end = parseInt(split[1]);
+
+  // Verify proper range
+  if (isNaN(start) || start < 1) throw new Error("Invalid start ID");
+  if (isNaN(end) || end < 1) throw new Error("Invalid end ID");
+  if (start > end) throw new Error("Invalid range");
+
+  console.log('Minting tokens', start + '-' + end, 'for', starsRecipient);
+
+  // Loop through range and generate contract messages.
+  let msgArray = new Array();
+  for (let i = start; i <= end; i++) {
+    let msg = {
+      mint_for: { token_id: i, recipient: starsRecipient },
+    };
+    let executeContractMsg: MsgExecuteContractEncodeObject = {
+      typeUrl: '/cosmwasm.wasm.v1.MsgExecuteContract',
+      value: MsgExecuteContract.fromPartial({
+        sender: config.account,
+        contract: config.minter,
+        msg: toUtf8(JSON.stringify(msg)),
+        funds: [...[]],
+      }),
+    };
+    msgArray.push(executeContractMsg);
+  }
+
+  const client = await getClient();
+
+  // Execute all messages.
+  const result = await client.signAndBroadcast(
+    config.account,
+    msgArray,
+    'auto',
+    'batch mint for'
+  );
+  console.log('Tx hash: ', result.transactionHash);
+}
+
 const args = process.argv.slice(2);
 if (args.length == 0) {
   console.log('No arguments provided, need --to or --for');
@@ -124,6 +168,8 @@ if (args.length == 0) {
   }
 } else if (args.length == 3 && args[0] == '--for') {
   mintFor(args[1], args[2]);
+} else if (args.length == 3 && args[0] == '--range') {
+  mintForRange(args[1], args[2]);
 } else {
   console.log('Invalid arguments');
 }
