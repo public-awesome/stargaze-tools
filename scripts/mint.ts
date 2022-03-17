@@ -113,13 +113,15 @@ async function mintForRange(tokenIdRange: string, recipient: string) {
   const starsRecipient = toStars(recipient);
 
   // Parse string from "1,10" -> "1" and "10"
-  let split = tokenIdRange.split(",");
-  let start = parseInt(split[0]), end = parseInt(split[1]);
+  const [start, end] = tokenIdRange.split(',').map(Number);
+
+  const client = await getClient();
+  const configResponse = await client.queryContractSmart(config.minter, { config: {} });
 
   // Verify proper range
-  if (isNaN(start) || start < 1) throw new Error("Invalid start ID");
-  if (isNaN(end) || end < 1) throw new Error("Invalid end ID");
-  if (start > end) throw new Error("Invalid range");
+  if (isNaN(start) || isNaN(end) || start > end) throw new Error("Invalid range");
+  if (start < 1) throw new Error("Start ID out of bounds");
+  if (end > configResponse.num_tokens) throw new Error("End ID out of bounds");
 
   console.log('Minting tokens', start + '-' + end, 'for', starsRecipient);
 
@@ -135,13 +137,11 @@ async function mintForRange(tokenIdRange: string, recipient: string) {
         sender: config.account,
         contract: config.minter,
         msg: toUtf8(JSON.stringify(msg)),
-        funds: [...[]],
+        funds: [],
       }),
     };
     msgArray.push(executeContractMsg);
   }
-
-  const client = await getClient();
 
   // Execute all messages.
   const result = await client.signAndBroadcast(
