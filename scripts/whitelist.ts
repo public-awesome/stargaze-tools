@@ -18,7 +18,8 @@ async function init() {
   }
   if (
     !config.whitelistPerAddressLimit ||
-    config.whitelistPerAddressLimit <= 0
+    config.whitelistPerAddressLimit <= 0 ||
+    config.whitelistPerAddressLimit > 30
   ) {
     throw new Error('invalid whitelistPerAddressLimit in config.js');
   }
@@ -153,6 +154,10 @@ async function increaseMemberLimit(newMemberLimit: string) {
   const whitelistContract = toStars(config.whitelistContract);
   const client = await getClient();
 
+  const msg = {
+    increase_member_limit: memberLimit,
+  };
+  console.log(JSON.stringify(msg, null, 2));
   const answer = await inquirer.prompt([
     {
       message:
@@ -164,11 +169,6 @@ async function increaseMemberLimit(newMemberLimit: string) {
     },
   ]);
   if (!answer.confirmation) return;
-
-  const msg = {
-    increase_member_limit: memberLimit,
-  };
-  console.log(JSON.stringify(msg, null, 2));
 
   const result = await client.execute(account, whitelistContract, msg, 'auto');
 
@@ -193,6 +193,12 @@ async function updateStartTime() {
   const account = toStars(config.account);
   const whitelistContract = toStars(config.whitelistContract);
 
+  // time expressed in nanoseconds (1 millionth of a millisecond)
+  const whitelistStartTime: Timestamp = (
+    new Date(config.whitelistStartTime).getTime() * 1_000_000
+  ).toString();
+  const msg = { update_start_time: whitelistStartTime };
+  console.log(JSON.stringify(msg, null, 2));
   const answer = await inquirer.prompt([
     {
       message:
@@ -205,11 +211,6 @@ async function updateStartTime() {
   ]);
   if (!answer.confirmation) return;
 
-  // time expressed in nanoseconds (1 millionth of a millisecond)
-  const whitelistStartTime: Timestamp = (
-    new Date(config.whitelistStartTime).getTime() * 1_000_000
-  ).toString();
-
   const result = await client.execute(
     account,
     whitelistContract,
@@ -218,6 +219,34 @@ async function updateStartTime() {
     'update whitelist start time'
   );
 
+  const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');
+  console.info(
+    'The `wasm` event emitted by the contract execution:',
+    wasmEvent
+  );
+}
+
+async function updatePerAddressLimit() {
+  const client = await getClient();
+  const limit: number = config.whitelistPerAddressLimit;
+  if (limit <= 0 || limit > 30) {
+    throw new Error('invalid whitelistPerAddressLimit in config.js');
+  }
+
+  const msg = { update_per_address_limit: { per_address_limit: limit } };
+  console.log(JSON.stringify(msg, null, 2));
+  const answer = await inquirer.prompt([
+    {
+      message: 'Ready to update whitelist per address limit to ' + limit + '?',
+      name: 'confirmation',
+      type: 'confirm',
+    },
+  ]);
+  if (!answer.confirmation) return;
+
+  const account = toStars(config.account);
+  const whitelistContract = toStars(config.whitelistContract);
+  const result = await client.execute(account, whitelistContract, msg, 'auto');
   const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');
   console.info(
     'The `wasm` event emitted by the contract execution:',
@@ -244,6 +273,8 @@ if (args.length == 0) {
   increaseMemberLimit(args[1]);
 } else if (args.length == 1 && args[0] == '--update-start-time') {
   updateStartTime();
+} else if (args.length == 1 && args[0] == '--update-per-address-limit') {
+  updatePerAddressLimit();
 } else if (args.length == 1 && args[0] == '--show-config') {
   showConfig();
 } else {
