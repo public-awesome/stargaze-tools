@@ -30,12 +30,32 @@ function clean(obj: any) {
   return obj;
 }
 
+function formatRoyaltyInfo(
+  royaltyPaymentAddress: null | string,
+  royaltyShare: string
+) {
+  if (royaltyPaymentAddress === null) {
+    return null;
+  } else {
+    if (royaltyShare === undefined || royaltyShare == '') {
+      throw new Error('royaltyPaymentAddress present, but no royaltyShare');
+    }
+    return { payment_address: royaltyPaymentAddress, share: royaltyShare };
+  }
+}
+
 async function init() {
   const account = toStars(config.account);
   const whitelistContract = config.whitelistContract
     ? toStars(config.whitelistContract)
     : null;
-  const royaltyPaymentAddress = toStars(config.royaltyPaymentAddress);
+  const royaltyPaymentAddress = config.royaltyPaymentAddress
+    ? toStars(config.royaltyPaymentAddress)
+    : null;
+  const royaltyInfo = formatRoyaltyInfo(
+    royaltyPaymentAddress,
+    config.royaltyShare
+  );
 
   if (!isValidIpfsUrl(config.baseTokenUri)) {
     throw new Error('Invalid base token URI');
@@ -73,10 +93,7 @@ async function init() {
         description: config.description,
         image: config.image,
         external_link: config.external_link,
-        royalty_info: {
-          payment_address: royaltyPaymentAddress,
-          share: config.royaltyShare,
-        },
+        royalty_info: royaltyInfo,
       },
     },
     per_address_limit: config.perAddressLimit,
