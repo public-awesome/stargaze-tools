@@ -95,6 +95,11 @@ yarn query
 
 For all possible queries, see the [query types](https://github.com/public-awesome/cw-nfts/blob/main/contracts/cw721-base/src/msg.rs#L76).
 
+## Testnet
+
+Test your contract. Make sure it's visible in launchpad. Try minting and viewing the NFT in your profile.
+[https://testnet.publicawesome.dev/](https://testnet.publicawesome.dev/)
+
 # More documentation
 
 A more comprehensive guide is available at [Stargaze Docs](https://docs.stargaze.zone/guides/readme).
