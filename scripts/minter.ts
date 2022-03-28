@@ -148,6 +148,13 @@ async function init() {
     'The `wasm` event emitted by the contract execution:',
     wasmEvent
   );
+  if (wasmEvent != undefined) {
+    console.info('Add these contract addresses to config.js:');
+    console.info('minter contract address: ', wasmEvent.attributes[0]['value']);
+    console.info('sg721 contract address: ', wasmEvent.attributes[5]['value']);
+  }
+
+  //   console.info(wasmEvent.message);
 }
 
 async function setWhitelist(whitelist: string) {
