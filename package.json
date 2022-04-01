@@ -28,6 +28,7 @@
     "pack-images": "ipfs-car --pack images --output images.car",
     "pack-metadata": "ipfs-car --pack metadata --output metadata.car",
     "pinata-upload": "ts-node scripts/pinata-upload.ts",
+    "pin": "ts-node scripts/pin.ts",
     "pinata-clean": "ts-node scripts/pinata-clean.ts",
     "query": "ts-node scripts/query.ts",
     "ts": "tsc --noEmit --incremental",

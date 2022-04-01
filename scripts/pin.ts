@@ -4,6 +4,8 @@
 // Pinning improves availability of the IPFS CID assets by avoiding CIDs getting garbage collected
 // https://docs.ipfs.io/concepts/persistence/#pinning-in-context
 
+// Ex: yarn pin bafybeihnixau3xfnw6cd7z4to7csixa3twogfktorm3nqxrpewcztyarpq,bafybeia43tr7rabffi65vogxfr75wyyi73ynyt6mah7f42hkpxkpvok45u
+
 require('dotenv').config();
 
 import pinataSDK from '@pinata/sdk';
@@ -19,6 +21,8 @@ async function pin(cids: string) {
   }
   if (cids == undefined || cids.length == 0) {
     throw new Error('No CIDs. Pass CIDs to pin.');
+  } else {
+    console.log('cids: ', cids);
   }
   const pinata = pinataSDK(pinata_key, pinata_secret_key);
 
@@ -33,11 +37,12 @@ async function pin(cids: string) {
     });
 
   // pin hashes
-  const cids_hashes = cids.split(',');
-  for (const cid_hash in cids_hashes) {
+  const cids_hashes: string[] = cids.split(',');
+  console.log(cids_hashes);
+  for (let idx in cids_hashes) {
     pinata
       .pinByHash(
-        cid_hash,
+        cids_hashes[idx],
         // empty options
         {}
       )
