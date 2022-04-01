@@ -8,7 +8,7 @@ require('dotenv').config();
 
 import pinataSDK from '@pinata/sdk';
 
-async function pin() {
+async function pin(cids: string) {
   const pinata_key = process.env.PINATA_API_KEY;
   const pinata_secret_key = process.env.PINATA_API_SECRET_KEY;
   if (pinata_key == undefined) {
@@ -17,7 +17,43 @@ async function pin() {
   if (pinata_secret_key == undefined) {
     throw new Error('PINATA_API_SECRET_KEY required in .env');
   }
+  if (cids == undefined || cids.length == 0) {
+    throw new Error('No CIDs. Pass CIDs to pin.');
+  }
   const pinata = pinataSDK(pinata_key, pinata_secret_key);
+
+  pinata
+    .testAuthentication()
+    .then((result) => {
+      console.log(result);
+    })
+    .catch((err) => {
+      console.log(err);
+      throw new Error('pinata authentication failed');
+    });
+
+  // pin hashes
+  const cids_hashes = cids.split(',');
+  for (const cid_hash in cids_hashes) {
+    pinata
+      .pinByHash(
+        cid_hash,
+        // empty options
+        {}
+      )
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((err) => {
+        console.log(err);
+        throw new Error(err);
+      });
+  }
 }
 
-pin();
+const args = process.argv.slice(2);
+if (args.length == 1) {
+  pin(args[0]);
+} else {
+  console.log('Invalid arguments');
+}
