@@ -1,6 +1,11 @@
 // Simple upload 500 addresses to airdrop using airdrop_addresses.csv.
+
+// WARNING: Airdrop order is not maintained! [addr1, addr2, addr3, addr4, addr5]
+// will not 100% translate to [token_id1, token_id2, token_id3, token_id4, token_id5]
+// ex: it could produce [token_id3, token_id4, token_id1, token_id5, token_id2]
+// To guarantee token_id: 100 gets airdropped to addr1, use mint_for(100, addr1)
+
 // Accepts cosmos, stars addresses.
-// this does a series of mint_to tx
 
 import { ExecuteMsg } from '@stargazezone/types/contracts/minter/execute_msg';
 import { coin, MsgExecuteContractEncodeObject } from 'cosmwasm';
@@ -86,7 +91,7 @@ async function addFile() {
 
       // Get confirmation before preceding
       console.log(
-        'Please confirm the settings for airdropping to addresses. THERE IS NO WAY TO UNDO THIS ONCE IT IS ON CHAIN.'
+        'WARNING: Airdrop order is not maintained! Please confirm the settings for airdropping to addresses. THERE IS NO WAY TO UNDO THIS ONCE IT IS ON CHAIN.'
       );
       console.log(JSON.stringify(executeContractMsgs, null, 2));
       const answer = await inquirer.prompt([
