@@ -3,13 +3,7 @@
 // If you run into an error with `member_limit`, run `yarn whitelist --increase-member-limit`
 
 import { ExecuteMsg } from '@stargazezone/types/contracts/whitelist/execute_msg';
-import {
-  coins,
-  DirectSecp256k1HdWallet,
-  GasPrice,
-  MsgExecuteContractEncodeObject,
-  SigningCosmWasmClient,
-} from 'cosmwasm';
+import { MsgExecuteContractEncodeObject } from 'cosmwasm';
 import { toStars } from '../src/utils';
 import inquirer from 'inquirer';
 import { getClient } from '../src/client';
@@ -21,16 +15,9 @@ import { parse } from 'csv-parse';
 import { assertIsDeliverTxSuccess } from '@cosmjs/stargate';
 
 const config = require('../config');
-const WHITELIST_CREATION_FEE = coins('100000000', 'ustars');
 const MSG_ADD_ADDR_LIMIT = 500;
 
-const gasPrice = GasPrice.fromString('0ustars');
-
 async function addFile() {
-  const wallet = await DirectSecp256k1HdWallet.fromMnemonic(config.mnemonic, {
-    prefix: 'stars',
-  });
-
   interface Whitelist {
     address: string;
   }
