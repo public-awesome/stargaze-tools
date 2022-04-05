@@ -1,4 +1,4 @@
-// Simple upload 500 addresses to airdrop using airdrop_addresses.csv.
+// Airdrop 1 token per address for a batch of addresses using airdrop_addresses.csv
 
 // WARNING: Airdrop order is not maintained! [addr1, addr2, addr3, addr4, addr5]
 // will not 100% translate to [token_id1, token_id2, token_id3, token_id4, token_id5]
