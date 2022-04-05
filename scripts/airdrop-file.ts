@@ -15,6 +15,8 @@ import { parse } from 'csv-parse';
 import { assertIsDeliverTxSuccess } from '@cosmjs/stargate';
 
 const config = require('../config');
+// airdrop fee will cost a low fee in the next minter upgrade
+const AIRDROP_FEE = coin(0, 'ustars');
 const MSG_AIRDROP_LIMIT = 500;
 
 async function addFile() {
@@ -33,7 +35,7 @@ async function addFile() {
       '"minter" must be set to a minter contract address in config.js'
     );
   }
-
+  const funds = parseInt(AIRDROP_FEE.amount) == 0 ? [] : [AIRDROP_FEE];
   await parse(
     fileContent,
     {
@@ -74,7 +76,7 @@ async function addFile() {
           sender: config.account,
           contract: config.minter,
           msg: toUtf8(JSON.stringify(msg)),
-          funds: [],
+          funds,
         }),
       };
 
