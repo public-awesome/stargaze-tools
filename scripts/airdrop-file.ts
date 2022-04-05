@@ -66,27 +66,29 @@ async function addFile() {
           uniqueValidatedAddrs.length
       );
 
-      const msg: ExecuteMsg = {
-        // TODO iterate through addrs
-        mint_to: { recipient: uniqueValidatedAddrs[0] },
-      };
-      const executeContractMsg: MsgExecuteContractEncodeObject = {
-        typeUrl: '/cosmwasm.wasm.v1.MsgExecuteContract',
-        value: MsgExecuteContract.fromPartial({
-          sender: config.account,
-          contract: config.minter,
-          msg: toUtf8(JSON.stringify(msg)),
-          funds,
-        }),
-      };
+      for (const idx in uniqueValidatedAddrs) {
+        console.log('airdropping to address: ', uniqueValidatedAddrs[idx]);
+        const msg: ExecuteMsg = {
+          mint_to: { recipient: uniqueValidatedAddrs[idx] },
+        };
+        const executeContractMsg: MsgExecuteContractEncodeObject = {
+          typeUrl: '/cosmwasm.wasm.v1.MsgExecuteContract',
+          value: MsgExecuteContract.fromPartial({
+            sender: config.account,
+            contract: config.minter,
+            msg: toUtf8(JSON.stringify(msg)),
+            funds,
+          }),
+        };
 
-      executeContractMsgs.push(executeContractMsg);
+        executeContractMsgs.push(executeContractMsg);
+      }
 
       // Get confirmation before preceding
       console.log(
         'Please confirm the settings for airdropping to addresses. THERE IS NO WAY TO UNDO THIS ONCE IT IS ON CHAIN.'
       );
-      console.log(JSON.stringify(msg, null, 2));
+      console.log(JSON.stringify(executeContractMsgs, null, 2));
       const answer = await inquirer.prompt([
         {
           message: 'Ready to submit the transaction?',
