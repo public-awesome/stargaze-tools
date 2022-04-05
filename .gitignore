@@ -41,6 +41,7 @@ coverage/
 # Config files
 config.js
 whitelist_addresses.csv
+airdrop_addresses.csv
 
 .env
 
