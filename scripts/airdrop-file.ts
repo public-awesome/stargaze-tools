@@ -17,7 +17,7 @@ import { assertIsDeliverTxSuccess } from '@cosmjs/stargate';
 const config = require('../config');
 // airdrop fee will cost a low fee in the next minter upgrade
 const AIRDROP_FEE = coin(0, 'ustars');
-const MSG_AIRDROP_LIMIT = 500;
+const MSG_AIRDROP_LIMIT = 50;
 
 async function addFile() {
   interface Airdrop {
