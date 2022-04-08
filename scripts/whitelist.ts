@@ -226,6 +226,44 @@ async function updateStartTime() {
   );
 }
 
+async function updateEndTime() {
+  const client = await getClient();
+  const account = toStars(config.account);
+  const whitelistContract = toStars(config.whitelistContract);
+
+  // time expressed in nanoseconds (1 millionth of a millisecond)
+  const whitelistEndTime: Timestamp = (
+    new Date(config.whitelistEndTime).getTime() * 1_000_000
+  ).toString();
+  const msg = { update_end_time: whitelistEndTime };
+  console.log(JSON.stringify(msg, null, 2));
+  const answer = await inquirer.prompt([
+    {
+      message:
+        'Are you sure your want to change whitelist end time to ' +
+        config.whitelistEndTime +
+        ' ?',
+      name: 'confirmation',
+      type: 'confirm',
+    },
+  ]);
+  if (!answer.confirmation) return;
+
+  const result = await client.execute(
+    account,
+    whitelistContract,
+    { update_end_time: whitelistEndTime },
+    'auto',
+    'update whitelist end time'
+  );
+
+  const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');
+  console.info(
+    'The `wasm` event emitted by the contract execution:',
+    wasmEvent
+  );
+}
+
 async function updatePerAddressLimit() {
   const client = await getClient();
   const limit: number = config.whitelistPerAddressLimit;
@@ -273,6 +311,8 @@ if (args.length == 0) {
   increaseMemberLimit(args[1]);
 } else if (args.length == 1 && args[0] == '--update-start-time') {
   updateStartTime();
+} else if (args.length == 1 && args[0] == '--update-end-time') {
+  updateEndTime();
 } else if (args.length == 1 && args[0] == '--update-per-address-limit') {
   updatePerAddressLimit();
 } else if (args.length == 1 && args[0] == '--show-config') {
