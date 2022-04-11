@@ -172,7 +172,7 @@ async function setWhitelist(whitelist: string) {
   console.log('Minter contract: ', config.minter);
   console.log('Setting whitelist contract: ', whitelistContract);
 
-  const msg = { set_whitelist: { whitelistContract } };
+  const msg = { set_whitelist: { whitelist: whitelistContract } };
   console.log(JSON.stringify(msg, null, 2));
   const answer = await inquirer.prompt([
     {
