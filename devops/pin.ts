@@ -4,7 +4,7 @@
 // Pinning improves availability of the IPFS CID assets by avoiding CIDs getting garbage collected
 // https://docs.ipfs.io/concepts/persistence/#pinning-in-context
 
-// Ex: yarn pin bafybeihnixau3xfnw6cd7z4to7csixa3twogfktorm3nqxrpewcztyarpq,bafybeia43tr7rabffi65vogxfr75wyyi73ynyt6mah7f42hkpxkpvok45u
+// Ex: yarn devops-pin bafybeihnixau3xfnw6cd7z4to7csixa3twogfktorm3nqxrpewcztyarpq,bafybeia43tr7rabffi65vogxfr75wyyi73ynyt6mah7f42hkpxkpvok45u
 
 require('dotenv').config();
 
