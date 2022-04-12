@@ -1,6 +1,7 @@
 // Add rarity frequencies
 // Frequencies displayed in NFT detail page
 // Via how rare api, other rarity calculators can be added later
+// https://doc.howrare.world
 
 // ex: yarn devops-rarity
 
