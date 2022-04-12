@@ -16,6 +16,7 @@
     "ipfs-car": "^0.6.1",
     "mime": "^3.0.0",
     "nft.storage": "^6.0.0",
+    "node-fetch": "2.6.1",
     "ts-node": "^10.5.0",
     "typescript": "^4.5.5"
   },
@@ -34,6 +35,7 @@
     "ts": "tsc --noEmit --incremental",
     "whitelist": "ts-node scripts/whitelist.ts",
     "whitelist-file": "ts-node scripts/whitelist-file.ts",
-    "devops-pin": "ts-node devops/pin.ts"
+    "devops-pin": "ts-node devops/pin.ts",
+    "devops-rarity": "ts-node devops/rarity.ts"
   }
 }
