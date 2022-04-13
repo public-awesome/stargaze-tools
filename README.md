@@ -100,6 +100,12 @@ For all possible queries, see the [query types](https://github.com/public-awesom
 Test your contract. Make sure it's visible in launchpad. Try minting and viewing the NFT in your profile.
 [https://testnet.publicawesome.dev/](https://testnet.publicawesome.dev/)
 
+## Video Walkthrough (Big thank you to meta-induction)
+
+[https://www.youtube.com/watch?v=1gvDlBWKEUc](https://www.youtube.com/watch?v=1gvDlBWKEUc)
+
+[https://asciinema.org/a/485818](https://asciinema.org/a/485818)
+
 # More documentation
 
 A more comprehensive guide is available at [Stargaze Docs](https://docs.stargaze.zone/guides/readme).
