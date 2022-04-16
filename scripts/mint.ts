@@ -54,7 +54,7 @@ async function mintTo(recipient: string) {
   );
 }
 
-async function batchMint(recipient: string, num: number) {
+export async function batchMint(recipient: string, num: number) {
   const client = await getClient();
 
   const starsRecipient = toStars(recipient);
@@ -116,12 +116,15 @@ async function mintForRange(tokenIdRange: string, recipient: string) {
   const [start, end] = tokenIdRange.split(',').map(Number);
 
   const client = await getClient();
-  const configResponse = await client.queryContractSmart(config.minter, { config: {} });
+  const configResponse = await client.queryContractSmart(config.minter, {
+    config: {},
+  });
 
   // Verify proper range
-  if (isNaN(start) || isNaN(end) || start > end) throw new Error("Invalid range");
-  if (start < 1) throw new Error("Start ID out of bounds");
-  if (end > configResponse.num_tokens) throw new Error("End ID out of bounds");
+  if (isNaN(start) || isNaN(end) || start > end)
+    throw new Error('Invalid range');
+  if (start < 1) throw new Error('Start ID out of bounds');
+  if (end > configResponse.num_tokens) throw new Error('End ID out of bounds');
 
   console.log('Minting tokens', start + '-' + end, 'for', starsRecipient);
 

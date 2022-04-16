@@ -26,14 +26,21 @@ const configKeys = ['rpcEndpoint', 'minterCodeId', 'sg721CodeId'];
 const collection1 = require('./collection1');
 const collection2 = require('./collection2');
 import { init as minterInit } from '../scripts/minter';
+import { batchMint } from '../scripts/mint';
 
 async function init() {
   if (config.rpcEndpoint == 'https://rpc.stargaze-apis.com/') {
     throw new Error('RPC pointed to mainnet. Change rpcEndpoint in config.js');
   }
+  const buyer = {
+    mnemonic:
+      'still degree drive submit clean entire shrug purse cruel record hollow strategy',
+    addr: 'stars1ppqvdpdql35vg3fppshr2k297a69le33ssl5h0',
+  };
 
   // save code ids from config
   // inherit from collection1
+  // setup collection1
   Object.keys(config).forEach((key) => {
     configKeys.includes(key) || delete config[key];
   });
@@ -43,9 +50,32 @@ async function init() {
   config.mnemonic = collection1.mnemonic;
   config.account = collection1.account;
   config.startTime = new Date(Date.now() + 10_000);
-
   const minter_addr = await minterInit();
-  console.log('minter addr: ', minter_addr);
+  config.minter = minter_addr;
+  console.log('collection 1 minter addr: ', minter_addr);
+
+  // 50x mint as buyer from collection #1
+  await batchMint(buyer.addr, 50);
+
+  // save code ids from config
+  // inherit from collection2
+  // set up collection2
+  //   Object.keys(config).forEach((key) => {
+  //     configKeys.includes(key) || delete config[key];
+  //   });
+  //   Object.keys(collection2).forEach((key) => {
+  //     config[key] = collection2[key];
+  //   });
+  //   config.mnemonic = collection2.mnemonic;
+  //   config.account = collection2.account;
+  //   config.startTime = new Date(Date.now() + 10_000);
+  //   const minter_addr2 = await minterInit();
+  //   config.minter = minter_addr2;
+  //   console.log('collection 2 minter addr: ', minter_addr2);
+
+  // 5x mint as buyer vrom collection #2
+  //   await batchMint(buyer.addr, 5);
+  // transfer nft to receiver
 }
 
 init();
