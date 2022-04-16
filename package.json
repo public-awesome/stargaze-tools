@@ -36,6 +36,7 @@
     "whitelist": "ts-node scripts/whitelist.ts",
     "whitelist-file": "ts-node scripts/whitelist-file.ts",
     "devops-pin": "ts-node devops/pin.ts",
-    "devops-rarity": "ts-node devops/rarity.ts"
+    "devops-rarity": "ts-node devops/rarity.ts",
+    "devops-launch": "ts-node devops/testnet-launch.ts"
   }
 }
