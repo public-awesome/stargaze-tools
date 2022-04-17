@@ -3,20 +3,22 @@
  * scripts use rpc and code ids from main config.js
  */
 
+// special thanks to Ziggy and Cosmos Constellations for permission to use in testnet
 module.exports = {
   mnemonic:
-    'enough toddler bargain faint track vendor supreme diesel myself vibrant chase cargo',
-  account: 'stars1wh3wjjgprxeww4cgqyaw8k75uslzh3sd3s2yfk',
+    'still degree drive submit clean entire shrug purse cruel record hollow strategy',
+  account: 'stars1ppqvdpdql35vg3fppshr2k297a69le33ssl5h0',
 
   //// COLLECTION INFO ////
-  name: 'Testnet Moons Collection',
-  symbol: 'MOON',
-  description: 'large 1050 NFT series for testnet',
-  image: 'ipfs://QmPYqcz3p89SNzHnsdHt6JCbXdB7EceLckdVSQGZBqNZeX/1.png',
+  name: 'Testnet Ziggy Super Gifs Collection',
+  symbol: 'TZIG',
+  description: 'Super large gifs for testnet',
+  image: 'ipfs://bafybeihtn57o7uos7xhjwty6g2o5gkz5qti65neycp4r37x2wu2b4zbina',
 
   //// MINTER CONTRACT ////
-  baseTokenUri: 'ipfs://QmVnos4WEq5z2zLwX8CR5EkaHyBUiF2RZYQLDWL4gm5DDU',
-  numTokens: 100,
+  baseTokenUri:
+    'ipfs://bafybeiaf2qzkva4tnxak4k5trnnyzuinzzoxrookm7t4wa753rdarsoetm/metadata',
+  numTokens: 20,
   unitPrice: 500,
-  perAddressLimit: 50,
+  perAddressLimit: 5,
 };
