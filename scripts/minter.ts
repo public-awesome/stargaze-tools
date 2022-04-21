@@ -44,7 +44,9 @@ function formatRoyaltyInfo(
   }
 }
 
-async function init() {
+export async function init() {
+  console.log('init config name ', config.name);
+  console.log('init config account ', config.account);
   const account = toStars(config.account);
   const whitelistContract = config.whitelistContract
     ? toStars(config.whitelistContract)
@@ -152,9 +154,8 @@ async function init() {
     console.info('Add these contract addresses to config.js:');
     console.info('minter contract address: ', wasmEvent.attributes[0]['value']);
     console.info('sg721 contract address: ', wasmEvent.attributes[5]['value']);
+    return wasmEvent.attributes[0]['value'];
   }
-
-  //   console.info(wasmEvent.message);
 }
 
 async function setWhitelist(whitelist: string) {
