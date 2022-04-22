@@ -13,8 +13,8 @@ module.exports = {
   account: 'stars1...',
 
   //// API CONFIG ////
-  // The RPC endpoint for Stargaze, Castor Testnet
-  rpcEndpoint: 'https://rpc.castor-1.stargaze-apis.com/',
+  // The RPC endpoint for Stargaze, Double Double Testnet
+  rpcEndpoint: 'https://rpc.double-double-1.stargaze-apis.com/',
   // The RPC endpoint for Stargaze, mainnet
   // rpcEndpoint: 'https://rpc.stargaze-apis.com/',
   // NFT.storage endpoint
@@ -84,11 +84,11 @@ module.exports = {
   // Get this after running `yarn minter`
   sg721: 'stars1...',
 
-  //// CONTRACT CODE IDs: Castor Testnet ////
+  //// CONTRACT CODE IDs: Double Double Testnet ////
   // The code ID for sg721
   sg721CodeId: 1,
   // The code ID for the minter contract
-  minterCodeId: 6,
+  minterCodeId: 2,
   // The code ID for the whitelist contract
   whitelistCodeId: 3,
 
