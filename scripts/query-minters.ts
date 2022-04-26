@@ -1,5 +1,4 @@
 import { CosmWasmClient } from 'cosmwasm';
-import { toStars } from '../src/utils';
 
 const config = require('../config');
 
