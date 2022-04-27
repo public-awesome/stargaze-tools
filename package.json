@@ -32,6 +32,7 @@
     "pinata-upload": "ts-node scripts/pinata-upload.ts",
     "pinata-clean": "ts-node scripts/pinata-clean.ts",
     "query": "ts-node scripts/query.ts",
+    "query-minters": "ts-node scripts/query-minters.ts",
     "ts": "tsc --noEmit --incremental",
     "whitelist": "ts-node scripts/whitelist.ts",
     "whitelist-file": "ts-node scripts/whitelist-file.ts",
