@@ -2,6 +2,7 @@ import { MsgExecuteContractEncodeObject, coins, toUtf8 } from 'cosmwasm';
 import { MsgExecuteContract } from 'cosmjs-types/cosmwasm/wasm/v1/tx';
 import { getClient } from '../src/client';
 import { toStars } from '../src/utils';
+import inquirer from 'inquirer';
 
 const config = require('../config');
 
@@ -10,9 +11,19 @@ async function burn_token(token: string) {
 
   console.log('SG721: ', config.sg721);
   console.log('Burning Token: ', token);
-
   const msg = { burn: { token_id: token } };
   console.log(JSON.stringify(msg, null, 2));
+  console.log(
+    'Please confirm that you would like to burn this token? This cannot be undone. Also note that this script can only burn tokens from your own wallet.'
+  );
+  const answer = await inquirer.prompt([
+    {
+      message: 'Ready to burn this token?',
+      name: 'confirmation',
+      type: 'confirm',
+    },
+  ]);
+  if (!answer.confirmation) return;
 
   const result = await client.execute(
     config.account,
