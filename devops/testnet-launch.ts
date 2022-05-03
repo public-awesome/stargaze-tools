@@ -3,16 +3,22 @@
 // in between blockchain upgrades, code id changes, smart contract changes, etc
 // also provides concrete test examples for creators
 
+// comment minter.ts code block that starts with
+// `const args = process.argv.slice(2);`
+// if it is uncommented, smart contracts are launched two times
+
 // This script will grow and change as the network tests more front end edge cases.
 
 //----------------------------------------------------------------
 // 1. show profile when more than 30 nfts
 // 2. show resized gifs in profile
-// 3. show transferred nft
+// 3. show audio nfts in profile
+// 4. show transferred nft
 //----------------------------------------------------------------
 
 // collection #1 - large collection
 // collection #2 - nft gifs
+// collection #3 - audio files
 // creator1 mints 50 to buyer
 // creator2 public mints 5 to buyer
 // buyer transfers to recipient
@@ -45,6 +51,7 @@ import { getClient } from '../src/client';
 const configKeys = ['rpcEndpoint', 'minterCodeId', 'sg721CodeId'];
 const collection1 = require('./collection1');
 const collection2 = require('./collection2');
+const collection3 = require('./collection3');
 import { init as minterInit } from '../scripts/minter';
 import { batchMint } from '../scripts/mint';
 import { toStars } from '../src/utils';
@@ -95,6 +102,20 @@ async function testnet_init() {
   // transfer nft to recipient
   const token_id2 = '5';
   await transferNft(buyer, minterAddr2, token_id2, recipient);
+
+  // save code ids from config
+  // inherit from collection2
+  // set up collection2
+  await updateConfig(collection3);
+  const minterAddr3 = await minterInit();
+  if (minterAddr3 == undefined) {
+    throw new Error('addr undefined');
+  }
+  config.minter = minterAddr3;
+  console.log('collection 3 minter addr: ', minterAddr3);
+
+  // 10x mint as buyer from collection #3
+  await batchMint(buyer.addr, 10);
 }
 
 async function updateConfig(collectionConfig: any) {
@@ -122,7 +143,6 @@ async function transferNft(
   const configResponse = await client.queryContractSmart(minter, {
     config: {},
   });
-  //   console.log('minter configResponse: ', configResponse);
 
   const sg721 = configResponse.sg721_address;
 
