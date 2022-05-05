@@ -25,6 +25,7 @@
     "airdrop-file": "ts-node scripts/airdrop-file.ts",
     "minter": "ts-node scripts/minter.ts",
     "mint": "ts-node scripts/mint.ts",
+    "burn":"ts-node scripts/burn.ts",
     "nft-storage-upload": "ts-node scripts/nft-storage-upload.ts",
     "nft-storage-clean": "ts-node scripts/nft-storage-clean.ts",
     "pack-images": "ipfs-car --pack images --output images.car",
