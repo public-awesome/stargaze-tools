@@ -25,7 +25,7 @@
     "airdrop-file": "ts-node scripts/airdrop-file.ts",
     "minter": "ts-node scripts/minter.ts",
     "mint": "ts-node scripts/mint.ts",
-    "burn":"ts-node scripts/burn.ts",
+    "burn": "ts-node scripts/burn.ts",
     "nft-storage-upload": "ts-node scripts/nft-storage-upload.ts",
     "nft-storage-clean": "ts-node scripts/nft-storage-clean.ts",
     "pack-images": "ipfs-car --pack images --output images.car",
@@ -39,6 +39,7 @@
     "whitelist-file": "ts-node scripts/whitelist-file.ts",
     "devops-pin": "ts-node devops/pin.ts",
     "devops-rarity": "ts-node devops/rarity.ts",
-    "devops-launch": "ts-node devops/testnet-launch.ts"
+    "devops-launch": "ts-node devops/testnet-launch.ts",
+    "floor": "ts-node marketplace/floor-price.ts"
   }
 }
