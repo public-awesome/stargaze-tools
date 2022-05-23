@@ -30,7 +30,7 @@ async function test_whitelist() {
   );
 }
 
-async function mintTo(recipient: string) {
+export async function mintTo(recipient: string) {
   const client = await getClient();
 
   const starsRecipient = toStars(recipient);
@@ -52,6 +52,10 @@ async function mintTo(recipient: string) {
     'The `wasm` event emitted by the contract execution:',
     wasmEvent
   );
+  if (wasmEvent != undefined) {
+    console.info('token_id:', wasmEvent!.attributes[4].value);
+    return wasmEvent!.attributes[4]['value'];
+  }
 }
 
 export async function batchMint(recipient: string, num: number) {
@@ -156,23 +160,23 @@ async function mintForRange(tokenIdRange: string, recipient: string) {
   console.log('Tx hash: ', result.transactionHash);
 }
 
-const args = process.argv.slice(2);
-if (args.length == 0) {
-  console.log('No arguments provided, need --to or --for');
-} else if (args.length == 1 && args[0] == '--test-whitelist') {
-  test_whitelist();
-} else if (args.length == 2 && args[0] == '--to') {
-  mintTo(args[1]);
-} else if (args.length == 4 && args[0] == '--to') {
-  if (args[2] == '--batch') {
-    batchMint(args[1], +args[3]);
-  } else {
-    console.log('Invalid arguments');
-  }
-} else if (args.length == 3 && args[0] == '--for') {
-  mintFor(args[1], args[2]);
-} else if (args.length == 3 && args[0] == '--range') {
-  mintForRange(args[1], args[2]);
-} else {
-  console.log('Invalid arguments');
-}
+// const args = process.argv.slice(2);
+// if (args.length == 0) {
+//   console.log('No arguments provided, need --to or --for');
+// } else if (args.length == 1 && args[0] == '--test-whitelist') {
+//   test_whitelist();
+// } else if (args.length == 2 && args[0] == '--to') {
+//   mintTo(args[1]);
+// } else if (args.length == 4 && args[0] == '--to') {
+//   if (args[2] == '--batch') {
+//     batchMint(args[1], +args[3]);
+//   } else {
+//     console.log('Invalid arguments');
+//   }
+// } else if (args.length == 3 && args[0] == '--for') {
+//   mintFor(args[1], args[2]);
+// } else if (args.length == 3 && args[0] == '--range') {
+//   mintForRange(args[1], args[2]);
+// } else {
+//   console.log('Invalid arguments');
+// }
