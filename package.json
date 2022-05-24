@@ -40,6 +40,7 @@
     "devops-pin": "ts-node devops/pin.ts",
     "devops-rarity": "ts-node devops/rarity.ts",
     "devops-launch": "ts-node devops/testnet-launch.ts",
-    "floor": "ts-node marketplace/floor-price.ts"
+    "floor": "ts-node marketplace/floor-price.ts",
+    "sweep": "ts-node marketplace/floor-sweeper.ts"
   }
 }
