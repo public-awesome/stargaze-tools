@@ -4,10 +4,16 @@
 // --execute tries to purchase N nft's all-or-none
 import { toStars } from '../src/utils';
 const config = require('../config');
+import inquirer from 'inquirer';
 import { getClient } from '../src/client';
+import { coin, MsgExecuteContractEncodeObject, toUtf8 } from 'cosmwasm';
+import { MsgExecuteContract } from 'cosmjs-types/cosmwasm/wasm/v1/tx';
+import { assertIsDeliverTxSuccess } from '@cosmjs/stargate';
 
 const MAX_SWEEP_COUNT = 10;
 
+/// calculate total price of sweep
+/// prep messages for execute
 async function prepFloorSweep(numTokens: number) {
   if (numTokens > MAX_SWEEP_COUNT) {
     throw new Error('Too many tokens to sweep');
@@ -21,8 +27,9 @@ async function prepFloorSweep(numTokens: number) {
   const configResponse = await client.queryContractSmart(marketplaceAddr, {
     asks_sorted_by_price: { collection: sg721Addr },
   });
+  const executeContractMsgs: Array<MsgExecuteContractEncodeObject> = [];
   let floorSweepPrice = BigInt(0);
-  let asks = configResponse.asks;
+  const asks = configResponse.asks;
   for (let i = 0; i < numTokens; i++) {
     if (asks[i] == undefined) {
       console.log('not enough asks in collection', i + 1);
@@ -31,18 +38,61 @@ async function prepFloorSweep(numTokens: number) {
     console.log('ask', i, asks[i].price);
     //stackoverflow.com/questions/14667713/how-to-convert-a-string-to-number-in-typescript
     floorSweepPrice += BigInt(asks[i].price);
+    const setBidMsg = {
+      collection: sg721Addr,
+      token_id: asks[i].token_id,
+      expires: new Date(Date.now() + 600_000),
+    };
+    const funds = [coin(asks[i].price, 'ustars')];
+    const executeContractMsg: MsgExecuteContractEncodeObject = {
+      typeUrl: '/cosmwasm.wasm.v1.MsgExecuteContract',
+      value: MsgExecuteContract.fromPartial({
+        sender: account,
+        contract: marketplaceAddr,
+        msg: toUtf8(JSON.stringify(setBidMsg)),
+        funds,
+      }),
+    };
+    executeContractMsgs.push(executeContractMsg);
   }
   console.log('floorSweepPrice', floorSweepPrice);
+  console.log(JSON.stringify(executeContractMsgs, null, 2));
 
   const balance = await client.getBalance(account, 'ustars');
-  https: if (+balance.amount < floorSweepPrice) {
+  if (+balance.amount < floorSweepPrice) {
     throw new Error(
       'Not enough balance to sweep ' + balance.amount + ' ' + floorSweepPrice
     );
   }
+  return executeContractMsgs;
 }
 
-async function runFloorSweep(numTokens: number) {}
+// runs prepFloorSweep and then executes the sweep
+async function runFloorSweep(numTokens: number) {
+  const executeContractMsgs = await prepFloorSweep(numTokens);
+  const client = await getClient();
+
+  // Get confirmation before proceeding
+  console.log(
+    'WARNING: Please confirm the settings for running the floor sweep purchase. THERE IS NO WAY TO UNDO THIS ONCE IT IS ON CHAIN.'
+  );
+  const answer = await inquirer.prompt([
+    {
+      message: 'Ready to submit the transaction?',
+      name: 'confirmation',
+      type: 'confirm',
+    },
+  ]);
+  if (!answer.confirmation) return;
+
+  const result = await client.signAndBroadcast(
+    config.account,
+    executeContractMsgs,
+    'auto',
+    'batch sweep-floor'
+  );
+  assertIsDeliverTxSuccess(result);
+}
 
 const args = process.argv.slice(2);
 if (args.length == 1) {
