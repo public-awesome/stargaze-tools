@@ -30,7 +30,7 @@ async function test_whitelist() {
   );
 }
 
-async function mintTo(recipient: string) {
+export async function mintTo(recipient: string) {
   const client = await getClient();
 
   const starsRecipient = toStars(recipient);
@@ -52,6 +52,10 @@ async function mintTo(recipient: string) {
     'The `wasm` event emitted by the contract execution:',
     wasmEvent
   );
+  if (wasmEvent != undefined) {
+    console.info('token_id:', wasmEvent!.attributes[4].value);
+    return wasmEvent!.attributes[4]['value'];
+  }
 }
 
 export async function batchMint(recipient: string, num: number) {
