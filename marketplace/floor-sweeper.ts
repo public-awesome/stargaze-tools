@@ -106,5 +106,5 @@ if (args.length == 1) {
 } else if (args.length == 2 && args[1] == '--execute') {
   runFloorSweep(parseInt(args[0]));
 } else {
-  console.log('Invalid arguments');
+  console.log('Invalid arguments. include number of tokens to sweep');
 }
