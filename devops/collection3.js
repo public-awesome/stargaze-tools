@@ -17,7 +17,7 @@ module.exports = {
 
   //// MINTER CONTRACT ////
   baseTokenUri:
-    'ipfs://bafybeifh43z2pcopsjb32xlwu4tofdcsx76o4icmduwqmjj2bahiistklm/galaxyb6j8PT',
+    'ipfs://bafybeicqs3s47bemkj2cmb2pbn4ep2fxlkifezgoao4ao5hxeoebxb6ac4/metadata',
   numTokens: 50,
   unitPrice: 162,
   perAddressLimit: 5,
