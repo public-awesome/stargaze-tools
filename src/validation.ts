@@ -1,3 +1,5 @@
+import fs from 'fs';
+
 export const checkFiles = (images: string[], metadata: string[]) => {
   // Check images length is equal to metadata length
   if (images.length !== metadata.length) {
@@ -42,4 +44,23 @@ export const checkFiles = (images: string[], metadata: string[]) => {
     }
     lastValue = image;
   }
+};
+
+export const validateMetadata = (
+  metadataBasePath: string,
+  metadata: string[]
+) => {
+  metadata.map(async (file, index: number) => {
+    // Read JSON file
+    let metadata = JSON.parse(
+      fs.readFileSync(`${metadataBasePath}/${file}`, 'utf8')
+    );
+
+    // iterate attributes, error unless 'value:' is a string
+    metadata.attributes.map((item: any) => {
+      if (typeof item.value !== 'string') {
+        throw Error('Attribute values must be a string');
+      }
+    });
+  });
 };
