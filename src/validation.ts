@@ -1,3 +1,5 @@
+import fs from 'fs';
+
 export const checkFiles = (images: string[], metadata: string[]) => {
   // Check images length is equal to metadata length
   if (images.length !== metadata.length) {
@@ -42,4 +44,27 @@ export const checkFiles = (images: string[], metadata: string[]) => {
     }
     lastValue = image;
   }
+};
+
+export const validateMetadata = (
+  metadataBasePath: string,
+  metadata: string[]
+) => {
+  metadata.map(async (file, index: number) => {
+    // Read JSON file
+    let metadata = JSON.parse(
+      fs.readFileSync(`${metadataBasePath}/${file}`, 'utf8')
+    );
+
+    // iterate attributes,
+    // confirm value and trait_type exists and trait type is string
+    // else error
+    metadata.attributes.map((item: any) => {
+      if ('trait_type' in item) {
+        if (typeof item.trait_type !== 'string' || !('value' in item)) {
+          throw Error('Attribute trait_type must be a string and have a value');
+        }
+      }
+    });
+  });
 };
