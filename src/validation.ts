@@ -56,10 +56,14 @@ export const validateMetadata = (
       fs.readFileSync(`${metadataBasePath}/${file}`, 'utf8')
     );
 
-    // iterate attributes, error unless 'value:' is a string
+    // iterate attributes,
+    // confirm value and trait_type exists and trait type is string
+    // else error
     metadata.attributes.map((item: any) => {
-      if (typeof item.value !== 'string') {
-        throw Error('Attribute values must be a string');
+      if ('trait_type' in item) {
+        if (typeof item.trait_type !== 'string' || !('value' in item)) {
+          throw Error('Attribute trait_type must be a string and have a value');
+        }
       }
     });
   });
