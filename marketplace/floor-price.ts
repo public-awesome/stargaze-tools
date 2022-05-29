@@ -4,6 +4,7 @@
 // Outputs to console as csv
 
 import { CosmWasmClient } from 'cosmwasm';
+import { toStars } from '../src/utils';
 const config = require('../config');
 const fetch = require('node-fetch');
 require('dotenv').config();
@@ -11,19 +12,14 @@ require('dotenv').config();
 async function collection_floor_prices() {
   const sg721Addrs = await fetchContractsByCodeId(config.sg721CodeId);
   console.log('found', sg721Addrs.length, 'sg721 addresses');
-  const marketplaceAddrs = await fetchContractsByCodeId(
-    config.marketplaceCodeId
-  );
-  console.log('marketplace addr:', marketplaceAddrs[0]);
+  const marketplaceAddr = toStars(config.marketplace);
+  console.log('marketplace addr:', marketplaceAddr);
   const client = await CosmWasmClient.connect(config.rpcEndpoint);
 
   for (const sg721Addr of sg721Addrs) {
-    const configResponse = await client.queryContractSmart(
-      marketplaceAddrs[0],
-      {
-        asks_sorted_by_price: { collection: sg721Addr },
-      }
-    );
+    const configResponse = await client.queryContractSmart(marketplaceAddr, {
+      asks_sorted_by_price: { collection: sg721Addr },
+    });
     if (configResponse.asks.length > 0) {
       console.log(sg721Addr + ',' + configResponse.asks[0].price);
     } else {

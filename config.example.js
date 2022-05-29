@@ -91,6 +91,8 @@ module.exports = {
   minterCodeId: 2,
   // The code ID for the whitelist contract
   whitelistCodeId: 3,
+  marketplace:
+    'stars154msvfvr3j37qpuqeq7neh00dh3dhzsf0cgflme9vwv7uqmjafns4dxrtr',
 
   // //// CONTRACT CODE IDs: Mainnet ////
   // // The code ID for sg721
@@ -99,4 +101,6 @@ module.exports = {
   // minterCodeId: 2,
   // // The code ID for the whitelist contract
   // whitelistCodeId: 3,
+  //   marketplace:
+  //       'stars1fvhcnyddukcqfnt7nlwv3thm5we22lyxyxylr9h77cvgkcn43xfsvgv0pl',
 };
