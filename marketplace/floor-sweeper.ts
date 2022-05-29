@@ -39,7 +39,7 @@ async function prepFloorSweep(numTokens: number) {
     //stackoverflow.com/questions/14667713/how-to-convert-a-string-to-number-in-typescript
     floorSweepPrice += BigInt(asks[i].price);
     const now = new Date();
-    now.setDate(now.getDate() + 600);
+    now.setDate(now.getDate() + 14);
     const expires = (now.getTime() * 1_000_000).toString();
     const setBidMsg = {
       set_bid: {
@@ -59,6 +59,7 @@ async function prepFloorSweep(numTokens: number) {
       }),
     };
     executeContractMsgs.push(executeContractMsg);
+    console.log(JSON.stringify(setBidMsg, null, 2));
   }
 
   console.log(JSON.stringify(executeContractMsgs, null, 2));
@@ -95,7 +96,7 @@ async function runFloorSweep(numTokens: number) {
     config.account,
     executeContractMsgs,
     'auto',
-    'batch sweep-floor'
+    'batch-sweep-floor'
   );
   assertIsDeliverTxSuccess(result);
 }
