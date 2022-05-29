@@ -56,7 +56,7 @@ async function burnToken(token: number) {
 // - config minter address is the collection
 // - collection is not fully sold out
 // - burn several tokens at a time
-async function batchBurn() {
+async function batchAirdropAndBurn() {
   const client = await getClient();
   const minter = toStars(config.minter);
   const account = toStars(config.account);
@@ -106,8 +106,8 @@ async function batchBurn() {
 const args = process.argv.slice(2);
 if (args.length == 0) {
   console.log('No arguments provided, need token to burn');
-} else if (args.length == 1 && args[0] == '--batch') {
-  batchBurn();
+} else if (args.length == 1 && args[0] == '--batchAirdropAndBurn') {
+  batchAirdropAndBurn();
 } else if (args.length == 1 && args[0]) {
   burnToken(parseInt(args[0]));
 } else {
