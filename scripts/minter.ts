@@ -170,9 +170,20 @@ async function setWhitelist(whitelist: string) {
     );
   }
 
+  // query whitelist contract to make sure it's valid.
+  try {
+    const configResponse = await client.queryContractSmart(whitelistContract, {
+      config: {},
+    });
+    console.log(configResponse);
+  } catch {
+    throw new Error(
+      'Error querying whitelist contract. Please double check whitelist address is valid.'
+    );
+  }
+
   console.log('Minter contract: ', config.minter);
   console.log('Setting whitelist contract: ', whitelistContract);
-
   const msg = { set_whitelist: { whitelist: whitelistContract } };
   console.log(JSON.stringify(msg, null, 2));
   const answer = await inquirer.prompt([
