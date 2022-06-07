@@ -3,7 +3,7 @@ import os from 'os';
 import path from 'path';
 import pinataSDK from '@pinata/sdk';
 import { naturalCompare } from '../src/sort';
-import { checkFiles } from '../src/validation';
+import { checkFiles, validateMetadata } from '../src/validation';
 
 // Load config
 const config = require('../config');
@@ -33,6 +33,9 @@ export async function pinataUpload() {
 
   // Validation
   checkFiles(images, metadata);
+
+  // Validate metadata attribute values
+  validateMetadata(metadataBasePath, metadata);
 
   // Upload images folder
   const imagesBaseUri = await pinata.pinFromFS(imagesBasePath);
