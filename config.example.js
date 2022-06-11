@@ -86,9 +86,9 @@ module.exports = {
 
   //// CONTRACT CODE IDs: Double Double Testnet ////
   // The code ID for sg721
-  sg721CodeId: 1,
+  sg721CodeId: 76,
   // The code ID for the minter contract
-  minterCodeId: 2,
+  minterCodeId: 75,
   // The code ID for the whitelist contract
   whitelistCodeId: 3,
   marketplace:
