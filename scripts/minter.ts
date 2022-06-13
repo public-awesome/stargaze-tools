@@ -1,6 +1,6 @@
 import { InstantiateMsg } from '@stargazezone/types/contracts/minter/instantiate_msg';
 import { Timestamp } from '@stargazezone/types/contracts/minter/shared-types';
-import { coins } from 'cosmwasm';
+import { coins, Decimal } from 'cosmwasm';
 import inquirer from 'inquirer';
 import { getClient } from '../src/client';
 import { isValidHttpUrl, toStars } from '../src/utils';
@@ -73,6 +73,15 @@ export async function init() {
 
   if (!config.perAddressLimit || config.perAddressLimit === 0) {
     throw new Error('perAddressLimit must be defined and greater than 0');
+  }
+
+  if (
+    royaltyInfo &&
+    Decimal.fromUserInput(royaltyInfo?.share, 3).isGreaterThan(
+      Decimal.fromUserInput('0.100', 3)
+    )
+  ) {
+    throw new Error("Royalty share must be lower than or equal to '0.100'");
   }
 
   const client = await getClient();
