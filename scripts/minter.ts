@@ -262,6 +262,12 @@ async function updateStartTime() {
   const account = toStars(config.account);
   const minter = toStars(config.minter);
 
+  // time expressed in nanoseconds (1 millionth of a millisecond)
+  const publicStartTime: Timestamp = (
+    new Date(config.startTime).getTime() * 1_000_000
+  ).toString();
+  const msg = { update_start_time: publicStartTime };
+  console.log(JSON.stringify(msg, null, 2));
   const answer = await inquirer.prompt([
     {
       message:
@@ -274,17 +280,7 @@ async function updateStartTime() {
   ]);
   if (!answer.confirmation) return;
 
-  // time expressed in nanoseconds (1 millionth of a millisecond)
-  const publicStartTime: Timestamp = (
-    new Date(config.startTime).getTime() * 1_000_000
-  ).toString();
-
-  const result = await client.execute(
-    account,
-    minter,
-    { update_start_time: publicStartTime },
-    'auto'
-  );
+  const result = await client.execute(account, minter, msg, 'auto');
 
   const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');
   console.info(
