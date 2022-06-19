@@ -50,13 +50,28 @@ async function burnToken(token: number) {
   await burn(client, msg);
 }
 
+// Burn a range of tokens you already own.
+// meant to be used to burn the supply of a broken collection
+// sequentially burns from 1 to 10 inclusive
+// fails if you are not the token owner
+async function burnRange(tokenIdRange: string) {
+  // Parse string from "1,10" -> "1" and "10"
+  const [start, end] = tokenIdRange.split(',').map(Number);
+  const client = await getClient();
+  for (let tokenId = start; tokenId <= end; tokenId++) {
+    console.log('Burning token:', tokenId);
+    const msg = { burn: { token_id: tokenId } };
+    await burn(client, msg);
+  }
+}
+
 // Airdrop to yourself and burn excess in batches
 // Makes several assumptions:
 // - config address is the creator of the collection
 // - config minter address is the collection
 // - collection is not fully sold out
 // - burn several tokens at a time
-async function batchBurn() {
+async function batchAirdropAndBurn() {
   const client = await getClient();
   const minter = toStars(config.minter);
   const account = toStars(config.account);
@@ -106,10 +121,12 @@ async function batchBurn() {
 const args = process.argv.slice(2);
 if (args.length == 0) {
   console.log('No arguments provided, need token to burn');
-} else if (args.length == 1 && args[0] == '--batch') {
-  batchBurn();
+} else if (args.length == 1 && args[0] == '--batchAirdropAndBurn') {
+  batchAirdropAndBurn();
 } else if (args.length == 1 && args[0]) {
   burnToken(parseInt(args[0]));
+} else if (args.length == 2 && args[0] == '--range') {
+  burnRange(args[1]);
 } else {
   console.log('Invalid arguments');
 }
