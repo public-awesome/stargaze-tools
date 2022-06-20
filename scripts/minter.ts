@@ -45,8 +45,8 @@ function formatRoyaltyInfo(
 }
 
 export async function init() {
-  console.log('init config name ', config.name);
-  console.log('init config account ', config.account);
+  console.log('Collection name:', config.name);
+  console.log('Account:', config.account, '\n');
   const account = toStars(config.account);
   const whitelistContract = config.whitelistContract
     ? toStars(config.whitelistContract)
