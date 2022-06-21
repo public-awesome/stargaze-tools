@@ -130,9 +130,9 @@ async function addFile(uniqueOnly: boolean) {
 
 const args = process.argv.slice(2);
 if (args.length == 0) {
-  addFile(false)
-} else if (args.length == 1 && args[0] == '--unique-only') {
   addFile(true)
+} else if (args.length == 1 && args[0] == '--keep-duplicates') {
+  addFile(false)
 } else {
-  console.log('Invalid argument. Expected --unique-only');
+  console.log('Invalid arguments.');
 }
