@@ -1,5 +1,10 @@
-import { MsgExecuteContractEncodeObject, coins, toUtf8 } from 'cosmwasm';
-import { MsgExecuteContract } from 'cosmjs-types/cosmwasm/wasm/v1/tx';
+// Shuffle() is a publically accessible function to introduce randomness to the token id mint order.
+// Shuffle fee is required because of the gas expense from loading and saving many objects from storage.
+// Current benchmarks show shuffle takes 35M gas.
+// Shuffling can act as a countermeasure against rarity snipers.
+// Shuffle Fee is meant to be controlled by governance proposal. It is currently hardcoded to 500 stars.
+
+import { coins } from 'cosmwasm';
 import { getClient } from '../src/client';
 import { toStars } from '../src/utils';
 
@@ -7,7 +12,6 @@ const config = require('../config');
 
 async function shuffle() {
   const client = await getClient();
-  //   const client = await CosmWasmClient.connect(config.rpcEndpoint);
 
   const shuffler = toStars(config.account);
   const minter = toStars(config.minter);
