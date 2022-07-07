@@ -13,8 +13,8 @@ module.exports = {
   account: 'stars1...',
 
   //// API CONFIG ////
-  // The RPC endpoint for Stargaze, Double Double Testnet
-  rpcEndpoint: 'https://rpc.double-double-1.stargaze-apis.com/',
+  // The RPC endpoint for Stargaze, Elgafar Testnet
+  rpcEndpoint: 'https://rpc.elgafar-1.stargaze-apis.com/',
   // The RPC endpoint for Stargaze, mainnet
   // rpcEndpoint: 'https://rpc.stargaze-apis.com/',
   // NFT.storage endpoint
@@ -86,13 +86,13 @@ module.exports = {
 
   //// CONTRACT CODE IDs: Double Double Testnet ////
   // The code ID for sg721
-  sg721CodeId: 76,
+  sg721CodeId: 1,
   // The code ID for the minter contract
-  minterCodeId: 75,
+  minterCodeId: 2,
   // The code ID for the whitelist contract
   whitelistCodeId: 3,
   marketplace:
-    'stars154msvfvr3j37qpuqeq7neh00dh3dhzsf0cgflme9vwv7uqmjafns4dxrtr',
+    'stars18cszlvm6pze0x9sz32qnjq4vtd45xehqs8dq7cwy8yhq35wfnn3qgzs5gu',
 
   // //// CONTRACT CODE IDs: Mainnet ////
   // // The code ID for sg721
