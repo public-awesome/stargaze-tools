@@ -92,7 +92,7 @@ module.exports = {
   // The code ID for the whitelist contract
   whitelistCodeId: 3,
   marketplace:
-    'stars154msvfvr3j37qpuqeq7neh00dh3dhzsf0cgflme9vwv7uqmjafns4dxrtr',
+    'stars18cszlvm6pze0x9sz32qnjq4vtd45xehqs8dq7cwy8yhq35wfnn3qgzs5gu',
 
   // //// CONTRACT CODE IDs: Mainnet ////
   // // The code ID for sg721
