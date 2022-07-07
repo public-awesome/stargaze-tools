@@ -100,9 +100,11 @@ For all possible queries, see the [query types](https://github.com/public-awesom
 Test your contract. Make sure it's visible in launchpad. Try minting and viewing the NFT in your profile.
 [https://testnet.publicawesome.dev/](https://testnet.publicawesome.dev/)
 
-## Video Walkthrough (Big thank you to meta-induction)
+## Video Walkthrough (Big thank you to meta-induction and Cosmos Tutorials)
 
-[https://www.youtube.com/watch?v=1gvDlBWKEUc](https://www.youtube.com/watch?v=1gvDlBWKEUc)
+[https://www.youtube.com/watch?v=1gvDlBWKEUc](https://www.youtube.com/watch?v=1gvDlBWKEUc) from meta-induction
+
+[https://www.youtube.com/watch?v=lw6w5zlRj14](https://www.youtube.com/watch?v=lw6w5zlRj14) from "Cosmos Tutorials"
 
 [https://asciinema.org/a/485818](https://asciinema.org/a/485818)
 
