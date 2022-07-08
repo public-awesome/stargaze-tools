@@ -48,9 +48,6 @@ export async function init() {
   console.log('Collection name:', config.name);
   console.log('Account:', config.account, '\n');
   const account = toStars(config.account);
-  const whitelistContract = config.whitelistContract
-    ? toStars(config.whitelistContract)
-    : null;
   const royaltyPaymentAddress = config.royaltyPaymentAddress
     ? toStars(config.royaltyPaymentAddress)
     : null;
@@ -108,7 +105,6 @@ export async function init() {
       },
     },
     per_address_limit: config.perAddressLimit,
-    whitelist: whitelistContract,
     start_time: startTime,
     unit_price: {
       amount: (config.unitPrice * 1000000).toString(),
@@ -177,6 +173,9 @@ async function setWhitelist(whitelist: string) {
     throw Error(
       '"minter" must be set to a minter contract address in config.js'
     );
+  }
+  if (!whitelistContract) {
+    throw Error('"whitelistContract" address must be set in config.js');
   }
 
   // query whitelist contract to make sure it's valid.
