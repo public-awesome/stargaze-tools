@@ -174,9 +174,6 @@ async function setWhitelist(whitelist: string) {
       '"minter" must be set to a minter contract address in config.js'
     );
   }
-  if (!whitelistContract) {
-    throw Error('"whitelistContract" address must be set in config.js');
-  }
 
   // query whitelist contract to make sure it's valid.
   try {
