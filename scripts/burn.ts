@@ -68,6 +68,20 @@ async function burnRange(tokenIdRange: string) {
   }
 }
 
+// Burn a list of tokens you already own.
+// meant to be used to burn the supply of a broken collection
+// fails if you are not the token owner
+async function burnList(tokenIds: string) {
+  // Parse string from "4,5,10,45,12" -> [4,5,10,45,12]
+  const tokens = tokenIds.split(',').map(Number);
+  const client = await getClient();
+  for (let i = 0; i < tokens.length; i++) {
+    console.log('Burning token:', tokens[i]);
+    const msg = { burn: { token_id: tokens[i].toString() } };
+    await burn(client, msg);
+  }
+}
+
 // Airdrop to yourself and burn excess in batches
 // Makes several assumptions:
 // - config address is the creator of the collection
@@ -130,6 +144,8 @@ if (args.length == 0) {
   burnToken(Number(args[0]));
 } else if (args.length == 2 && args[0] == '--range') {
   burnRange(args[1]);
-} else {
+} else if (args.length == 2 && args[0] == '--list') {
+  burnList(args[1]);
+}  else {
   console.log('Invalid arguments');
 }
