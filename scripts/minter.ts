@@ -90,7 +90,18 @@ export async function init() {
   const startTime: Timestamp = (
     new Date(config.startTime).getTime() * 1_000_000
   ).toString();
-
+  // query whitelist contract to make sure it's valid.
+  try {
+    if (whitelistContract) {
+      await client.queryContractSmart(whitelistContract, {
+        config: {},
+      });
+    }
+  } catch {
+    throw new Error(
+      'Error querying whitelist contract. Please double check whitelist address is valid.'
+    );
+  }
   const tempMsg: InstantiateMsg = {
     base_token_uri: config.baseTokenUri,
     num_tokens: config.numTokens,
