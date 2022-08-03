@@ -1,4 +1,7 @@
-import { InstantiateMsg } from '@stargazezone/types/contracts/minter/instantiate_msg';
+import {
+  InstantiateMsg,
+  ExecuteMsgCreateMinter,
+} from '@stargazezone/types/contracts/minter/instantiate_msg';
 import { Timestamp } from '@stargazezone/types/contracts/minter/shared-types';
 import { coins, Decimal } from 'cosmwasm';
 import inquirer from 'inquirer';
@@ -7,7 +10,7 @@ import { isValidHttpUrl, toStars } from '../src/utils';
 
 const config = require('../config');
 
-const NEW_COLLECTION_FEE = coins('1000000000', 'ustars');
+const NEW_COLLECTION_FEE = coins('5000000000', 'ustars');
 
 function isValidIpfsUrl(uri: string) {
   let url;
@@ -44,7 +47,7 @@ function formatRoyaltyInfo(
   }
 }
 
-export async function init() {
+export async function create_minter() {
   console.log('Collection name:', config.name);
   console.log('Account:', config.account, '\n');
   const account = toStars(config.account);
@@ -102,38 +105,65 @@ export async function init() {
       'Error querying whitelist contract. Please double check whitelist address is valid.'
     );
   }
-  const tempMsg: InstantiateMsg = {
-    base_token_uri: config.baseTokenUri,
-    num_tokens: config.numTokens,
-    sg721_code_id: config.sg721CodeId,
-    sg721_instantiate_msg: {
-      name: config.name,
-      symbol: config.symbol,
-      minter: account,
-      collection_info: {
-        creator: account,
-        description: config.description,
-        image: config.image,
-        external_link: config.external_link,
-        royalty_info: royaltyInfo,
+  //   const tempMsg: InstantiateMsg = {
+  //     base_token_uri: config.baseTokenUri,
+  //     num_tokens: config.numTokens,
+  //     sg721_code_id: config.sg721CodeId,
+  //     sg721_instantiate_msg: {
+  //       name: config.name,
+  //       symbol: config.symbol,
+  //       minter: account,
+  //       collection_info: {
+  //         creator: account,
+  //         description: config.description,
+  //         image: config.image,
+  //         external_link: config.external_link,
+  //         royalty_info: royaltyInfo,
+  //       },
+  //     },
+  //     per_address_limit: config.perAddressLimit,
+  //     whitelist: whitelistContract,
+  //     start_time: startTime,
+  //     unit_price: {
+  //       amount: (config.unitPrice * 1000000).toString(),
+  //       denom: 'ustars',
+  //     },
+  //   };
+
+  const tempMsg: ExecuteMsgCreateMinter = {
+    create_minter: {
+      init_msg: {
+        base_token_uri: config.baseTokenUri,
+        start_time: startTime,
+        num_tokens: config.numTokens,
+        unit_price: {
+          amount: (config.unitPrice * 1_000_000).toString(),
+          denom: 'ustars',
+        },
+        per_address_limit: config.perAddressLimit,
+        whitelist: whitelistContract,
       },
-    },
-    per_address_limit: config.perAddressLimit,
-    whitelist: whitelistContract,
-    start_time: startTime,
-    unit_price: {
-      amount: (config.unitPrice * 1000000).toString(),
-      denom: 'ustars',
+      collection_params: {
+        code_id: config.sg721BaseCodeId,
+        name: config.name,
+        symbol: config.symbol,
+        info: {
+          creator: config.account,
+          description: config.description,
+          image: config.image,
+          royalty_info: royaltyInfo,
+        },
+      },
     },
   };
 
   if (
-    tempMsg.sg721_instantiate_msg.collection_info?.royalty_info
+    tempMsg.create_minter.collection_params.info?.royalty_info
       ?.payment_address === undefined &&
-    tempMsg.sg721_instantiate_msg.collection_info?.royalty_info?.share ===
+    tempMsg.create_minter.collection_params.info?.royalty_info?.share ===
       undefined
   ) {
-    tempMsg.sg721_instantiate_msg.collection_info.royalty_info = null;
+    tempMsg.create_minter.collection_params.info.royalty_info = null;
   }
   const msg = clean(tempMsg);
 
@@ -157,13 +187,13 @@ export async function init() {
   ]);
   if (!answer.confirmation) return;
 
-  const result = await client.instantiate(
+  const result = await client.execute(
     account,
-    config.minterCodeId,
+    config.vendingFactory,
     msg,
-    config.name,
     'auto',
-    { funds: NEW_COLLECTION_FEE, admin: account }
+    config.name,
+    NEW_COLLECTION_FEE
   );
   const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');
   console.info(
@@ -172,9 +202,9 @@ export async function init() {
   );
   if (wasmEvent != undefined) {
     console.info('Add these contract addresses to config.js:');
-    console.info('minter contract address: ', wasmEvent.attributes[0]['value']);
-    console.info('sg721 contract address: ', wasmEvent.attributes[5]['value']);
-    return wasmEvent.attributes[0]['value'];
+    // console.info('minter contract address: ', wasmEvent.attributes[0]['value']);
+    // console.info('sg721 contract address: ', wasmEvent.attributes[5]['value']);
+    // return wasmEvent.attributes[0]['value'];
   }
 }
 
@@ -302,7 +332,7 @@ async function updateStartTime() {
 
 const args = process.argv.slice(2);
 if (args.length == 0) {
-  init();
+  create_minter();
 } else if (args.length == 2 && args[0] == '--whitelist') {
   setWhitelist(args[1]);
 } else if (args.length == 1 && args[0] == '--update-start-time') {
