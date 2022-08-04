@@ -202,9 +202,10 @@ export async function create_minter() {
   );
   if (wasmEvent != undefined) {
     console.info('Add these contract addresses to config.js:');
-    // console.info('minter contract address: ', wasmEvent.attributes[0]['value']);
-    // console.info('sg721 contract address: ', wasmEvent.attributes[5]['value']);
-    // return wasmEvent.attributes[0]['value'];
+    console.info('factory address: ', wasmEvent.attributes[0]['value']);
+    console.info('minter address: ', wasmEvent.attributes[2]['value']);
+    console.info('sg721 contract address: ', wasmEvent.attributes[7]['value']);
+    return wasmEvent.attributes[2]['value'];
   }
 }
 
