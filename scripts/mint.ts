@@ -5,6 +5,8 @@ import { toStars } from '../src/utils';
 
 const config = require('../config');
 
+const AIRDROP_FEE = coins('5000', 'ustars');
+
 async function test_whitelist() {
   const client = await getClient();
 
@@ -45,7 +47,8 @@ export async function mintTo(recipient: string) {
     config.minter,
     msg,
     'auto',
-    'mint to'
+    'mint to',
+    AIRDROP_FEE
   );
   const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');
   console.info(
