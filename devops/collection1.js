@@ -19,4 +19,7 @@ module.exports = {
   numTokens: 1050,
   unitPrice: 100,
   perAddressLimit: 50,
+  vendingFactory:
+    'stars1tlnygjnfrcqwckr8gf2l4f5uex9eeylyf86n33mh0j2uqxmwdkqqrqnuvk',
+  sg721BaseCodeId: 12,
 };

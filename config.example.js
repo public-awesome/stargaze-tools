@@ -13,9 +13,9 @@ module.exports = {
   account: 'stars1...',
 
   //// API CONFIG ////
-  // The RPC endpoint for Stargaze, Elgafar Testnet
+  // The RPC endpoint for Stargaze testnet
   rpcEndpoint: 'https://rpc.elgafar-1.stargaze-apis.com/',
-  // The RPC endpoint for Stargaze, mainnet
+  // The RPC endpoint for Stargaze mainnet
   // rpcEndpoint: 'https://rpc.stargaze-apis.com/',
   // NFT.storage endpoint
   nftStorageEndpoint: 'https://api.nft.storage',
@@ -76,7 +76,7 @@ module.exports = {
   // The date when the sale goes live
   // If whitelist is enabled, only whitelisted addresses will be able to purchase
   // startTime in ISO format
-  startTime: '2022-03-11T21:00:00.000Z',
+  startTime: '2022-08-11T19:00:00.000Z',
   // The minter contract address
   // Get this after running `yarn minter`
   minter: 'stars1...',
@@ -84,15 +84,22 @@ module.exports = {
   // Get this after running `yarn minter`
   sg721: 'stars1...',
 
-  //// CONTRACT CODE IDs: Double Double Testnet ////
+  //// CONTRACT CODE IDs: Testnet ////
+  // The code ID for sg721_base
+  sg721BaseCodeId: 12,
+  // The code ID for vending_minter
+  vendingMinterCodeId: 10,
+  // The code ID for vending_factory
+  vendingFactoryCodeId: 11,
   // The code ID for sg721
   sg721CodeId: 1,
   // The code ID for the minter contract
   minterCodeId: 2,
   // The code ID for the whitelist contract
   whitelistCodeId: 3,
-  marketplace:
-    'stars18cszlvm6pze0x9sz32qnjq4vtd45xehqs8dq7cwy8yhq35wfnn3qgzs5gu',
+  // The marketplace contract address
+  //   marketplace:
+  //     'stars18cszlvm6pze0x9sz32qnjq4vtd45xehqs8dq7cwy8yhq35wfnn3qgzs5gu',
 
   // //// CONTRACT CODE IDs: Mainnet ////
   // // The code ID for sg721
@@ -101,6 +108,7 @@ module.exports = {
   // minterCodeId: 2,
   // // The code ID for the whitelist contract
   // whitelistCodeId: 3,
+  // The marketplace contract address
   //   marketplace:
   //       'stars1fvhcnyddukcqfnt7nlwv3thm5we22lyxyxylr9h77cvgkcn43xfsvgv0pl',
 };

@@ -1,7 +1,4 @@
-import {
-  InstantiateMsg,
-  ExecuteMsgCreateMinter,
-} from '@stargazezone/types/contracts/minter/instantiate_msg';
+import { ExecuteMsgCreateMinter } from '@stargazezone/types/contracts/minter/instantiate_msg';
 import { Timestamp } from '@stargazezone/types/contracts/minter/shared-types';
 import { coins, Decimal } from 'cosmwasm';
 import inquirer from 'inquirer';
@@ -25,12 +22,7 @@ function isValidIpfsUrl(uri: string) {
 }
 
 function clean(obj: any) {
-  for (var propName in obj) {
-    if (obj[propName] === null || obj[propName] === undefined) {
-      delete obj[propName];
-    }
-  }
-  return obj;
+  return JSON.parse(JSON.stringify(obj));
 }
 
 function formatRoyaltyInfo(
@@ -105,30 +97,6 @@ export async function create_minter() {
       'Error querying whitelist contract. Please double check whitelist address is valid.'
     );
   }
-  //   const tempMsg: InstantiateMsg = {
-  //     base_token_uri: config.baseTokenUri,
-  //     num_tokens: config.numTokens,
-  //     sg721_code_id: config.sg721CodeId,
-  //     sg721_instantiate_msg: {
-  //       name: config.name,
-  //       symbol: config.symbol,
-  //       minter: account,
-  //       collection_info: {
-  //         creator: account,
-  //         description: config.description,
-  //         image: config.image,
-  //         external_link: config.external_link,
-  //         royalty_info: royaltyInfo,
-  //       },
-  //     },
-  //     per_address_limit: config.perAddressLimit,
-  //     whitelist: whitelistContract,
-  //     start_time: startTime,
-  //     unit_price: {
-  //       amount: (config.unitPrice * 1000000).toString(),
-  //       denom: 'ustars',
-  //     },
-  //   };
 
   const tempMsg: ExecuteMsgCreateMinter = {
     create_minter: {

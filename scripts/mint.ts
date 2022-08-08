@@ -76,7 +76,7 @@ export async function batchMint(recipient: string, num: number) {
       sender: config.account,
       contract: config.minter,
       msg: toUtf8(JSON.stringify(msg)),
-      funds: [...[]],
+      funds: AIRDROP_FEE,
     }),
   };
 
@@ -107,7 +107,8 @@ async function mintFor(tokenId: string, recipient: string) {
     config.minter,
     msg,
     'auto',
-    'mint for'
+    'mint for',
+    AIRDROP_FEE
   );
   const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');
   console.info(
@@ -147,7 +148,7 @@ async function mintForRange(tokenIdRange: string, recipient: string) {
         sender: config.account,
         contract: config.minter,
         msg: toUtf8(JSON.stringify(msg)),
-        funds: [],
+        funds: AIRDROP_FEE,
       }),
     };
     msgArray.push(executeContractMsg);
