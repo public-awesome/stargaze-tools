@@ -40,6 +40,7 @@ coverage/
 
 # Config files
 config.js
+config.austinPOAP.js
 whitelist_addresses.csv
 airdrop_addresses.csv
 
