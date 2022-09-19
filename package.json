@@ -34,6 +34,7 @@
     "pinata-clean": "ts-node scripts/pinata-clean.ts",
     "query": "ts-node scripts/query.ts",
     "query-minters": "ts-node scripts/query-minters.ts",
+    "query-mint-count": "ts-node scripts/query-mint-count.ts",
     "ts": "tsc --noEmit --incremental",
     "whitelist": "ts-node scripts/whitelist.ts",
     "whitelist-file": "ts-node scripts/whitelist-file.ts",
