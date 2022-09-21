@@ -1,5 +1,5 @@
-import { ExecuteMsgCreateMinter } from '@stargazezone/types/contracts/minter/instantiate_msg';
-import { Timestamp } from '@stargazezone/types/contracts/minter/shared-types';
+import { CreateMinterMsgForVendingMinterInitMsgExtension } from '@stargazezone/ts/src/VendingMinter.types';
+import { Timestamp } from '@stargazezone/ts/src/VendingMinter.types';
 import { coins, Decimal } from 'cosmwasm';
 import inquirer from 'inquirer';
 import { getClient } from '../src/client';
@@ -7,7 +7,7 @@ import { isValidHttpUrl, toStars } from '../src/utils';
 
 const config = require('../config');
 
-const NEW_COLLECTION_FEE = coins('5000000000', 'ustars');
+const NEW_COLLECTION_FEE = coins('1000000000', 'ustars');
 
 function isValidIpfsUrl(uri: string) {
   let url;
@@ -85,6 +85,12 @@ export async function create_minter() {
   const startTime: Timestamp = (
     new Date(config.startTime).getTime() * 1_000_000
   ).toString();
+
+  // time expressed in nanoseconds (1 millionth of a millisecond)
+  const tradingStartTime: Timestamp | null = config.tradingStartTime
+    ? (new Date(config.tradingStartTime).getTime() * 1_000_000).toString()
+    : null;
+
   // query whitelist contract to make sure it's valid.
   try {
     if (whitelistContract) {
@@ -98,37 +104,47 @@ export async function create_minter() {
     );
   }
 
-  const tempMsg: ExecuteMsgCreateMinter = {
-    create_minter: {
-      init_msg: {
-        base_token_uri: config.baseTokenUri,
-        start_time: startTime,
-        num_tokens: config.numTokens,
-        unit_price: {
-          amount: (config.unitPrice * 1_000_000).toString(),
-          denom: 'ustars',
-        },
-        per_address_limit: config.perAddressLimit,
-        whitelist: whitelistContract,
+  const initMsg: CreateMinterMsgForVendingMinterInitMsgExtension = {
+    init_msg: {
+      base_token_uri: config.baseTokenUri,
+      start_time: startTime,
+      num_tokens: config.numTokens,
+      mint_price: {
+        amount: (config.unitPrice * 1000000).toString(),
+        denom: 'ustars',
       },
-      collection_params: {
-        code_id: config.sg721BaseCodeId,
-        name: config.name,
-        symbol: config.symbol,
-        info: {
-          creator: config.account,
-          description: config.description,
-          image: config.image,
-          royalty_info: royaltyInfo,
-        },
+      per_address_limit: config.perAddressLimit,
+      whitelist: whitelistContract,
+    },
+    collection_params: {
+      code_id: config.sg721BaseCodeId,
+      name: config.name,
+      symbol: config.symbol,
+      info: {
+        creator: config.account,
+        description: config.description,
+        image: config.image,
+        royalty_info: royaltyInfo,
+        trading_start_time: tradingStartTime,
       },
     },
   };
 
+  const paramsResponse = await client.queryContractSmart(
+    config.vendingFactory,
+    {
+      params: {},
+    }
+  );
+  console.log(paramsResponse);
+
+  const tempMsg = { create_minter: initMsg };
+
+  // TODO use recursive cleanup of undefined and null values
   if (
-    tempMsg.create_minter.collection_params.info?.royalty_info
+    tempMsg.create_minter?.collection_params.info?.royalty_info
       ?.payment_address === undefined &&
-    tempMsg.create_minter.collection_params.info?.royalty_info?.share ===
+    tempMsg.create_minter?.collection_params.info?.royalty_info?.share ===
       undefined
   ) {
     tempMsg.create_minter.collection_params.info.royalty_info = null;
@@ -299,15 +315,15 @@ async function updateStartTime() {
   );
 }
 
-const args = process.argv.slice(2);
-if (args.length == 0) {
-  create_minter();
-} else if (args.length == 2 && args[0] == '--whitelist') {
-  setWhitelist(args[1]);
-} else if (args.length == 1 && args[0] == '--update-start-time') {
-  updateStartTime();
-} else if (args.length == 2 && args[0] == '--per-address-limit') {
-  updatePerAddressLimit();
-} else {
-  console.log('Invalid arguments');
-}
+// const args = process.argv.slice(2);
+// if (args.length == 0) {
+//   create_minter();
+// } else if (args.length == 2 && args[0] == '--whitelist') {
+//   setWhitelist(args[1]);
+// } else if (args.length == 1 && args[0] == '--update-start-time') {
+//   updateStartTime();
+// } else if (args.length == 2 && args[0] == '--per-address-limit') {
+//   updatePerAddressLimit();
+// } else {
+//   console.log('Invalid arguments');
+// }

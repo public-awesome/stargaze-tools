@@ -3,7 +3,7 @@
   "version": "0.8.2",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@stargazezone/types": "^0.7.2",
+    "@stargazezone/ts": "^0.1.0",
     "@types/inquirer": "^8.2.0",
     "@types/mime": "^2.0.3",
     "cosmwasm": "^1.0.2"

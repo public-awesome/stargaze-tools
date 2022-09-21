@@ -147,6 +147,7 @@ async function updateConfig(collectionConfig: any) {
     config[key] = collectionConfig[key];
   });
   config.startTime = new Date(Date.now() + 10_000);
+  config.tradingStartTime = new Date(Date.now() + 100_000);
 }
 
 async function transferNft(
