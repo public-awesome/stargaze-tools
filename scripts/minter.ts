@@ -1,5 +1,7 @@
-import { CreateMinterMsgForVendingMinterInitMsgExtension } from '@stargazezone/ts/src/VendingMinter.types';
-import { Timestamp } from '@stargazezone/ts/src/VendingMinter.types';
+import {
+  CreateMinterMsgForVendingMinterInitMsgExtension,
+  Timestamp,
+} from '@stargazezone/ts/src/VendingMinter.types';
 import { coins, Decimal } from 'cosmwasm';
 import inquirer from 'inquirer';
 import { getClient } from '../src/client';
@@ -110,7 +112,7 @@ export async function create_minter() {
       start_time: startTime,
       num_tokens: config.numTokens,
       mint_price: {
-        amount: (config.unitPrice * 1000000).toString(),
+        amount: (config.mintPrice * 1000000).toString(),
         denom: 'ustars',
       },
       per_address_limit: config.perAddressLimit,
@@ -130,13 +132,16 @@ export async function create_minter() {
     },
   };
 
+  // should be stars1nelx34qg6xtm5u748jzjsahthddsktrrg5dw2rx8vzpc8hwwgk5q32mj2h
+  console.log('vending factory addr: ', config.vendingFactory);
+
   const paramsResponse = await client.queryContractSmart(
     config.vendingFactory,
     {
       params: {},
     }
   );
-  console.log(paramsResponse);
+  console.log('params response', paramsResponse);
 
   const tempMsg = { create_minter: initMsg };
 

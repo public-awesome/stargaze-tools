@@ -1,11 +1,11 @@
-import { MsgExecuteContractEncodeObject, coins, toUtf8 } from 'cosmwasm';
+import { MsgExecuteContractEncodeObject, coins, toUtf8, Coin } from 'cosmwasm';
 import { MsgExecuteContract } from 'cosmjs-types/cosmwasm/wasm/v1/tx';
 import { getClient } from '../src/client';
 import { toStars } from '../src/utils';
 
 const config = require('../config');
 
-const AIRDROP_FEE = coins('5000', 'ustars');
+const AIRDROP_FEE = coins('0', 'ustars');
 
 async function test_whitelist() {
   const client = await getClient();
@@ -34,7 +34,6 @@ async function test_whitelist() {
 
 export async function mintTo(recipient: string) {
   const client = await getClient();
-
   const starsRecipient = toStars(recipient);
   console.log('Minter contract: ', config.minter);
   console.log('Minting to: ', starsRecipient);
@@ -42,14 +41,27 @@ export async function mintTo(recipient: string) {
   const msg = { mint_to: { recipient: starsRecipient } };
   console.log(JSON.stringify(msg, null, 2));
 
-  const result = await client.execute(
-    config.account,
-    config.minter,
-    msg,
-    'auto',
-    'mint to',
-    AIRDROP_FEE
-  );
+  // handle 0ustars airdrop fee
+  let result = null;
+  if (AIRDROP_FEE == coins('0', 'ustars')) {
+    result = await client.execute(
+      config.account,
+      config.minter,
+      msg,
+      'auto',
+      'mint to'
+      // AIRDROP_FEE
+    );
+  } else {
+    result = await client.execute(
+      config.account,
+      config.minter,
+      msg,
+      'auto',
+      'mint to',
+      AIRDROP_FEE
+    );
+  }
   const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');
   console.info(
     'The `wasm` event emitted by the contract execution:',
@@ -76,9 +88,12 @@ export async function batchMint(recipient: string, num: number) {
       sender: config.account,
       contract: config.minter,
       msg: toUtf8(JSON.stringify(msg)),
-      funds: AIRDROP_FEE,
+      funds: [],
     }),
   };
+  if ((await format_funds(AIRDROP_FEE[0])) == true) {
+    executeContractMsg.value.funds = AIRDROP_FEE;
+  }
 
   const result = await client.signAndBroadcast(
     config.account,
@@ -102,14 +117,27 @@ async function mintFor(tokenId: string, recipient: string) {
   };
   console.log(JSON.stringify(msg, null, 2));
 
-  const result = await client.execute(
-    config.account,
-    config.minter,
-    msg,
-    'auto',
-    'mint for',
-    AIRDROP_FEE
-  );
+  // handle 0ustars airdrop fee
+  let result = null;
+  if (AIRDROP_FEE == coins('0', 'ustars')) {
+    result = await client.execute(
+      config.account,
+      config.minter,
+      msg,
+      'auto',
+      'mint to'
+      // AIRDROP_FEE
+    );
+  } else {
+    result = await client.execute(
+      config.account,
+      config.minter,
+      msg,
+      'auto',
+      'mint to',
+      AIRDROP_FEE
+    );
+  }
   const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');
   console.info(
     'The `wasm` event emitted by the contract execution:',
@@ -148,9 +176,11 @@ async function mintForRange(tokenIdRange: string, recipient: string) {
         sender: config.account,
         contract: config.minter,
         msg: toUtf8(JSON.stringify(msg)),
-        funds: AIRDROP_FEE,
       }),
     };
+    if ((await format_funds(AIRDROP_FEE[0])) == true) {
+      executeContractMsg.value.funds = AIRDROP_FEE;
+    }
     msgArray.push(executeContractMsg);
   }
 
@@ -162,6 +192,14 @@ async function mintForRange(tokenIdRange: string, recipient: string) {
     'batch mint for'
   );
   console.log('Tx hash: ', result.transactionHash);
+}
+
+async function format_funds(funds: Coin) {
+  if (Number(funds.amount) > 0) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 const args = process.argv.slice(2);
