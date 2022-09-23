@@ -89,8 +89,8 @@ module.exports = {
   sg721BaseCodeId: 12,
   // The code ID for vending_minter
   vendingMinterCodeId: 10,
-  // The code ID for vending_factory
-  vendingFactoryCodeId: 11,
+  // Addr for vending factory contract
+  vendingFactoryAddr: 'stars1...',
   // The code ID for sg721
   sg721CodeId: 1,
   // The code ID for the minter contract
