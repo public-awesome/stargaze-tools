@@ -17,9 +17,6 @@ module.exports = {
   //// MINTER CONTRACT ////
   baseTokenUri: 'ipfs://QmVnos4WEq5z2zLwX8CR5EkaHyBUiF2RZYQLDWL4gm5DDU',
   numTokens: 10000,
-  unitPrice: 100,
+  mintPrice: 100,
   perAddressLimit: 50,
-  vendingFactory:
-    'stars1tlnygjnfrcqwckr8gf2l4f5uex9eeylyf86n33mh0j2uqxmwdkqqrqnuvk',
-  sg721BaseCodeId: 151,
 };

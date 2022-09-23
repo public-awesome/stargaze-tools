@@ -58,6 +58,12 @@ import { toStars } from '../src/utils';
 import { CosmWasmClient } from 'cosmwasm';
 import { naturalCompare } from '../src/sort';
 
+// Define constants to use for launch. overrides config.js
+// minter code id already locked in the factory addr contract
+const FACTORY_ADDR =
+  'stars15yucl9lt49n5d4v64q0tvzynqagryz2mrgq690aexeptehcfl7uq8wcn4h';
+const SG721_BASE_CODE_ID = 161;
+
 async function testnet_init() {
   if (config.rpcEndpoint == 'https://rpc.stargaze-apis.com/') {
     throw new Error('RPC pointed to mainnet. Change rpcEndpoint in config.js');
@@ -148,6 +154,9 @@ async function updateConfig(collectionConfig: any) {
   });
   config.startTime = new Date(Date.now() + 10_000);
   config.tradingStartTime = new Date(Date.now() + 100_000);
+  // add common vending factory address and sg721 base code id for collections
+  config.vendingFactory = FACTORY_ADDR;
+  config.sg721BaseCodeId = SG721_BASE_CODE_ID;
 }
 
 async function transferNft(
