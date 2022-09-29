@@ -126,6 +126,7 @@ export async function create_minter() {
         creator: config.account,
         description: config.description,
         image: config.image,
+        explicit_content: config.explicit_content,
         royalty_info: royaltyInfo,
         trading_start_time: tradingStartTime,
       },
