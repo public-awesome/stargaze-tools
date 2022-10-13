@@ -1,28 +1,38 @@
-import { MsgExecuteContractEncodeObject, coins, toUtf8 } from 'cosmwasm';
-import { MsgExecuteContract } from 'cosmjs-types/cosmwasm/wasm/v1/tx';
+// Shuffle() is a publically accessible function to introduce randomness to the token id mint order.
+// Shuffle fee is required because of the gas expense from loading and saving many objects from storage.
+// Current benchmarks show shuffle takes 35M gas.
+// Shuffling can act as a countermeasure against rarity snipers.
+// Shuffle Fee is meant to be controlled by governance proposal. It is currently hardcoded to 500 stars.
+
+import { coins } from 'cosmwasm';
 import { getClient } from '../src/client';
 import { toStars } from '../src/utils';
 
 const config = require('../config');
 
-const SHUFFLE_FEE = coins('5000', 'ustars');
-
 async function shuffle() {
   const client = await getClient();
 
-  const starsRecipient = toStars(config.account);
-  console.log('shuffle minter: ', starsRecipient);
+  const shuffler = toStars(config.account);
+  const minter = toStars(config.minter);
+  console.log('shuffler address: ', shuffler);
 
+  const shuffleFee = coins((500 * 1000000).toString(), 'ustars');
   const msg = { shuffle: {} };
   console.log(JSON.stringify(msg, null, 2));
 
+  const response = await client.queryContractSmart(minter, {
+    mintable_num_tokens: {},
+  });
+  console.log('mintable num tokens: ', response);
+
   const result = await client.execute(
-    config.account,
-    config.minter,
+    shuffler,
+    minter,
     msg,
     'auto',
     'shuffle',
-    SHUFFLE_FEE
+    shuffleFee
   );
   const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');
   console.info(
@@ -31,9 +41,4 @@ async function shuffle() {
   );
 }
 
-const args = process.argv.slice(2);
-if (args.length == 0) {
-  shuffle();
-} else {
-  console.log('Invalid arguments');
-}
+shuffle();
