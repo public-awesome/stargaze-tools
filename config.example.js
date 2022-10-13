@@ -70,13 +70,17 @@ module.exports = {
   // The number of tokens to mint
   numTokens: 100,
   // The price (in STARS) for your NFTs (minimum 50 STARS)
-  unitPrice: 100,
+  mintPrice: 100,
   // The max amount of NFTs an address can mint
   perAddressLimit: 1,
   // The date when the sale goes live
   // If whitelist is enabled, only whitelisted addresses will be able to purchase
   // startTime in ISO format
   startTime: '2022-08-11T19:00:00.000Z',
+  // The date when secondary sales goes live
+  // If this is not enabled a default offset will be used (usually 2 weeks)
+  // That is set by governance
+  // startTradingTime: '2022-08-11T19:00:00.000Z',
   // The minter contract address
   // Get this after running `yarn minter`
   minter: 'stars1...',
@@ -86,15 +90,12 @@ module.exports = {
 
   //// CONTRACT CODE IDs: Testnet ////
   // The code ID for sg721_base
-  sg721BaseCodeId: 12,
+  sg721BaseCodeId: 256,
   // The code ID for vending_minter
-  vendingMinterCodeId: 10,
+  vendingMinterCodeId: 257,
   // Addr for vending factory contract
-  vendingFactoryAddr: 'stars1...',
-  // The code ID for sg721
-  sg721CodeId: 1,
-  // The code ID for the minter contract
-  minterCodeId: 2,
+  vendingFactory:
+    'stars1qdcxmc82uh8tqf56kprjddkfy7p4ft4z46kh9f6lhnjxtgekra5qjj5r6c',
   // The code ID for the whitelist contract
   whitelistCodeId: 3,
   // The marketplace contract address
@@ -103,11 +104,13 @@ module.exports = {
 
   // //// CONTRACT CODE IDs: Mainnet ////
   // // The code ID for sg721
-  // sg721CodeId: 1,
+  // sg721BaseCodeId: 1,
   // // The code ID for the minter contract
-  // minterCodeId: 2,
+  // vendingMinterCodeId: 2,
   // // The code ID for the whitelist contract
   // whitelistCodeId: 3,
+  // Addr for vending factory contract
+  // vendingFactory: '',
   // The marketplace contract address
   //   marketplace:
   //       'stars1fvhcnyddukcqfnt7nlwv3thm5we22lyxyxylr9h77cvgkcn43xfsvgv0pl',
