@@ -89,8 +89,8 @@ export async function create_minter() {
   ).toString();
 
   // time expressed in nanoseconds (1 millionth of a millisecond)
-  const tradingStartTime: Timestamp | null = config.tradingStartTime
-    ? (new Date(config.tradingStartTime).getTime() * 1_000_000).toString()
+  const startTradingTime: Timestamp | null = config.startTradingTime
+    ? (new Date(config.startTradingTime).getTime() * 1_000_000).toString()
     : null;
 
   // query whitelist contract to make sure it's valid.
@@ -112,7 +112,7 @@ export async function create_minter() {
       start_time: startTime,
       num_tokens: config.numTokens,
       mint_price: {
-        amount: (config.mintPrice * 1000000).toString(),
+        amount: (config.unitPrice * 1000000).toString(),
         denom: 'ustars',
       },
       per_address_limit: config.perAddressLimit,
@@ -126,9 +126,9 @@ export async function create_minter() {
         creator: config.account,
         description: config.description,
         image: config.image,
-        explicit_content: config.explicit_content,
+        explicit_content: config.explicit_content || false,
         royalty_info: royaltyInfo,
-        trading_start_time: tradingStartTime,
+        start_trading_time: startTradingTime,
       },
     },
   };
@@ -321,15 +321,52 @@ async function updateStartTime() {
   );
 }
 
-// const args = process.argv.slice(2);
-// if (args.length == 0) {
-//   create_minter();
-// } else if (args.length == 2 && args[0] == '--whitelist') {
-//   setWhitelist(args[1]);
-// } else if (args.length == 1 && args[0] == '--update-start-time') {
-//   updateStartTime();
-// } else if (args.length == 2 && args[0] == '--per-address-limit') {
-//   updatePerAddressLimit();
-// } else {
-//   console.log('Invalid arguments');
-// }
+// Takes config.minter address and config.startTradingTime
+// and tries to update existing minter start time.
+// Can not change if public mint already started.
+async function updateStartTradingTime() {
+  const client = await getClient();
+  const account = toStars(config.account);
+  const minter = toStars(config.minter);
+
+  // time expressed in nanoseconds (1 millionth of a millisecond)
+  const startTradingTime: Timestamp = (
+    new Date(config.startTradingTime).getTime() * 1_000_000
+  ).toString();
+  const msg = { update_start_trading_time: startTradingTime };
+  console.log(JSON.stringify(msg, null, 2));
+  const answer = await inquirer.prompt([
+    {
+      message:
+        'Are you sure your want to change public mint start time to ' +
+        config.startTradingTime +
+        ' ?',
+      name: 'confirmation',
+      type: 'confirm',
+    },
+  ]);
+  if (!answer.confirmation) return;
+
+  const result = await client.execute(account, minter, msg, 'auto');
+
+  const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');
+  console.info(
+    'The `wasm` event emitted by the contract execution:',
+    wasmEvent
+  );
+}
+
+const args = process.argv.slice(2);
+if (args.length == 0) {
+  create_minter();
+} else if (args.length == 2 && args[0] == '--whitelist') {
+  setWhitelist(args[1]);
+} else if (args.length == 1 && args[0] == '--update-start-time') {
+  updateStartTime();
+} else if (args.length == 1 && args[0] == '--update-start-trading-time') {
+  updateStartTradingTime();
+} else if (args.length == 2 && args[0] == '--per-address-limit') {
+  updatePerAddressLimit();
+} else {
+  console.log('Invalid arguments');
+}
