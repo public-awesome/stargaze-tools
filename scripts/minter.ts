@@ -128,7 +128,7 @@ export async function create_minter() {
         image: config.image,
         explicit_content: config.explicit_content || false,
         royalty_info: royaltyInfo,
-        start_trading_time: startTradingTime,
+        start_trading_time: startTradingTime || null,
       },
     },
   };
@@ -322,8 +322,8 @@ async function updateStartTime() {
 }
 
 // Takes config.minter address and config.startTradingTime
-// and tries to update existing minter start time.
-// Can not change if public mint already started.
+// and tries to update existing start trading time.
+// Can not update if it's beyond the max offset
 async function updateStartTradingTime() {
   const client = await getClient();
   const account = toStars(config.account);
@@ -338,7 +338,7 @@ async function updateStartTradingTime() {
   const answer = await inquirer.prompt([
     {
       message:
-        'Are you sure your want to change public mint start time to ' +
+        'Are you sure your want to change start trading time to ' +
         config.startTradingTime +
         ' ?',
       name: 'confirmation',

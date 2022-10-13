@@ -1937,10 +1937,10 @@
   resolved "https://registry.yarnpkg.com/@sinclair/typebox/-/typebox-0.24.42.tgz#a74b608d494a1f4cc079738e050142a678813f52"
   integrity sha512-d+2AtrHGyWek2u2ITF0lHRIv6Tt7X0dEHW+0rP+5aDCEjC3fiN2RBjrLD0yU0at52BcZbRGxLbAtXiR0hFCjYw==
 
-"@stargazezone/ts@^0.6.0":
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/@stargazezone/ts/-/ts-0.6.0.tgz#017b8578f3737c2fea4b1607e1413784a7898d62"
-  integrity sha512-92eRPrQL3fTrFz0W28G7PgVyb4kD6DgL4LYeratCu2GMfS98uA47JD8lh0gwr+JRu8HF7NlYDfttpOLGJBeogg==
+"@stargazezone/ts@^0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@stargazezone/ts/-/ts-0.7.0.tgz#75f36ccec607b79caf4129e6533a790bb024ba73"
+  integrity sha512-oa264XlOeiwaEAIQ75xXd7CB2D5M3MwErgRD56bCgLx53ev+op85yOO8ajmw0iHt8onesGQd4ezZraXbHXUFpA==
   dependencies:
     "@cosmjs/amino" "0.29.0"
     "@cosmjs/cosmwasm-stargate" "^0.29.0"
