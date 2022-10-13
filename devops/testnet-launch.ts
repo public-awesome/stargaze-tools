@@ -52,9 +52,17 @@ const configKeys = ['rpcEndpoint', 'minterCodeId', 'sg721CodeId'];
 const collection1 = require('./collection1');
 const collection2 = require('./collection2');
 const collection3 = require('./collection3');
-import { init as minterInit } from '../scripts/minter';
+import { create_minter as create_minter } from '../scripts/minter';
 import { batchMint } from '../scripts/mint';
 import { toStars } from '../src/utils';
+import { CosmWasmClient } from 'cosmwasm';
+import { naturalCompare } from '../src/sort';
+
+// Define constants to use for launch. overrides config.js
+// minter code id already locked in the factory addr contract
+const FACTORY_ADDR =
+  'stars15yucl9lt49n5d4v64q0tvzynqagryz2mrgq690aexeptehcfl7uq8wcn4h';
+const SG721_BASE_CODE_ID = 161;
 
 async function testnet_init() {
   if (config.rpcEndpoint == 'https://rpc.stargaze-apis.com/') {
@@ -73,7 +81,11 @@ async function testnet_init() {
   await updateConfig(collection1);
 
   console.log('in testnet-launch config.account ', config.account);
-  const minterAddr = await minterInit();
+  console.log(
+    'in testnet-launch config.vendingFactory ',
+    config.vendingFactory
+  );
+  const minterAddr = await create_minter();
   if (minterAddr == undefined) {
     throw new Error('addr undefined');
   }
@@ -83,14 +95,22 @@ async function testnet_init() {
   // 50x mint as buyer from collection #1
   await batchMint(buyer.addr, 50);
   // transfer nft to recipient
-  const token_id = '50';
+  const client = await CosmWasmClient.connect(config.rpcEndpoint);
+  let configResponse = await client.queryContractSmart(minterAddr, {
+    config: {},
+  });
+  let sg721 = configResponse.sg721_address;
+  let nfts = await client.queryContractSmart(sg721, {
+    tokens: { owner: buyer.addr, limit: 30 },
+  });
+  let token_id = nfts.tokens.sort(naturalCompare).pop();
   await transferNft(buyer, minterAddr, token_id, recipient);
 
   // save code ids from config
   // inherit from collection2
   // set up collection2
   await updateConfig(collection2);
-  const minterAddr2 = await minterInit();
+  const minterAddr2 = await create_minter();
   if (minterAddr2 == undefined) {
     throw new Error('addr undefined');
   }
@@ -100,14 +120,21 @@ async function testnet_init() {
   // 5x mint as buyer from collection #2
   await batchMint(buyer.addr, 5);
   // transfer nft to recipient
-  const token_id2 = '5';
-  await transferNft(buyer, minterAddr2, token_id2, recipient);
+  configResponse = await client.queryContractSmart(minterAddr2, {
+    config: {},
+  });
+  sg721 = configResponse.sg721_address;
+  nfts = await client.queryContractSmart(sg721, {
+    tokens: { owner: buyer.addr, limit: 30 },
+  });
+  token_id = nfts.tokens.sort(naturalCompare).pop();
+  await transferNft(buyer, minterAddr2, token_id, recipient);
 
   // save code ids from config
   // inherit from collection2
   // set up collection2
   await updateConfig(collection3);
-  const minterAddr3 = await minterInit();
+  const minterAddr3 = await create_minter();
   if (minterAddr3 == undefined) {
     throw new Error('addr undefined');
   }
@@ -126,6 +153,10 @@ async function updateConfig(collectionConfig: any) {
     config[key] = collectionConfig[key];
   });
   config.startTime = new Date(Date.now() + 10_000);
+  config.tradingStartTime = new Date(Date.now() + 100_000);
+  // add common vending factory address and sg721 base code id for collections
+  config.vendingFactory = FACTORY_ADDR;
+  config.sg721BaseCodeId = SG721_BASE_CODE_ID;
 }
 
 async function transferNft(

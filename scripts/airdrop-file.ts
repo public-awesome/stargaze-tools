@@ -21,7 +21,7 @@ import { assertIsDeliverTxSuccess } from '@cosmjs/stargate';
 
 const config = require('../config');
 // airdrop fee will cost a low fee in the next minter upgrade
-const AIRDROP_FEE = coin(0, 'ustars');
+const AIRDROP_FEE = coin(5000, 'ustars');
 const MSG_AIRDROP_LIMIT = 50;
 
 async function addFile(uniqueOnly: boolean) {
@@ -59,24 +59,23 @@ async function addFile(uniqueOnly: boolean) {
         validatedAddrs.push(toStars(addr));
       });
 
-      let finalAddrs: Array<string>
+      let finalAddrs: Array<string>;
 
-      if(uniqueOnly){
+      if (uniqueOnly) {
         finalAddrs = [...new Set(validatedAddrs)].sort();
       } else {
-        finalAddrs = validatedAddrs
+        finalAddrs = validatedAddrs;
       }
 
       if (finalAddrs.length > MSG_AIRDROP_LIMIT) {
         throw new Error(
           'Too many addrs added in a transaction. Max ' +
-          MSG_AIRDROP_LIMIT +
-          ' at a time.'
+            MSG_AIRDROP_LIMIT +
+            ' at a time.'
         );
       }
       console.log(
-        'Airdrop addresses validated and deduped. count: ' +
-        finalAddrs.length
+        'Airdrop addresses validated and deduped. count: ' + finalAddrs.length
       );
 
       for (const idx in finalAddrs) {
@@ -130,9 +129,9 @@ async function addFile(uniqueOnly: boolean) {
 
 const args = process.argv.slice(2);
 if (args.length == 0) {
-  addFile(true)
+  addFile(true);
 } else if (args.length == 1 && args[0] == '--keep-duplicates') {
-  addFile(false)
+  addFile(false);
 } else {
   console.log('Invalid arguments.');
 }

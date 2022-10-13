@@ -19,6 +19,9 @@ module.exports = {
   baseTokenUri:
     'ipfs://bafybeiaf2qzkva4tnxak4k5trnnyzuinzzoxrookm7t4wa753rdarsoetm/metadata',
   numTokens: 20,
-  unitPrice: 500,
+  mintPrice: 500,
   perAddressLimit: 5,
+  vendingFactory:
+    'stars1nelx34qg6xtm5u748jzjsahthddsktrrg5dw2rx8vzpc8hwwgk5q32mj2h',
+  sg721BaseCodeId: 151,
 };
