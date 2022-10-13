@@ -1,6 +1,13 @@
 # Stargaze Tools
 
-Stargaze Tools is a set of tools for launching a collection and minting on Stargaze.
+Stargaze Tools is a set of tools to interact with smart contracts on Stargaze.
+
+Mainly focused towards NFT creators and developers to help launch and manage NFT collections. As use cases grow, more tools and scripts will be added.
+
+- Validate NFT collections
+- Marketplace functionality
+- P2P trading functionality
+- Governance tasks
 
 ## Setup project
 
@@ -32,6 +39,8 @@ Copy `config.example.js` to `config.js`.
 Edit `config.js` with your project configuration.
 
 ## Initialize an NFT minting contract
+
+A minter is created from a factory contract.
 
 ```sh
 yarn minter
