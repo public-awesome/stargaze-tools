@@ -1,13 +1,11 @@
-// Airdrop 1 token per address for a batch of addresses using airdrop_addresses.csv
+// Transfer specific NFTs to recipient addresses using transfer.csv
 
-// WARNING: Airdrop order is not maintained! [addr1, addr2, addr3, addr4, addr5]
-// will not 100% translate to [token_id1, token_id2, token_id3, token_id4, token_id5]
-// ex: it could produce [token_id3, token_id4, token_id1, token_id5, token_id2]
-// To guarantee token_id: 100 gets airdropped to addr1, use mint_for(100, addr1)
+// Requires transfer.csv with "recipient" and "token-id" columns
+// Requires account have all the token-ids or it will error out
+// Cycles through addresses and token ids to construct an array of messages to be broadcast
 
 // Accepts cosmos, stars addresses.
 
-import { ExecuteMsg } from '@stargazezone/types/contracts/minter/execute_msg';
 import { coin, MsgExecuteContractEncodeObject } from 'cosmwasm';
 import { toStars } from '../src/utils';
 import inquirer from 'inquirer';
@@ -20,19 +18,19 @@ import { parse } from 'csv-parse';
 import { assertIsDeliverTxSuccess } from '@cosmjs/stargate';
 
 const config = require('../config');
-// airdrop fee will cost a low fee in the next minter upgrade
-const AIRDROP_FEE = coin(5000, 'ustars');
-const MSG_AIRDROP_LIMIT = 50;
+const MSG_TRANSFER_LIMIT = 50;
 
-async function addFile(uniqueOnly: boolean) {
-  interface Airdrop {
-    address: string;
+async function addFile() {
+  interface TransferData {
+    recipient: string;
+    token_id: number;
   }
   const __dirname = process.cwd();
-  const csvFilePath = path.resolve(__dirname, './airdrop_addresses.csv');
-  const headers = ['address'];
+  const csvFilePath = path.resolve(__dirname, './transfer.csv');
+  const headers = ['recipient', 'token_id'];
   const fileContent = fs.readFileSync(csvFilePath, { encoding: 'utf-8' });
   const addrs: Array<string> = [];
+  const tokens: Array<number> = [];
   const executeContractMsgs: Array<MsgExecuteContractEncodeObject> = [];
   const client = await getClient();
   if (!config.minter) {
@@ -40,48 +38,54 @@ async function addFile(uniqueOnly: boolean) {
       '"minter" must be set to a minter contract address in config.js'
     );
   }
-  const funds = parseInt(AIRDROP_FEE.amount) == 0 ? [] : [AIRDROP_FEE];
-  await parse(
+  const funds: never[] = [];
+  parse(
     fileContent,
     {
       delimiter: ',',
       columns: headers,
     },
-    async (error, fileContents: Airdrop[]) => {
+    async (error, fileContents: TransferData[]) => {
       if (error) {
         throw error;
       }
-      fileContents.map((row) => addrs.push(row.address));
+      fileContents.map((row) => addrs.push(row.recipient));
+      fileContents.map((row) => tokens.push(row.token_id));
       console.log(addrs);
+      console.log(tokens);
 
       const validatedAddrs: Array<string> = [];
       addrs.forEach((addr) => {
         validatedAddrs.push(toStars(addr));
       });
-
-      let finalAddrs: Array<string>;
-
-      if (uniqueOnly) {
-        finalAddrs = [...new Set(validatedAddrs)].sort();
-      } else {
-        finalAddrs = validatedAddrs;
-      }
-
-      if (finalAddrs.length > MSG_AIRDROP_LIMIT) {
+      let uniqueValidatedAddrs = [...new Set(validatedAddrs)];
+      if (uniqueValidatedAddrs.length > MSG_TRANSFER_LIMIT) {
         throw new Error(
           'Too many addrs added in a transaction. Max ' +
-            MSG_AIRDROP_LIMIT +
+            MSG_TRANSFER_LIMIT +
             ' at a time.'
         );
       }
+      if (uniqueValidatedAddrs.length !== tokens.length) {
+        throw new Error('unique addrs length must equal token ids length');
+      }
       console.log(
-        'Airdrop addresses validated and deduped. count: ' + finalAddrs.length
+        'Recipient addresses validated and deduped. count: ' +
+          uniqueValidatedAddrs.length
       );
 
-      for (const idx in finalAddrs) {
-        console.log('airdropping to address: ', finalAddrs[idx]);
-        const msg: ExecuteMsg = {
-          mint_to: { recipient: finalAddrs[idx] },
+      for (const idx in uniqueValidatedAddrs) {
+        console.log(
+          'transfer token id',
+          tokens[idx],
+          'to recipient address: ',
+          uniqueValidatedAddrs[idx]
+        );
+        const msg = {
+          transfer_nft: {
+            recipient: uniqueValidatedAddrs[idx],
+            token_id: tokens[idx],
+          },
         };
         const executeContractMsg: MsgExecuteContractEncodeObject = {
           typeUrl: '/cosmwasm.wasm.v1.MsgExecuteContract',
@@ -98,7 +102,7 @@ async function addFile(uniqueOnly: boolean) {
 
       // Get confirmation before preceding
       console.log(
-        'WARNING: Airdrop order is not maintained! Please confirm the settings for airdropping to addresses. THERE IS NO WAY TO UNDO THIS ONCE IT IS ON CHAIN.'
+        'WARNING: Transfer is not reverisble. Please confirm the settings for transferring tokens to addresses. THERE IS NO WAY TO UNDO THIS ONCE IT IS ON CHAIN.'
       );
       console.log(JSON.stringify(executeContractMsgs, null, 2));
       const answer = await inquirer.prompt([
@@ -114,24 +118,11 @@ async function addFile(uniqueOnly: boolean) {
         config.account,
         executeContractMsgs,
         'auto',
-        'batch mint_to'
+        'batch transfer'
       );
       assertIsDeliverTxSuccess(result);
-
-      console.log('Tx hash: ', result.transactionHash);
-      let res = await client.queryContractSmart(config.minter, {
-        mintable_num_tokens: {},
-      });
-      console.log('mintable num tokens:', res);
     }
   );
 }
 
-const args = process.argv.slice(2);
-if (args.length == 0) {
-  addFile(true);
-} else if (args.length == 1 && args[0] == '--keep-duplicates') {
-  addFile(false);
-} else {
-  console.log('Invalid arguments.');
-}
+addFile();

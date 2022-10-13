@@ -22,7 +22,10 @@ async function burn(client: SigningCosmWasmClient, msg: any) {
   );
 }
 
-async function burnToken(token: number) {
+async function burnToken(tokenId: number) {
+  if (isNaN(tokenId)) {
+    throw new Error('tokenId must be a number');
+  }
   const client = await getClient();
   const minter = toStars(config.minter);
   const minterConfigResponse = await client.queryContractSmart(minter, {
@@ -32,8 +35,8 @@ async function burnToken(token: number) {
   const sg721 = minterConfigResponse.sg721_address;
 
   console.log('SG721: ', sg721);
-  console.log('Burning Token: ', token);
-  const msg = { burn: { token_id: token } };
+  console.log('Burning Token: ', tokenId);
+  const msg = { burn: { token_id: tokenId.toString() } };
   console.log(JSON.stringify(msg, null, 2));
   console.log(
     'Please confirm that you would like to burn this token? This cannot be undone. Also note that this script can only burn tokens from your own wallet.'
@@ -60,7 +63,21 @@ async function burnRange(tokenIdRange: string) {
   const client = await getClient();
   for (let tokenId = start; tokenId <= end; tokenId++) {
     console.log('Burning token:', tokenId);
-    const msg = { burn: { token_id: tokenId } };
+    const msg = { burn: { token_id: tokenId.toString() } };
+    await burn(client, msg);
+  }
+}
+
+// Burn a list of tokens you already own.
+// meant to be used to burn the supply of a broken collection
+// fails if you are not the token owner
+async function burnList(tokenIds: string) {
+  // Parse string from "4,5,10,45,12" -> [4,5,10,45,12]
+  const tokens = tokenIds.split(',').map(Number);
+  const client = await getClient();
+  for (let i = 0; i < tokens.length; i++) {
+    console.log('Burning token:', tokens[i]);
+    const msg = { burn: { token_id: tokens[i].toString() } };
     await burn(client, msg);
   }
 }
@@ -94,7 +111,7 @@ async function batchAirdropAndBurn() {
     totalSupply - numMintedTokens > BATCH_BURN_LIMIT
       ? BATCH_BURN_LIMIT
       : totalSupply - numMintedTokens;
-  console.log('burning', burnCount, 'tokens');
+  console.log('burning', burnCount);
 
   // Get confirmation before proceeding
   console.log(
@@ -124,9 +141,11 @@ if (args.length == 0) {
 } else if (args.length == 1 && args[0] == '--batchAirdropAndBurn') {
   batchAirdropAndBurn();
 } else if (args.length == 1 && args[0]) {
-  burnToken(parseInt(args[0]));
+  burnToken(Number(args[0]));
 } else if (args.length == 2 && args[0] == '--range') {
   burnRange(args[1]);
-} else {
+} else if (args.length == 2 && args[0] == '--list') {
+  burnList(args[1]);
+}  else {
   console.log('Invalid arguments');
 }

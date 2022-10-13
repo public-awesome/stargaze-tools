@@ -16,7 +16,7 @@ module.exports = {
 
   //// MINTER CONTRACT ////
   baseTokenUri: 'ipfs://QmVnos4WEq5z2zLwX8CR5EkaHyBUiF2RZYQLDWL4gm5DDU',
-  numTokens: 1050,
-  unitPrice: 100,
+  numTokens: 10000,
+  mintPrice: 100,
   perAddressLimit: 50,
 };

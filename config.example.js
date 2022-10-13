@@ -13,9 +13,9 @@ module.exports = {
   account: 'stars1...',
 
   //// API CONFIG ////
-  // The RPC endpoint for Stargaze, Double Double Testnet
-  rpcEndpoint: 'https://rpc.double-double-1.stargaze-apis.com/',
-  // The RPC endpoint for Stargaze, mainnet
+  // The RPC endpoint for Stargaze testnet
+  rpcEndpoint: 'https://rpc.elgafar-1.stargaze-apis.com/',
+  // The RPC endpoint for Stargaze mainnet
   // rpcEndpoint: 'https://rpc.stargaze-apis.com/',
   // NFT.storage endpoint
   nftStorageEndpoint: 'https://api.nft.storage',
@@ -70,13 +70,17 @@ module.exports = {
   // The number of tokens to mint
   numTokens: 100,
   // The price (in STARS) for your NFTs (minimum 50 STARS)
-  unitPrice: 100,
+  mintPrice: 100,
   // The max amount of NFTs an address can mint
   perAddressLimit: 1,
   // The date when the sale goes live
   // If whitelist is enabled, only whitelisted addresses will be able to purchase
   // startTime in ISO format
-  startTime: '2022-03-11T21:00:00.000Z',
+  startTime: '2022-08-11T19:00:00.000Z',
+  // The date when secondary sales goes live
+  // If this is not enabled a default offset will be used (usually 2 weeks)
+  // That is set by governance
+  // startTradingTime: '2022-08-11T19:00:00.000Z',
   // The minter contract address
   // Get this after running `yarn minter`
   minter: 'stars1...',
@@ -84,23 +88,30 @@ module.exports = {
   // Get this after running `yarn minter`
   sg721: 'stars1...',
 
-  //// CONTRACT CODE IDs: Double Double Testnet ////
-  // The code ID for sg721
-  sg721CodeId: 76,
-  // The code ID for the minter contract
-  minterCodeId: 75,
+  //// CONTRACT CODE IDs: Testnet ////
+  // The code ID for sg721_base
+  sg721BaseCodeId: 256,
+  // The code ID for vending_minter
+  vendingMinterCodeId: 257,
+  // Addr for vending factory contract
+  vendingFactory:
+    'stars1qdcxmc82uh8tqf56kprjddkfy7p4ft4z46kh9f6lhnjxtgekra5qjj5r6c',
   // The code ID for the whitelist contract
   whitelistCodeId: 3,
-  marketplace:
-    'stars154msvfvr3j37qpuqeq7neh00dh3dhzsf0cgflme9vwv7uqmjafns4dxrtr',
+  // The marketplace contract address
+  //   marketplace:
+  //     'stars18cszlvm6pze0x9sz32qnjq4vtd45xehqs8dq7cwy8yhq35wfnn3qgzs5gu',
 
   // //// CONTRACT CODE IDs: Mainnet ////
   // // The code ID for sg721
-  // sg721CodeId: 1,
+  // sg721BaseCodeId: 1,
   // // The code ID for the minter contract
-  // minterCodeId: 2,
+  // vendingMinterCodeId: 2,
   // // The code ID for the whitelist contract
   // whitelistCodeId: 3,
+  // Addr for vending factory contract
+  // vendingFactory: '',
+  // The marketplace contract address
   //   marketplace:
   //       'stars1fvhcnyddukcqfnt7nlwv3thm5we22lyxyxylr9h77cvgkcn43xfsvgv0pl',
 };

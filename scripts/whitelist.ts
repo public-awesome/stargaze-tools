@@ -1,4 +1,5 @@
 import { InstantiateMsg } from '@stargazezone/types/contracts/whitelist/instantiate_msg';
+import { ExecuteMsg } from '@stargazezone/types/contracts/whitelist/execute_msg';
 import { Timestamp } from '@stargazezone/types/contracts/minter/shared-types';
 import { coins } from 'cosmwasm';
 import inquirer from 'inquirer';
@@ -271,7 +272,9 @@ async function updatePerAddressLimit() {
     throw new Error('invalid whitelistPerAddressLimit in config.js');
   }
 
-  const msg = { update_per_address_limit: { per_address_limit: limit } };
+  const msg: ExecuteMsg = {
+    update_per_address_limit: limit,
+  };
   console.log(JSON.stringify(msg, null, 2));
   const answer = await inquirer.prompt([
     {

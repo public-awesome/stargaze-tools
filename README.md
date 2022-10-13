@@ -1,6 +1,13 @@
 # Stargaze Tools
 
-Stargaze Tools is a set of tools for launching a collection and minting on Stargaze.
+Stargaze Tools is a set of tools to interact with smart contracts on Stargaze.
+
+Mainly focused towards NFT creators and developers to help launch and manage NFT collections. As use cases grow, more tools and scripts will be added.
+
+- Validate NFT collections
+- Marketplace functionality
+- P2P trading functionality
+- Governance tasks
 
 ## Setup project
 
@@ -32,6 +39,8 @@ Copy `config.example.js` to `config.js`.
 Edit `config.js` with your project configuration.
 
 ## Initialize an NFT minting contract
+
+A minter is created from a factory contract.
 
 ```sh
 yarn minter
@@ -100,9 +109,11 @@ For all possible queries, see the [query types](https://github.com/public-awesom
 Test your contract. Make sure it's visible in launchpad. Try minting and viewing the NFT in your profile.
 [https://testnet.publicawesome.dev/](https://testnet.publicawesome.dev/)
 
-## Video Walkthrough (Big thank you to meta-induction)
+## Video Walkthrough (Big thank you to meta-induction and Cosmos Tutorials)
 
-[https://www.youtube.com/watch?v=1gvDlBWKEUc](https://www.youtube.com/watch?v=1gvDlBWKEUc)
+[https://www.youtube.com/watch?v=1gvDlBWKEUc](https://www.youtube.com/watch?v=1gvDlBWKEUc) from meta-induction
+
+[https://www.youtube.com/watch?v=lw6w5zlRj14](https://www.youtube.com/watch?v=lw6w5zlRj14) from "Cosmos Tutorials"
 
 [https://asciinema.org/a/485818](https://asciinema.org/a/485818)
 
@@ -117,3 +128,7 @@ STARGAZE TOOLS IS PROVIDED “AS IS”, AT YOUR OWN RISK, AND WITHOUT WARRANTIES
 # Terms and Conditions
 
 By using this code you agree to the following [terms and conditions](TERMS).
+
+# Copyrighted Content
+
+You represent and warrant that you have, or have obtained, all rights, licenses, consents, permissions, power and/or authority necessary to grant the rights granted herein for any content that you create, submit, post, promote, or display on or through the Service. You represent and warrant that such content does not contain material subject to copyright, trademark, publicity rights, or other intellectual property rights, unless you have necessary permission or are otherwise legally entitled to post the material and to grant Stargaze Parties the license described above, and that the content does not violate any laws.

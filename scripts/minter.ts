@@ -1,5 +1,7 @@
-import { InstantiateMsg } from '@stargazezone/types/contracts/minter/instantiate_msg';
-import { Timestamp } from '@stargazezone/types/contracts/minter/shared-types';
+import {
+  CreateMinterMsgForVendingMinterInitMsgExtension,
+  Timestamp,
+} from '@stargazezone/ts/src/VendingMinter.types';
 import { coins, Decimal } from 'cosmwasm';
 import inquirer from 'inquirer';
 import { getClient } from '../src/client';
@@ -22,12 +24,7 @@ function isValidIpfsUrl(uri: string) {
 }
 
 function clean(obj: any) {
-  for (var propName in obj) {
-    if (obj[propName] === null || obj[propName] === undefined) {
-      delete obj[propName];
-    }
-  }
-  return obj;
+  return JSON.parse(JSON.stringify(obj));
 }
 
 function formatRoyaltyInfo(
@@ -44,7 +41,7 @@ function formatRoyaltyInfo(
   }
 }
 
-export async function init() {
+export async function create_minter() {
   console.log('Collection name:', config.name);
   console.log('Account:', config.account, '\n');
   const account = toStars(config.account);
@@ -91,38 +88,72 @@ export async function init() {
     new Date(config.startTime).getTime() * 1_000_000
   ).toString();
 
-  const tempMsg: InstantiateMsg = {
-    base_token_uri: config.baseTokenUri,
-    num_tokens: config.numTokens,
-    sg721_code_id: config.sg721CodeId,
-    sg721_instantiate_msg: {
+  // time expressed in nanoseconds (1 millionth of a millisecond)
+  const startTradingTime: Timestamp | null = config.startTradingTime
+    ? (new Date(config.startTradingTime).getTime() * 1_000_000).toString()
+    : null;
+
+  // query whitelist contract to make sure it's valid.
+  try {
+    if (whitelistContract) {
+      await client.queryContractSmart(whitelistContract, {
+        config: {},
+      });
+    }
+  } catch {
+    throw new Error(
+      'Error querying whitelist contract. Please double check whitelist address is valid.'
+    );
+  }
+
+  const initMsg: CreateMinterMsgForVendingMinterInitMsgExtension = {
+    init_msg: {
+      base_token_uri: config.baseTokenUri,
+      start_time: startTime,
+      num_tokens: config.numTokens,
+      mint_price: {
+        amount: (config.unitPrice * 1000000).toString(),
+        denom: 'ustars',
+      },
+      per_address_limit: config.perAddressLimit,
+      whitelist: whitelistContract,
+    },
+    collection_params: {
+      code_id: config.sg721BaseCodeId,
       name: config.name,
       symbol: config.symbol,
-      minter: account,
-      collection_info: {
-        creator: account,
+      info: {
+        creator: config.account,
         description: config.description,
         image: config.image,
-        external_link: config.external_link,
+        explicit_content: config.explicit_content || false,
         royalty_info: royaltyInfo,
+        start_trading_time: startTradingTime || null,
       },
-    },
-    per_address_limit: config.perAddressLimit,
-    whitelist: whitelistContract,
-    start_time: startTime,
-    unit_price: {
-      amount: (config.unitPrice * 1000000).toString(),
-      denom: 'ustars',
     },
   };
 
+  // should be stars1nelx34qg6xtm5u748jzjsahthddsktrrg5dw2rx8vzpc8hwwgk5q32mj2h
+  console.log('vending factory addr: ', config.vendingFactory);
+
+  const paramsResponse = await client.queryContractSmart(
+    config.vendingFactory,
+    {
+      params: {},
+    }
+  );
+  console.log('params response', paramsResponse);
+
+  const tempMsg = { create_minter: initMsg };
+
+  // TODO use recursive cleanup of undefined and null values
   if (
-    tempMsg.sg721_instantiate_msg.collection_info?.royalty_info
+    tempMsg.create_minter?.collection_params.info?.royalty_info
       ?.payment_address === undefined &&
-    tempMsg.sg721_instantiate_msg.collection_info?.royalty_info?.share ===
+    tempMsg.create_minter?.collection_params.info?.royalty_info?.share ===
       undefined
   ) {
-    tempMsg.sg721_instantiate_msg.collection_info.royalty_info = null;
+    tempMsg.create_minter.collection_params.info.royalty_info = null;
   }
   const msg = clean(tempMsg);
 
@@ -146,13 +177,13 @@ export async function init() {
   ]);
   if (!answer.confirmation) return;
 
-  const result = await client.instantiate(
+  const result = await client.execute(
     account,
-    config.minterCodeId,
+    config.vendingFactory,
     msg,
-    config.name,
     'auto',
-    { funds: NEW_COLLECTION_FEE, admin: account }
+    config.name,
+    NEW_COLLECTION_FEE
   );
   const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');
   console.info(
@@ -161,9 +192,10 @@ export async function init() {
   );
   if (wasmEvent != undefined) {
     console.info('Add these contract addresses to config.js:');
-    console.info('minter contract address: ', wasmEvent.attributes[0]['value']);
-    console.info('sg721 contract address: ', wasmEvent.attributes[5]['value']);
-    return wasmEvent.attributes[0]['value'];
+    console.info('factory address: ', wasmEvent.attributes[0]['value']);
+    console.info('minter address: ', wasmEvent.attributes[2]['value']);
+    console.info('sg721 contract address: ', wasmEvent.attributes[7]['value']);
+    return wasmEvent.attributes[2]['value'];
   }
 }
 
@@ -289,13 +321,50 @@ async function updateStartTime() {
   );
 }
 
+// Takes config.minter address and config.startTradingTime
+// and tries to update existing start trading time.
+// Can not update if it's beyond the max offset
+async function updateStartTradingTime() {
+  const client = await getClient();
+  const account = toStars(config.account);
+  const minter = toStars(config.minter);
+
+  // time expressed in nanoseconds (1 millionth of a millisecond)
+  const startTradingTime: Timestamp = (
+    new Date(config.startTradingTime).getTime() * 1_000_000
+  ).toString();
+  const msg = { update_start_trading_time: startTradingTime };
+  console.log(JSON.stringify(msg, null, 2));
+  const answer = await inquirer.prompt([
+    {
+      message:
+        'Are you sure your want to change start trading time to ' +
+        config.startTradingTime +
+        ' ?',
+      name: 'confirmation',
+      type: 'confirm',
+    },
+  ]);
+  if (!answer.confirmation) return;
+
+  const result = await client.execute(account, minter, msg, 'auto');
+
+  const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');
+  console.info(
+    'The `wasm` event emitted by the contract execution:',
+    wasmEvent
+  );
+}
+
 const args = process.argv.slice(2);
 if (args.length == 0) {
-  init();
+  create_minter();
 } else if (args.length == 2 && args[0] == '--whitelist') {
   setWhitelist(args[1]);
 } else if (args.length == 1 && args[0] == '--update-start-time') {
   updateStartTime();
+} else if (args.length == 1 && args[0] == '--update-start-trading-time') {
+  updateStartTradingTime();
 } else if (args.length == 2 && args[0] == '--per-address-limit') {
   updatePerAddressLimit();
 } else {
