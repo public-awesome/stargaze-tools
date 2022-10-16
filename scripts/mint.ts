@@ -43,14 +43,13 @@ export async function mintTo(recipient: string) {
 
   // handle 0ustars airdrop fee
   let result = null;
-  if (AIRDROP_FEE == coins('0', 'ustars')) {
+  if (AIRDROP_FEE[0].amount == '0') {
     result = await client.execute(
       config.account,
       config.minter,
       msg,
       'auto',
       'mint to'
-      // AIRDROP_FEE
     );
   } else {
     result = await client.execute(
@@ -119,14 +118,13 @@ async function mintFor(tokenId: string, recipient: string) {
 
   // handle 0ustars airdrop fee
   let result = null;
-  if (AIRDROP_FEE == coins('0', 'ustars')) {
+  if (AIRDROP_FEE[0].amount == '0') {
     result = await client.execute(
       config.account,
       config.minter,
       msg,
       'auto',
       'mint to'
-      // AIRDROP_FEE
     );
   } else {
     result = await client.execute(
