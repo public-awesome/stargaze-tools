@@ -112,7 +112,7 @@ export async function create_minter() {
       start_time: startTime,
       num_tokens: config.numTokens,
       mint_price: {
-        amount: (config.unitPrice * 1000000).toString(),
+        amount: (config.mintPrice * 1000000).toString(),
         denom: 'ustars',
       },
       per_address_limit: config.perAddressLimit,
