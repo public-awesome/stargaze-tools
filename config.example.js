@@ -104,9 +104,12 @@ module.exports = {
 
   // //// CONTRACT CODE IDs: Mainnet ////
   // // The code ID for sg721
-  // sg721BaseCodeId: 1,
+  // sg721BaseCodeId: 15,
   // // The code ID for the minter contract
-  // vendingMinterCodeId: 2,
+  // vendingMinterCodeId: 16,
+  // // Addr for vending factory contract
+  // vendingFactory:
+  //  'stars15p5xmrj4ryfh39pdvlphdr64kunm4zrvq3p6rku82zlahkn63vtqm3gmpt',
   // // The code ID for the whitelist contract
   // whitelistCodeId: 3,
   // Addr for vending factory contract
