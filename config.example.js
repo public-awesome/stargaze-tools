@@ -97,7 +97,7 @@ module.exports = {
   vendingFactory:
     'stars1qdcxmc82uh8tqf56kprjddkfy7p4ft4z46kh9f6lhnjxtgekra5qjj5r6c',
   // The code ID for the whitelist contract
-  whitelistCodeId: 3,
+  whitelistCodeId: 267,
   // The marketplace contract address
   //   marketplace:
   //     'stars18cszlvm6pze0x9sz32qnjq4vtd45xehqs8dq7cwy8yhq35wfnn3qgzs5gu',
