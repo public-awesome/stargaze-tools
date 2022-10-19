@@ -51,11 +51,12 @@ async function init() {
     new Date(config.whitelistEndTime).getTime() * 1_000_000
   ).toString();
 
+  // @ts-ignore
   const msg: InstantiateMsg = {
     members: whitelist,
     start_time: whitelistStartTime,
     end_time: whitelistEndTime,
-    unit_price: {
+    mint_price: {
       amount: (config.whitelistPrice * 1000000).toString(),
       denom: 'ustars',
     },
