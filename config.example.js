@@ -90,14 +90,14 @@ module.exports = {
 
   //// CONTRACT CODE IDs: Testnet ////
   // The code ID for sg721_base
-  sg721BaseCodeId: 256,
+  sg721BaseCodeId: 274,
   // The code ID for vending_minter
-  vendingMinterCodeId: 257,
+  vendingMinterCodeId: 275,
   // Addr for vending factory contract
   vendingFactory:
-    'stars1qdcxmc82uh8tqf56kprjddkfy7p4ft4z46kh9f6lhnjxtgekra5qjj5r6c',
+    'stars1j4qn9krchp5xs8nued4j4vcr4j654wxkhf7acy76734xe5fsz08sku28s2',
   // The code ID for the whitelist contract
-  whitelistCodeId: 267,
+  whitelistCodeId: 277,
   // The marketplace contract address
   //   marketplace:
   //     'stars18cszlvm6pze0x9sz32qnjq4vtd45xehqs8dq7cwy8yhq35wfnn3qgzs5gu',
