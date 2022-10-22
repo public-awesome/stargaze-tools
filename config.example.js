@@ -41,8 +41,8 @@ module.exports = {
   // External_link is optional. Gif compatible
   //   external_link:
   // 'https://c.tenor.com/o656qFKDzeUAAAAC/rick-astley-never-gonna-give-you-up.gif',
-  // The address for royalites to go to (may be the same as `account`)
-  // Comment out both below if not using royalites
+  // The address for royalties to go to (may be the same as `account`)
+  // Comment out both below if not using royalties
   // royaltyPaymentAddress: 'stars1...',
   // Royalty share: 1 = 100%, 0.1 = 10%
   // royaltyShare: '0.1',
@@ -65,7 +65,7 @@ module.exports = {
   // whitelistContract: 'stars1...',
 
   //// MINTER CONTRACT ////
-  // The base URI to be used to programatically mint tokens
+  // The base URI to be used to programmatically mint tokens
   baseTokenUri: 'ipfs://...',
   // The number of tokens to mint
   numTokens: 100,
