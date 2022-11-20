@@ -91,6 +91,11 @@ module.exports = {
   //// CONTRACT CODE IDs: Testnet ////
   // The code ID for sg721_base
   sg721BaseCodeId: 274,
+  // The code ID for base_minter (1/1 minter)
+  baseMinterCodeId: 275,
+  // Addr for base factory contract (1/1 factory)
+  baseFactory:
+    'stars1j4qn9krchp5xs8nued4j4vcr4j654wxkhf7acy76734xe5fsz08sku28s2',
   // The code ID for vending_minter
   vendingMinterCodeId: 275,
   // Addr for vending factory contract
