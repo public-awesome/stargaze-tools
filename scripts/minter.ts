@@ -356,6 +356,44 @@ async function updateStartTradingTime() {
   );
 }
 
+// takes mint price from config and tries to update the price
+async function updateMintPrice() {
+  const client = await getClient();
+  const account = toStars(config.account);
+  const minter = toStars(config.minter);
+  const price = (config.mintPrice * 1000000).toString();
+
+  if (!minter) {
+    throw Error(
+      '"minter" must be set to a minter contract address in config.js'
+    );
+  }
+  console.log('Minter contract: ', config.minter);
+
+  const msg = { update_mint_price: { price } };
+  console.log(JSON.stringify(msg, null, 2));
+  const answer = await inquirer.prompt([
+    {
+      message:
+        'Ready to update mint price to ' +
+        price +
+        'uStars (' +
+        config.mintPrice +
+        'stars)?',
+      name: 'confirmation',
+      type: 'confirm',
+    },
+  ]);
+  if (!answer.confirmation) return;
+
+  const result = await client.execute(account, minter, msg, 'auto');
+  const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');
+  console.info(
+    'The `wasm` event emitted by the contract execution:',
+    wasmEvent
+  );
+}
+
 const args = process.argv.slice(2);
 if (args.length == 0) {
   create_minter();
@@ -367,6 +405,8 @@ if (args.length == 0) {
   updateStartTradingTime();
 } else if (args.length == 2 && args[0] == '--per-address-limit') {
   updatePerAddressLimit();
+} else if (args.length == 2 && args[0] == '--update-mint-price') {
+  updateMintPrice();
 } else {
   console.log('Invalid arguments');
 }
