@@ -109,26 +109,26 @@ For all possible queries, see the [query types](https://github.com/public-awesom
 Test your contract. Make sure it's visible in launchpad. Try minting and viewing the NFT in your profile.
 [https://testnet.publicawesome.dev/](https://testnet.publicawesome.dev/)
 
-## Video Walkthrough (Big thank you to meta-induction and Cosmos Tutorials)
+## Video Tutorials
 
-[https://www.youtube.com/watch?v=1gvDlBWKEUc](https://www.youtube.com/watch?v=1gvDlBWKEUc) from meta-induction
+[https://www.youtube.com/watch?v=1gvDlBWKEUc](https://www.youtube.com/watch?v=1gvDlBWKEUc) by Meta-induction
 
-[https://www.youtube.com/watch?v=lw6w5zlRj14](https://www.youtube.com/watch?v=lw6w5zlRj14) from "Cosmos Tutorials"
+[https://www.youtube.com/watch?v=lw6w5zlRj14](https://www.youtube.com/watch?v=lw6w5zlRj14) by Cosmos Tutorials
 
 [https://asciinema.org/a/485818](https://asciinema.org/a/485818)
 
-# More documentation
+## More documentation
 
 A more comprehensive guide is available at [Stargaze Docs](https://docs.stargaze.zone/guides/readme).
 
-# Disclaimer
+## Copyrighted Content
+
+You represent and warrant that you have, or have obtained, all rights, licenses, consents, permissions, power and/or authority necessary to grant the rights granted herein for any content that you create, submit, post, promote, or display on or through the Service. You represent and warrant that such content does not contain material subject to copyright, trademark, publicity rights, or other intellectual property rights, unless you have necessary permission or are otherwise legally entitled to post the material and to grant Stargaze Parties the license described above, and that the content does not violate any laws.
+
+## Disclaimer
 
 STARGAZE TOOLS IS PROVIDED “AS IS”, AT YOUR OWN RISK, AND WITHOUT WARRANTIES OF ANY KIND. No developer or entity involved in creating Stargaze Tools or smart contracts will be liable for any claims or damages whatsoever associated with your use, inability to use, or your interaction with other users of Stargaze, including any direct, indirect, incidental, special, exemplary, punitive or consequential damages, or loss of profits, cryptocurrencies, tokens, or anything else of value. Although Public Awesome, LLC and it's affiliates developed the initial code for Stargaze, it does not own or control the Stargaze network, which is run by a decentralized validator set.
 
-# Terms and Conditions
+## Terms and Conditions
 
 By using this code you agree to the following [terms and conditions](TERMS).
-
-# Copyrighted Content
-
-You represent and warrant that you have, or have obtained, all rights, licenses, consents, permissions, power and/or authority necessary to grant the rights granted herein for any content that you create, submit, post, promote, or display on or through the Service. You represent and warrant that such content does not contain material subject to copyright, trademark, publicity rights, or other intellectual property rights, unless you have necessary permission or are otherwise legally entitled to post the material and to grant Stargaze Parties the license described above, and that the content does not violate any laws.
