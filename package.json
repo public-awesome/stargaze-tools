@@ -20,7 +20,8 @@
     "nft.storage": "^6.0.0",
     "node-fetch": "2.6.1",
     "ts-node": "^10.5.0",
-    "typescript": "^4.5.5"
+    "typescript": "^4.5.5",
+    "fetch": "1.1.0"
   },
   "scripts": {
     "account": "ts-node scripts/account.ts",
@@ -45,6 +46,8 @@
     "devops-rarity": "ts-node devops/rarity.ts",
     "devops-launch": "ts-node devops/testnet-launch.ts",
     "floor": "ts-node marketplace/floor-price.ts",
-    "sweep": "ts-node marketplace/floor-sweeper.ts"
+    "sweep": "ts-node marketplace/floor-sweeper.ts",
+    "query-accounts": "ts-node scripts/query_accounts.ts",
+    "query-token-owners": "ts-node scripts/query_token_owners.ts"
   }
 }
