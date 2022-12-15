@@ -34,12 +34,19 @@ async function queryAccounts() {
 
       addrs.forEach((addr) => {
         fetchUrl(
-          'https://rest.elgafar-1.stargaze-apis.com/cosmos/bank/v1beta1/balances/' +
+          'https://rest.stargaze-apis.com/cosmos/bank/v1beta1/balances/' +
             addr +
             '/by_denom?denom=ustars',
           function (error: any, meta: any, body: { toString: () => any }) {
             if (JSON.parse(body.toString())['message'] != undefined) {
-              console.log(addr + JSON.parse(body.toString())['message']);
+              console.log(addr + ': ' + JSON.parse(body.toString())['message']);
+            } else if (
+              Number(JSON.parse(body.toString())['balance']['amount']) <
+              50000000
+            ) {
+              console.log(
+                addr + ': ' + JSON.parse(body.toString())['balance']['amount']
+              );
             }
           }
         );
