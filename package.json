@@ -36,7 +36,6 @@
     "pinata-upload": "ts-node scripts/pinata-upload.ts",
     "pinata-clean": "ts-node scripts/pinata-clean.ts",
     "query": "ts-node scripts/query.ts",
-    "query-minters": "ts-node scripts/query-minters.ts",
     "shuffle": "ts-node scripts/shuffle.ts",
     "query-mint-count": "ts-node scripts/query-mint-count.ts",
     "ts": "tsc --noEmit --incremental",
@@ -48,6 +47,7 @@
     "floor": "ts-node marketplace/floor-price.ts",
     "sweep": "ts-node marketplace/floor-sweeper.ts",
     "query-accounts": "ts-node scripts/query_accounts.ts",
-    "query-token-owners": "ts-node scripts/query_token_owners.ts"
+    "query-token-owners": "ts-node scripts/query_token_owners.ts",
+    "query-minters": "ts-node scripts/query_minters.ts"
   }
 }
