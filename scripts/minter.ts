@@ -9,7 +9,7 @@ import { isValidHttpUrl, toStars } from '../src/utils';
 
 const config = require('../config');
 
-const NEW_COLLECTION_FEE = coins('1000000000', 'ustars');
+const NEW_COLLECTION_FEE = coins('3000000000', 'ustars');
 
 function isValidIpfsUrl(uri: string) {
   let url;
