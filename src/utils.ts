@@ -32,3 +32,15 @@ export const isValidHttpUrl = (uri: string) => {
 
   return url.protocol === 'http:' || url.protocol === 'https:';
 };
+
+export const isValidIpfsUrl = (uri: string) => {
+  let url;
+
+  try {
+    url = new URL(uri);
+  } catch (_) {
+    return false;
+  }
+
+  return url.protocol === 'ipfs:';
+};

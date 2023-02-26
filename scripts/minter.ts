@@ -5,23 +5,11 @@ import {
 import { coins, Decimal } from 'cosmwasm';
 import inquirer from 'inquirer';
 import { getClient } from '../src/client';
-import { isValidHttpUrl, toStars } from '../src/utils';
+import { isValidHttpUrl, toStars, isValidIpfsUrl } from '../src/utils';
 
 const config = require('../config');
 
 const NEW_COLLECTION_FEE = coins('3000000000', 'ustars');
-
-function isValidIpfsUrl(uri: string) {
-  let url;
-
-  try {
-    url = new URL(uri);
-  } catch (_) {
-    return false;
-  }
-
-  return url.protocol === 'ipfs:';
-}
 
 function clean(obj: any) {
   return JSON.parse(JSON.stringify(obj));
