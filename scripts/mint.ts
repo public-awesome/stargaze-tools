@@ -1,7 +1,7 @@
 import { MsgExecuteContractEncodeObject, coins, toUtf8, Coin } from 'cosmwasm';
 import { MsgExecuteContract } from 'cosmjs-types/cosmwasm/wasm/v1/tx';
 import { getClient } from '../src/client';
-import { toStars } from '../src/utils';
+import { isValidIpfsUrl, toStars } from '../src/utils';
 
 const config = require('../config');
 
@@ -30,6 +30,36 @@ async function test_whitelist() {
     'The `wasm` event emitted by the contract execution:',
     wasmEvent
   );
+}
+
+// For base (1/1) minter only
+export async function baseMint(tokenUri: string) {
+  const client = await getClient();
+  console.log('Minter contract: ', config.minter);
+  console.log('Minting to: ', config.account);
+
+  if (!isValidIpfsUrl(tokenUri)) {
+    throw new Error('Invalid token URI');
+  }
+
+  const msg = { mint: { token_uri: tokenUri } };
+  console.log(JSON.stringify(msg, null, 2));
+
+  const mintFee = coins('5000000', 'ustars');
+
+  let result = await client.execute(
+    config.account,
+    config.minter,
+    msg,
+    'auto',
+    '1/1 mint',
+    mintFee
+  );
+
+  console.log('result: ', result);
+
+  const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');
+  console.info('Wasm event:', wasmEvent);
 }
 
 export async function mintTo(recipient: string) {
@@ -207,6 +237,8 @@ if (args.length == 0) {
   test_whitelist();
 } else if (args.length == 2 && args[0] == '--to') {
   mintTo(args[1]);
+} else if (args.length == 2 && args[0] == '--token-uri') {
+  baseMint(args[1]);
 } else if (args.length == 4 && args[0] == '--to') {
   if (args[2] == '--batch') {
     batchMint(args[1], +args[3]);
