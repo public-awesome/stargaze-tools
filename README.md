@@ -40,7 +40,7 @@ Edit `config.js` with your project configuration.
 
 ## Vending Minter
 
-A vending minter is suiteable for PFP-style 10,000 item or less generative collections.
+A vending minter is suitable for PFP-style 10,000 item or less generative collections.
 
 ### Initialize a vending minter contract
 
