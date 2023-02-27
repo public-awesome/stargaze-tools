@@ -1,7 +1,4 @@
-import {
-  CreateMinterMsgForNullable_Empty,
-  Timestamp,
-} from '@stargazezone/ts/src/BaseMinter.types';
+import { CreateMinterMsgForNullable_Empty } from '@stargazezone/ts/src/BaseMinter.types';
 import { coins, Decimal } from 'cosmwasm';
 import inquirer from 'inquirer';
 import { getClient } from '../src/client';
@@ -14,7 +11,7 @@ import {
 
 const config = require('../config');
 
-const NEW_COLLECTION_FEE = coins('3000000000', 'ustars');
+const NEW_COLLECTION_FEE = coins('250000000', 'ustars');
 
 function clean(obj: any) {
   return JSON.parse(JSON.stringify(obj));
@@ -32,10 +29,6 @@ export async function create_minter() {
     config.royaltyShare
   );
 
-  if (!isValidIpfsUrl(config.baseTokenUri)) {
-    throw new Error('Invalid base token URI');
-  }
-
   if (!isValidIpfsUrl(config.image) && !isValidHttpUrl(config.image)) {
     throw new Error('Image link is not valid. Must be IPFS or http(s)');
   }
@@ -51,16 +44,6 @@ export async function create_minter() {
 
   const client = await getClient();
 
-  // time expressed in nanoseconds (1 millionth of a millisecond)
-  const startTime: Timestamp = (
-    new Date(config.startTime).getTime() * 1_000_000
-  ).toString();
-
-  // time expressed in nanoseconds (1 millionth of a millisecond)
-  const startTradingTime: Timestamp | null = config.startTradingTime
-    ? (new Date(config.startTradingTime).getTime() * 1_000_000).toString()
-    : null;
-
   const initMsg: CreateMinterMsgForNullable_Empty = {
     init_msg: {},
     collection_params: {
@@ -73,7 +56,7 @@ export async function create_minter() {
         image: config.image,
         explicit_content: config.explicit_content || false,
         royalty_info: royaltyInfo,
-        start_trading_time: startTradingTime || null,
+        start_trading_time: null,
       },
     },
   };
@@ -134,7 +117,10 @@ export async function create_minter() {
     console.info('Add these contract addresses to config.js:');
     console.info('factory address: ', wasmEvent.attributes[0]['value']);
     console.info('minter address: ', wasmEvent.attributes[2]['value']);
-    console.info('sg721 contract address: ', wasmEvent.attributes[7]['value']);
+    console.info(
+      'collection contract address: ',
+      wasmEvent.attributes[7]['value']
+    );
     return wasmEvent.attributes[2]['value'];
   }
 }

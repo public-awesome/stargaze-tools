@@ -8,9 +8,9 @@ module.exports = {
   //// ACCOUNT INFO ////
   // The account seed phrase to use for deployment
   mnemonic:
-    'enlist hip relief stomach skate base shallow young switch frequent cry park',
+    'mnemonic: mixture daring fatigue range piano famous window ranch flock boy property city',
   // Your STARS address
-  account: 'stars1...',
+  account: 'stars1uj9njchwvk5pnw70rwe60t5kld35t9x4cw5hzd',
 
   //// API CONFIG ////
   // The RPC endpoint for Stargaze testnet
@@ -91,11 +91,11 @@ module.exports = {
   //// CONTRACT CODE IDs: Testnet ////
   // The code ID for sg721_base
   sg721BaseCodeId: 274,
-  // The code ID for vending_minter
-  baseMinterCodeId: 275,
-  // Addr for vending factory contract
+  // The code ID for base minter
+  baseMinterCodeId: 1641,
+  // Address for the base factory contract
   baseFactory:
-    'stars1j4qn9krchp5xs8nued4j4vcr4j654wxkhf7acy76734xe5fsz08sku28s2',
+    'stars16pf7e8er8z9steshyr7hvrcfwly55ragujura7nhr5x7m4px7l2s806s4n',
   // The code ID for vending_minter
   vendingMinterCodeId: 275,
   // Addr for vending factory contract
