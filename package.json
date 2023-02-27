@@ -25,6 +25,7 @@
   "scripts": {
     "account": "ts-node scripts/account.ts",
     "airdrop-file": "ts-node scripts/airdrop-file.ts",
+    "base-minter": "ts-node scripts/base-minter.ts",
     "minter": "ts-node scripts/minter.ts",
     "mint": "ts-node scripts/mint.ts",
     "burn": "ts-node scripts/burn.ts",
