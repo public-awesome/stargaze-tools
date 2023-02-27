@@ -113,7 +113,7 @@ yarn base-minter
 ### Mint
 
 ```sh
-yarn mint [token-uri]
+yarn mint --token-uri [token-uri]
 ```
 
 ## Query sg721
