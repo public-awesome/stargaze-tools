@@ -8,7 +8,7 @@ module.exports = {
   //// ACCOUNT INFO ////
   // The account seed phrase to use for deployment
   mnemonic:
-    'mnemonic: mixture daring fatigue range piano famous window ranch flock boy property city',
+    'mixture daring fatigue range piano famous window ranch flock boy property city',
   // Your STARS address
   account: 'stars1uj9njchwvk5pnw70rwe60t5kld35t9x4cw5hzd',
 
@@ -83,10 +83,10 @@ module.exports = {
   // startTradingTime: '2022-08-11T19:00:00.000Z',
   // The minter contract address
   // Get this after running `yarn minter`
-  minter: 'stars1...',
+  minter: 'stars1fp48nt0nak09h4aqunfldum0n8a65g08y7mhs53hgmlzge4zvqlqqvs356',
   // SG721 contract address
   // Get this after running `yarn minter`
-  sg721: 'stars1...',
+  sg721: 'stars1u5za034k9wpun6pfxm7em55rckkh25zfwl3e4nuh4f6u0dy0kr5s7je82z',
 
   //// CONTRACT CODE IDs: Testnet ////
   // The code ID for sg721_base
@@ -95,7 +95,7 @@ module.exports = {
   baseMinterCodeId: 1641,
   // Address for the base factory contract
   baseFactory:
-    'stars16pf7e8er8z9steshyr7hvrcfwly55ragujura7nhr5x7m4px7l2s806s4n',
+    'stars1vqm5yjmv64ncgtjdue3uxaxaave0gutavsk3szwdzz4flpk5palskdx6pu',
   // The code ID for vending_minter
   vendingMinterCodeId: 275,
   // Addr for vending factory contract
