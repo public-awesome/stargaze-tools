@@ -32,3 +32,29 @@ export const isValidHttpUrl = (uri: string) => {
 
   return url.protocol === 'http:' || url.protocol === 'https:';
 };
+
+export const isValidIpfsUrl = (uri: string) => {
+  let url;
+
+  try {
+    url = new URL(uri);
+  } catch (_) {
+    return false;
+  }
+
+  return url.protocol === 'ipfs:';
+};
+
+export const formatRoyaltyInfo = (
+  royaltyPaymentAddress: null | string,
+  royaltyShare: string
+) => {
+  if (royaltyPaymentAddress === null) {
+    return null;
+  } else {
+    if (royaltyShare === undefined || royaltyShare == '') {
+      throw new Error('royaltyPaymentAddress present, but no royaltyShare');
+    }
+    return { payment_address: royaltyPaymentAddress, share: royaltyShare };
+  }
+};

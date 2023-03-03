@@ -5,40 +5,19 @@ import {
 import { coins, Decimal } from 'cosmwasm';
 import inquirer from 'inquirer';
 import { getClient } from '../src/client';
-import { isValidHttpUrl, toStars } from '../src/utils';
+import {
+  isValidHttpUrl,
+  toStars,
+  isValidIpfsUrl,
+  formatRoyaltyInfo,
+} from '../src/utils';
 
 const config = require('../config');
 
 const NEW_COLLECTION_FEE = coins('3000000000', 'ustars');
 
-function isValidIpfsUrl(uri: string) {
-  let url;
-
-  try {
-    url = new URL(uri);
-  } catch (_) {
-    return false;
-  }
-
-  return url.protocol === 'ipfs:';
-}
-
 function clean(obj: any) {
   return JSON.parse(JSON.stringify(obj));
-}
-
-function formatRoyaltyInfo(
-  royaltyPaymentAddress: null | string,
-  royaltyShare: string
-) {
-  if (royaltyPaymentAddress === null) {
-    return null;
-  } else {
-    if (royaltyShare === undefined || royaltyShare == '') {
-      throw new Error('royaltyPaymentAddress present, but no royaltyShare');
-    }
-    return { payment_address: royaltyPaymentAddress, share: royaltyShare };
-  }
 }
 
 export async function create_minter() {

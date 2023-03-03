@@ -8,9 +8,9 @@ module.exports = {
   //// ACCOUNT INFO ////
   // The account seed phrase to use for deployment
   mnemonic:
-    'enlist hip relief stomach skate base shallow young switch frequent cry park',
+    'mixture daring fatigue range piano famous window ranch flock boy property city',
   // Your STARS address
-  account: 'stars1...',
+  account: 'stars1uj9njchwvk5pnw70rwe60t5kld35t9x4cw5hzd',
 
   //// API CONFIG ////
   // The RPC endpoint for Stargaze testnet
@@ -83,14 +83,19 @@ module.exports = {
   // startTradingTime: '2022-08-11T19:00:00.000Z',
   // The minter contract address
   // Get this after running `yarn minter`
-  minter: 'stars1...',
+  minter: 'stars1fp48nt0nak09h4aqunfldum0n8a65g08y7mhs53hgmlzge4zvqlqqvs356',
   // SG721 contract address
   // Get this after running `yarn minter`
-  sg721: 'stars1...',
+  sg721: 'stars1u5za034k9wpun6pfxm7em55rckkh25zfwl3e4nuh4f6u0dy0kr5s7je82z',
 
   //// CONTRACT CODE IDs: Testnet ////
   // The code ID for sg721_base
   sg721BaseCodeId: 274,
+  // The code ID for base minter
+  baseMinterCodeId: 1641,
+  // Address for the base factory contract
+  baseFactory:
+    'stars1vqm5yjmv64ncgtjdue3uxaxaave0gutavsk3szwdzz4flpk5palskdx6pu',
   // The code ID for vending_minter
   vendingMinterCodeId: 275,
   // Addr for vending factory contract

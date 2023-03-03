@@ -38,7 +38,11 @@ $request [address]
 Copy `config.example.js` to `config.js`.
 Edit `config.js` with your project configuration.
 
-## Initialize an NFT minting contract
+## Vending Minter
+
+A vending minter is suitable for PFP-style 10,000 item or less generative collections.
+
+### Initialize a vending minter contract
 
 A minter is created from a factory contract.
 
@@ -46,9 +50,9 @@ A minter is created from a factory contract.
 yarn minter
 ```
 
-## Mint
+### Mint
 
-### Mint a specific NFT to an address
+#### Mint a specific NFT to an address
 
 ```sh
 yarn mint --for [token_id] [address]
@@ -56,7 +60,7 @@ yarn mint --for [token_id] [address]
 
 `[address]` can be any Cosmos address. It'll be converted automatically into a Stargaze address.
 
-### Mint to an address
+#### Mint to an address
 
 ```sh
 yarn mint --to [address]
@@ -64,7 +68,7 @@ yarn mint --to [address]
 
 This mints the next available token ID to the given address.
 
-### Batch mint
+#### Batch mint
 
 Mint `num` NFTs to an address.
 
@@ -74,7 +78,7 @@ yarn mint --to [address] --batch [num]
 
 Same as `mint --to` but mints the next [num] tokens sequentially to the given address.
 
-## Whitelist (optional)
+### Whitelist (optional)
 
 Instantiate a whitelist contract:
 
@@ -92,6 +96,24 @@ To add addresses to the whitelist, use:
 
 ```sh
 yarn whitelist --add [stars1..., stars2..., etc.]
+```
+
+## Base Minter (1/1s)
+
+A base minter is suitable for collections of 1/1s.
+
+### Initialize a base minter contract
+
+A minter is created from a factory contract.
+
+```sh
+yarn base-minter
+```
+
+### Mint
+
+```sh
+yarn mint --token-uri [token-uri]
 ```
 
 ## Query sg721
