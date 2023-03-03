@@ -10,7 +10,7 @@ module.exports = {
   mnemonic:
     'mixture daring fatigue range piano famous window ranch flock boy property city',
   // Your STARS address
-  account: 'stars1uj9njchwvk5pnw70rwe60t5kld35t9x4cw5hzd',
+  account: 'stars1...',
 
   //// API CONFIG ////
   // The RPC endpoint for Stargaze testnet
@@ -83,14 +83,16 @@ module.exports = {
   // startTradingTime: '2022-08-11T19:00:00.000Z',
   // The minter contract address
   // Get this after running `yarn minter`
-  minter: 'stars1fp48nt0nak09h4aqunfldum0n8a65g08y7mhs53hgmlzge4zvqlqqvs356',
+  minter: 'stars1...',
   // SG721 contract address
   // Get this after running `yarn minter`
-  sg721: 'stars1u5za034k9wpun6pfxm7em55rckkh25zfwl3e4nuh4f6u0dy0kr5s7je82z',
+  sg721: 'stars1...',
 
   //// CONTRACT CODE IDs: Testnet ////
   // The code ID for sg721_base
   sg721BaseCodeId: 274,
+  // The code ID for sg721-updatable
+  sg721UpdatableCodeId: 1652,
   // The code ID for base minter
   baseMinterCodeId: 1641,
   // Address for the base factory contract
@@ -101,6 +103,9 @@ module.exports = {
   // Addr for vending factory contract
   vendingFactory:
     'stars1j4qn9krchp5xs8nued4j4vcr4j654wxkhf7acy76734xe5fsz08sku28s2',
+  // Addr for updatable vending factory contract
+  updatableVendingFactory:
+    'stars1csq2m3gpca9syyq386v6rsfq5r3cp8llee9eyx5uj4wcmxcmg98sqx5xzg',
   // The code ID for the whitelist contract
   whitelistCodeId: 277,
   // The marketplace contract address
