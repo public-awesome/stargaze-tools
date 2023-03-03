@@ -98,8 +98,10 @@ module.exports = {
   // Address for the base factory contract
   baseFactory:
     'stars1vqm5yjmv64ncgtjdue3uxaxaave0gutavsk3szwdzz4flpk5palskdx6pu',
-  // The code ID for vending_minter
+  // The code ID for vending minter
   vendingMinterCodeId: 275,
+  // The code ID for updatable vending minter
+  updatableVendingMinterCodeId: 1654,
   // Addr for vending factory contract
   vendingFactory:
     'stars1j4qn9krchp5xs8nued4j4vcr4j654wxkhf7acy76734xe5fsz08sku28s2',
