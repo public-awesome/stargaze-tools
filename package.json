@@ -38,6 +38,7 @@
     "query": "ts-node scripts/query.ts",
     "query-minters": "ts-node scripts/query-minters.ts",
     "shuffle": "ts-node scripts/shuffle.ts",
+    "update-metadata": "ts-node scripts/update-metadata.ts",
     "query-mint-count": "ts-node scripts/query-mint-count.ts",
     "ts": "tsc --noEmit --incremental",
     "whitelist": "ts-node scripts/whitelist.ts",
