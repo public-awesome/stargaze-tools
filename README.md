@@ -50,6 +50,12 @@ A minter is created from a factory contract.
 yarn minter
 ```
 
+Creating an updatable collection requires adding --updatable to the above command.
+
+```sh
+yarn minter --updatable
+```
+
 ### Mint
 
 #### Mint a specific NFT to an address
@@ -77,6 +83,14 @@ yarn mint --to [address] --batch [num]
 ```
 
 Same as `mint --to` but mints the next [num] tokens sequentially to the given address.
+
+#### Batch update token URIs
+
+**Only available for updatable collections.**
+
+```sh
+yarn update-metadata
+```
 
 ### Whitelist (optional)
 
