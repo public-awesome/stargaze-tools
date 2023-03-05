@@ -50,10 +50,10 @@ A minter is created from a factory contract.
 yarn minter
 ```
 
-Creating an updatable collection requires adding --updatable to the above command.
+Creating an updatable vending collection requires adding --updatable-vending to the above command.
 
 ```sh
-yarn minter --updatable
+yarn minter --updatable-vending
 ```
 
 ### Mint
