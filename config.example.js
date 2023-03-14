@@ -109,7 +109,7 @@ module.exports = {
 
   // //// CONTRACT CODE IDs: Mainnet ////
   // // The code ID for sg721
-  // sg721BaseCodeId: 37,
+  // sg721BaseCodeId: 36,
   // // The code ID for the minter contract
   // vendingMinterCodeId: 37,
   // // Addr for vending factory contract
