@@ -85,7 +85,7 @@ async function testnet_init() {
     'in testnet-launch config.vendingFactory ',
     config.vendingFactory
   );
-  const minterAddr = await create_minter();
+  const minterAddr = await create_minter(undefined);
   if (minterAddr == undefined) {
     throw new Error('addr undefined');
   }
@@ -110,7 +110,7 @@ async function testnet_init() {
   // inherit from collection2
   // set up collection2
   await updateConfig(collection2);
-  const minterAddr2 = await create_minter();
+  const minterAddr2 = await create_minter(undefined);
   if (minterAddr2 == undefined) {
     throw new Error('addr undefined');
   }
@@ -134,7 +134,7 @@ async function testnet_init() {
   // inherit from collection2
   // set up collection2
   await updateConfig(collection3);
-  const minterAddr3 = await create_minter();
+  const minterAddr3 = await create_minter(undefined);
   if (minterAddr3 == undefined) {
     throw new Error('addr undefined');
   }

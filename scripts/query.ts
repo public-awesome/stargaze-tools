@@ -42,10 +42,17 @@ async function queryInfo() {
     console.log('whitelist members:', whitelistMembers);
   }
 
+  // query owned tokens
+  //   const nfts = await client.queryContractSmart(sg721, {
+  //     tokens: { owner: account, limit: 30 },
+  //   });
+
+  // query all tokens
   const nfts = await client.queryContractSmart(sg721, {
-    tokens: { owner: account, limit: 30 },
+    all_tokens: { limit: 30 },
   });
   for (let id of nfts.tokens) {
+    console.log('token_id ', id);
     const tokenInfo = await client.queryContractSmart(sg721, {
       all_nft_info: { token_id: id },
     });

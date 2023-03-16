@@ -20,7 +20,22 @@ function clean(obj: any) {
   return JSON.parse(JSON.stringify(obj));
 }
 
-export async function create_minter() {
+export type MinterParams =
+  | {
+      sg721CodeId: number;
+      vendingMinterCodeId: number;
+      vendingFactory: string;
+      [k: string]: unknown;
+    }
+  | undefined;
+
+export async function create_minter(params: MinterParams) {
+  if (params !== undefined) {
+    const { sg721CodeId, vendingMinterCodeId, vendingFactory } = params;
+    config.sg721BaseCodeId = sg721CodeId;
+    config.vendingMinterCodeId = vendingMinterCodeId;
+    config.vendingFactory = vendingFactory;
+  }
   console.log('Collection name:', config.name);
   console.log('Account:', config.account, '\n');
   const account = toStars(config.account);
@@ -176,6 +191,16 @@ export async function create_minter() {
     console.info('sg721 contract address: ', wasmEvent.attributes[7]['value']);
     return wasmEvent.attributes[2]['value'];
   }
+}
+
+async function create_updatable_vending_minter() {
+  console.log('updatable');
+  let params = {
+    sg721CodeId: config.sg721UpdatableCodeId,
+    vendingMinterCodeId: config.updatableVendingMinterCodeId,
+    vendingFactory: config.updatableVendingFactory,
+  };
+  create_minter(params);
 }
 
 async function setWhitelist(whitelist: string) {
@@ -375,7 +400,9 @@ async function updateMintPrice() {
 
 const args = process.argv.slice(2);
 if (args.length == 0) {
-  create_minter();
+  create_minter(undefined);
+} else if (args.length == 1 && args[0] == '--updatable-vending') {
+  create_updatable_vending_minter();
 } else if (args.length == 2 && args[0] == '--whitelist') {
   setWhitelist(args[1]);
 } else if (args.length == 1 && args[0] == '--update-start-time') {
