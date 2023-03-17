@@ -32,6 +32,9 @@ async function initGroup() {
     'The `wasm` event emitted by the contract execution:',
     wasmEvent
   );
+
+  const addr = wasmEvent?.attributes.find((a) => a.key === '_contract_address');
+  console.log('Group contract:', addr?.value);
 }
 
 async function initSplit(groupAddr: string) {
