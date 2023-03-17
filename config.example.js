@@ -64,6 +64,23 @@ module.exports = {
   // Get this after running `yarn whitelist`
   // whitelistContract: 'stars1...',
 
+  // //// SPLITS CONTRACT (OPTIONAL) ////
+  // // The code ID for the cw4-group contract
+  // cw4GroupCodeId: 1904,
+  // // The code ID for the splits contract
+  // splitsCodeId: 1905,
+  // // This admin can add/remove members from the group (optional)
+  // // If not set, the group is immutable forever, so it's best to set this.
+  // groupAdmin: 'stars1...',
+  // // This admin can control distribution from the splits contract (optional)
+  // // If not set, any member of the group can control distribution (recommended)
+  // splitsAdmin: 'stars1...',
+  // // Members and their weights
+  // members: [
+  //   { addr: 'stars1...', weight: 90 },
+  //   { addr: 'stars1...', weight: 10 },
+  // ],
+
   //// MINTER CONTRACT ////
   // The base URI to be used to programmatically mint tokens
   baseTokenUri: 'ipfs://...',
