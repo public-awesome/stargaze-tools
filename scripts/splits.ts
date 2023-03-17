@@ -10,12 +10,12 @@ async function initGroup() {
 
   // @ts-ignore
   const msg: InstantiateMsg = {
-    admin: 'stars1wh3wjjgprxeww4cgqyaw8k75uslzh3sd3s2yfk',
-    members: [
-      { addr: 'stars1wh3wjjgprxeww4cgqyaw8k75uslzh3sd3s2yfk', weight: 90 },
-      { addr: 'stars1cy0nlkpp97xpfvc7jcaf483mqxvk0nkc6jm79f', weight: 10 },
-    ],
+    members: config.members,
   };
+
+  if (config.groupAdmin != undefined) {
+    msg.admin = toStars(config.groupAdmin);
+  }
 
   console.log('Instantiating cw4-group contract...');
 
@@ -24,9 +24,9 @@ async function initGroup() {
     config.cw4GroupCodeId,
     msg,
     'cw4-group',
-    'auto',
-    { admin: config.account }
+    'auto'
   );
+
   const wasmEvent = result.logs[0].events.find((e) => e.type === 'instantiate');
   console.info(
     'The `wasm` event emitted by the contract execution:',
@@ -34,16 +34,18 @@ async function initGroup() {
   );
 }
 
-async function initSplit() {
+async function initSplit(groupAddr: string) {
   const client = await getClient();
   // @ts-ignore
   const msg: InstantiateMsg = {
-    admin: 'stars1wh3wjjgprxeww4cgqyaw8k75uslzh3sd3s2yfk',
     group: {
-      cw4_address:
-        'stars1t0fnmf765mk2dezhcvj5x4v836cxm74ju3vky8dw855fkej3aptqd04day',
+      cw4_address: toStars(groupAddr),
     },
   };
+
+  if (config.splitsAdmin != undefined) {
+    msg.admin = toStars(config.splitsAdmin);
+  }
 
   console.log('Instantiating splits contract...');
 
@@ -52,8 +54,7 @@ async function initSplit() {
     config.splitsCodeId,
     msg,
     'splits',
-    'auto',
-    { admin: config.account }
+    'auto'
   );
 
   const wasmEvent = result.logs[0].events.find((e) => e.type === 'instantiate');
@@ -67,27 +68,20 @@ async function initCombo() {
   const client = await getClient();
 
   // @ts-ignore
-  const groupMsg = {
-    admin: 'stars1wh3wjjgprxeww4cgqyaw8k75uslzh3sd3s2yfk',
-    members: [
-      {
-        addr: 'stars1wh3wjjgprxeww4cgqyaw8k75uslzh3sd3s2yfk',
-        weight: 90,
-      },
-      {
-        addr: 'stars1cy0nlkpp97xpfvc7jcaf483mqxvk0nkc6jm79f',
-        weight: 10,
-      },
-    ],
+  const groupMsg: any = {
+    members: config.members,
   };
+
+  if (config.groupAdmin != undefined) {
+    groupMsg.admin = toStars(config.groupAdmin);
+  }
 
   // base64 encode groupMsg
   // @ts-ignore
-  const groupMsgBase64 = toBase64(groupMsg);
+  const groupMsgBase64 = toBase64(JSON.parse(groupMsg));
 
   // @ts-ignore
   const msg: InstantiateMsg = {
-    admin: 'stars1wh3wjjgprxeww4cgqyaw8k75uslzh3sd3s2yfk',
     group: {
       cw4_instantiate: {
         code_id: config.cw4GroupCodeId,
@@ -97,6 +91,10 @@ async function initCombo() {
     },
   };
 
+  if (config.splitsAdmin != undefined) {
+    msg.admin = toStars(config.splitsAdmin);
+  }
+
   console.log('Instantiating combined splits contract...');
 
   const result = await client.instantiate(
@@ -104,8 +102,7 @@ async function initCombo() {
     config.splitsCodeId,
     msg,
     'splits',
-    'auto',
-    { admin: config.account }
+    'auto'
   );
 
   const wasmEvent = result.logs[0].events.find((e) => e.type === 'instantiate');
@@ -118,8 +115,8 @@ async function initCombo() {
 const args = process.argv.slice(2);
 if (args.length == 0) {
   initGroup();
-} else if (args[0] == 'splits') {
-  initSplit();
+} else if (args[0] == 'splits' && args.length == 2) {
+  initSplit(args[1]);
 } else if (args[0] == 'combo') {
   initCombo();
 } else {
