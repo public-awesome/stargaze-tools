@@ -42,6 +42,9 @@ export async function create_minter(params: MinterParams) {
   const whitelistContract = config.whitelistContract
     ? toStars(config.whitelistContract)
     : null;
+  const paymentAddress = config.paymentAddress
+    ? toStars(config.paymentAddress)
+    : config.account;
   const royaltyPaymentAddress = config.royaltyPaymentAddress
     ? toStars(config.royaltyPaymentAddress)
     : null;
@@ -110,7 +113,7 @@ export async function create_minter(params: MinterParams) {
         denom: 'ustars',
       },
       per_address_limit: config.perAddressLimit,
-      payment_address: config.paymentAddress || config.account,
+      payment_address: paymentAddress,
       whitelist: whitelistContract,
     },
     collection_params: {
