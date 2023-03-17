@@ -64,6 +64,12 @@ module.exports = {
   // Get this after running `yarn whitelist`
   // whitelistContract: 'stars1...',
 
+  //// SPLITS CONTRACT (OPTIONAL) ////
+  // The code ID for the cw4-group contract
+  cw4GroupCodeId: 1904,
+  // The code ID for the splits contract
+  splitsCodeId: 1905,
+
   //// MINTER CONTRACT ////
   // The base URI to be used to programmatically mint tokens
   baseTokenUri: 'ipfs://...',
