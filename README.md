@@ -1,13 +1,8 @@
 # Stargaze Tools V2
 
-Stargaze Tools is a set of tools to interact with launchpad v2 smart contracts on Stargaze.
+Stargaze Tools is a set of tools to interact with Launchpad smart contracts on Stargaze.
 
-Mainly focused towards NFT creators and developers to help launch and manage NFT collections. As use cases grow, more tools and scripts will be added.
-
-- Validate NFT collections
-- Marketplace functionality
-- P2P trading functionality
-- Governance tasks
+It's designed for creators and developers to help launch and manage collections. As use cases grow, more tools and scripts will be added.
 
 ## Setup project
 
