@@ -139,7 +139,19 @@ For all possible queries, see the [query types](https://github.com/public-awesom
 
 Splits allow splitting mint revenue and secondary sale royalties across multiple accounts.
 
-Define split members and allocations in `config.js`.
+Define split members and allocations in `config.js`, and run:
+
+```sh
+yarn splits
+```
+
+Now the address of the splits contract can be used for the `paymentAddress` (primary sales) and/or `royaltyPaymentAddress` (secondary sales) in `config.js` when creating a minter.
+
+To distribute funds from the splits contract, make sure you are either the `admin` or a member of the group, and run:
+
+```sh
+yarn splits-distribute
+```
 
 ## Testnet
 

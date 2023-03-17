@@ -110,6 +110,7 @@ export async function create_minter(params: MinterParams) {
         denom: 'ustars',
       },
       per_address_limit: config.perAddressLimit,
+      payment_address: config.paymentAddress || config.account,
       whitelist: whitelistContract,
     },
     collection_params: {

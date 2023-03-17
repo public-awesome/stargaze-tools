@@ -88,6 +88,8 @@ module.exports = {
   numTokens: 100,
   // The price (in STARS) for your NFTs (minimum 50 STARS)
   mintPrice: 100,
+  // Specify a payment address if different from the account
+  paymentAddress: 'stars1...',
   // The max amount of NFTs an address can mint
   perAddressLimit: 1,
   // The date when the sale goes live
