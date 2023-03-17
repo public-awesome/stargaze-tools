@@ -135,6 +135,12 @@ yarn query
 
 For all possible queries, see the [query types](https://github.com/public-awesome/cw-nfts/blob/main/contracts/cw721-base/src/msg.rs#L76).
 
+## Splits (optional)
+
+Splits allow splitting mint revenue and secondary sale royalties across multiple accounts.
+
+Define split members and allocations in `config.js`.
+
 ## Testnet
 
 Test your contract. Make sure it's visible in launchpad. Try minting and viewing the NFT in your profile.
