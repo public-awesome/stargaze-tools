@@ -67,25 +67,32 @@ async function initCombo() {
   const client = await getClient();
 
   // @ts-ignore
+  const groupMsg = {
+    admin: 'stars1wh3wjjgprxeww4cgqyaw8k75uslzh3sd3s2yfk',
+    members: [
+      {
+        addr: 'stars1wh3wjjgprxeww4cgqyaw8k75uslzh3sd3s2yfk',
+        weight: 90,
+      },
+      {
+        addr: 'stars1cy0nlkpp97xpfvc7jcaf483mqxvk0nkc6jm79f',
+        weight: 10,
+      },
+    ],
+  };
+
+  // base64 encode groupMsg
+  // @ts-ignore
+  const groupMsgBase64 = toBase64(groupMsg);
+
+  // @ts-ignore
   const msg: InstantiateMsg = {
     admin: 'stars1wh3wjjgprxeww4cgqyaw8k75uslzh3sd3s2yfk',
     group: {
       cw4_instantiate: {
         code_id: config.cw4GroupCodeId,
         label: 'cw4-group',
-        msg: {
-          admin: 'stars1wh3wjjgprxeww4cgqyaw8k75uslzh3sd3s2yfk',
-          members: [
-            {
-              addr: 'stars1wh3wjjgprxeww4cgqyaw8k75uslzh3sd3s2yfk',
-              weight: 90,
-            },
-            {
-              addr: 'stars1cy0nlkpp97xpfvc7jcaf483mqxvk0nkc6jm79f',
-              weight: 10,
-            },
-          ],
-        },
+        msg: groupMsgBase64,
       },
     },
   };
