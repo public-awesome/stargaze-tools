@@ -47,6 +47,9 @@
     "devops-rarity": "ts-node devops/rarity.ts",
     "devops-launch": "ts-node devops/testnet-launch.ts",
     "floor": "ts-node marketplace/floor-price.ts",
-    "sweep": "ts-node marketplace/floor-sweeper.ts"
+    "sweep": "ts-node marketplace/floor-sweeper.ts",
+    "group": "ts-node scripts/splits.ts",
+    "splits": "ts-node scripts/splits.ts splits",
+    "splits-combo": "ts-node scripts/splits.ts combo"
   }
 }
