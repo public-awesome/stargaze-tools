@@ -1,7 +1,7 @@
 import {
   CreateMinterMsgForVendingMinterInitMsgExtension,
   Timestamp,
-} from '@stargazezone/ts/src/VendingMinter.types';
+} from '@stargazezone/launchpad/src/VendingMinter.types';
 import { coins, Decimal } from 'cosmwasm';
 import inquirer from 'inquirer';
 import { getClient } from '../src/client';

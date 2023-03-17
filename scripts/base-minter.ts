@@ -1,4 +1,4 @@
-import { CreateMinterMsgForNullable_Empty } from '@stargazezone/ts/src/BaseMinter.types';
+import { CreateMinterMsgForNullable_Empty } from '@stargazezone/launchpad/src/BaseMinter.types';
 import { coins, Decimal } from 'cosmwasm';
 import inquirer from 'inquirer';
 import { getClient } from '../src/client';
