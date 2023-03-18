@@ -142,10 +142,18 @@ Splits allow splitting mint revenue and secondary sale royalties across multiple
 Define split members and allocations in `config.js`, and run:
 
 ```sh
-yarn splits
+yarn group
+```
+
+This command will output the group contract address. Now use this address to create a splits contract:
+
+```sh
+yarn splits [group-address]
 ```
 
 Now the address of the splits contract can be used for the `paymentAddress` (primary sales) and/or `royaltyPaymentAddress` (secondary sales) in `config.js` when creating a minter.
+
+Coming soon:
 
 To distribute funds from the splits contract, make sure you are either the `admin` or a member of the group, and run:
 
