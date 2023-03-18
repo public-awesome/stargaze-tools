@@ -1,7 +1,7 @@
 import {
   CreateMinterMsgForVendingMinterInitMsgExtension,
   Timestamp,
-} from '@stargazezone/ts/src/VendingMinter.types';
+} from '@stargazezone/launchpad/src/VendingMinter.types';
 import { coins, Decimal } from 'cosmwasm';
 import inquirer from 'inquirer';
 import { getClient } from '../src/client';
@@ -42,6 +42,9 @@ export async function create_minter(params: MinterParams) {
   const whitelistContract = config.whitelistContract
     ? toStars(config.whitelistContract)
     : null;
+  const paymentAddress = config.paymentAddress
+    ? toStars(config.paymentAddress)
+    : config.account;
   const royaltyPaymentAddress = config.royaltyPaymentAddress
     ? toStars(config.royaltyPaymentAddress)
     : null;
@@ -110,6 +113,7 @@ export async function create_minter(params: MinterParams) {
         denom: 'ustars',
       },
       per_address_limit: config.perAddressLimit,
+      payment_address: paymentAddress,
       whitelist: whitelistContract,
     },
     collection_params: {

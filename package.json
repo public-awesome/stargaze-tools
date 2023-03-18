@@ -3,7 +3,7 @@
   "version": "0.8.2",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@stargazezone/ts": "^0.7.0",
+    "@stargazezone/launchpad": "^0.25.1",
     "@stargazezone/types": "^0.9.0",
     "@types/inquirer": "^8.2.0",
     "@types/mime": "^2.0.3",
@@ -47,6 +47,9 @@
     "devops-rarity": "ts-node devops/rarity.ts",
     "devops-launch": "ts-node devops/testnet-launch.ts",
     "floor": "ts-node marketplace/floor-price.ts",
-    "sweep": "ts-node marketplace/floor-sweeper.ts"
+    "sweep": "ts-node marketplace/floor-sweeper.ts",
+    "group": "ts-node scripts/splits.ts",
+    "splits": "ts-node scripts/splits.ts splits",
+    "splits-combo": "ts-node scripts/splits.ts combo"
   }
 }

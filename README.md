@@ -1,13 +1,8 @@
 # Stargaze Tools V2
 
-Stargaze Tools is a set of tools to interact with launchpad v2 smart contracts on Stargaze.
+Stargaze Tools is a set of tools to interact with Launchpad smart contracts on Stargaze.
 
-Mainly focused towards NFT creators and developers to help launch and manage NFT collections. As use cases grow, more tools and scripts will be added.
-
-- Validate NFT collections
-- Marketplace functionality
-- P2P trading functionality
-- Governance tasks
+It's designed for creators and developers to help launch and manage collections. As use cases grow, more tools and scripts will be added.
 
 ## Setup project
 
@@ -139,6 +134,24 @@ yarn query
 ```
 
 For all possible queries, see the [query types](https://github.com/public-awesome/cw-nfts/blob/main/contracts/cw721-base/src/msg.rs#L76).
+
+## Splits (optional)
+
+Splits allow splitting mint revenue and secondary sale royalties across multiple accounts.
+
+Define split members and allocations in `config.js`, and run:
+
+```sh
+yarn splits
+```
+
+Now the address of the splits contract can be used for the `paymentAddress` (primary sales) and/or `royaltyPaymentAddress` (secondary sales) in `config.js` when creating a minter.
+
+To distribute funds from the splits contract, make sure you are either the `admin` or a member of the group, and run:
+
+```sh
+yarn splits-distribute
+```
 
 ## Testnet
 
