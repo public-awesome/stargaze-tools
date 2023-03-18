@@ -75,6 +75,8 @@ async function initSplit(groupAddr: string) {
   );
 }
 
+// [FIXME]: this doesn't work
+// see https://github.com/public-awesome/stargaze-tools/issues/241
 async function initCombo() {
   const client = await getClient();
 
