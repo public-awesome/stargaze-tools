@@ -161,6 +161,22 @@ To distribute funds from the splits contract, make sure you are either the `admi
 yarn splits-distribute
 ```
 
+## Snapshot
+
+Create a snapshot of owners of a vending collection:
+
+```
+yarn vending-snapshot [collection] [expected_num_tokens]
+```
+
+For example, to do a snapshot of all owners of Bad Kids:
+
+```
+yarn vending-snapshot stars19jq6mj84cnt9p7sagjxqf8hxtczwc8wlpuwe4sh62w45aheseues57n420 9999
+```
+
+This generates a CSV file called `snapshot.csv`. Burned tokens will show as `burned` for the owner address.
+
 ## Testnet
 
 Test your contract. Make sure it's visible in launchpad. Try minting and viewing the NFT in your profile.
