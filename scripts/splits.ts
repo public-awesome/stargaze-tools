@@ -2,6 +2,7 @@ import inquirer from 'inquirer';
 import { toStars } from '../src/utils';
 import { getClient } from '../src/client';
 import { toBase64 } from 'cosmwasm';
+import { InstantiateMsg as SplitsInstantiateMsg } from '@stargazezone/launchpad/src/Splits.types';
 
 const config = require('../config');
 
@@ -32,6 +33,9 @@ async function initGroup() {
     'The `wasm` event emitted by the contract execution:',
     wasmEvent
   );
+
+  const addr = wasmEvent?.attributes.find((a) => a.key === '_contract_address');
+  console.log('Group contract:', addr?.value);
 }
 
 async function initSplit(groupAddr: string) {
@@ -42,6 +46,13 @@ async function initSplit(groupAddr: string) {
       cw4_address: toStars(groupAddr),
     },
   };
+
+  // FIXME: this causes `client.instantiate` to fail
+  // const msg: SplitsInstantiateMsg = {
+  //   group: {
+  //     cw4_address: toStars(groupAddr),
+  //   },
+  // };
 
   if (config.splitsAdmin != undefined) {
     msg.admin = toStars(config.splitsAdmin);
