@@ -48,3 +48,6 @@ airdrop_addresses.csv
 
 # TS
 tsconfig.tsbuildinfo
+
+# Ignore snapshot csv files
+snapshot.csv
