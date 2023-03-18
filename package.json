@@ -50,6 +50,7 @@
     "sweep": "ts-node marketplace/floor-sweeper.ts",
     "group": "ts-node scripts/splits.ts",
     "splits": "ts-node scripts/splits.ts splits",
-    "splits-combo": "ts-node scripts/splits.ts combo"
+    "splits-combo": "ts-node scripts/splits.ts combo",
+    "vending-snapshot": "ts-node scripts/vending-snapshot.ts"
   }
 }
