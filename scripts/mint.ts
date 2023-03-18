@@ -134,7 +134,7 @@ export async function batchMint(recipient: string, num: number) {
   console.log('Tx hash: ', result.transactionHash);
 }
 
-async function mintFor(tokenId: string, recipient: string) {
+export async function mintFor(tokenId: string, recipient: string) {
   const client = await getClient();
 
   const starsRecipient = toStars(recipient);

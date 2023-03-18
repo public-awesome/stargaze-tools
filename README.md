@@ -177,6 +177,20 @@ yarn vending-snapshot stars19jq6mj84cnt9p7sagjxqf8hxtczwc8wlpuwe4sh62w45aheseues
 
 This generates a CSV file called `snapshot.csv`. Burned tokens will show as `burned` for the owner address.
 
+### Snapshot + Airdrop
+
+You can airdrop a new collection to owners of an existing vending collection.
+
+First configure a new minter following [instructions above](#configure-project).
+
+Then generate a snapshot with the `--mint` flag. For example, to airdrop a new collection to owners of Bad Kids:
+
+```
+yarn vending-snapshot stars19jq6mj84cnt9p7sagjxqf8hxtczwc8wlpuwe4sh62w45aheseues57n420 9999 --mint
+```
+
+_Note: Burned tokens will be omitted._
+
 ## Testnet
 
 Test your contract. Make sure it's visible in launchpad. Try minting and viewing the NFT in your profile.

@@ -1,5 +1,6 @@
 import { CosmWasmClient } from 'cosmwasm';
 import { appendFileSync } from 'fs';
+import { mintFor } from './mint';
 
 const config = require('../config');
 
@@ -21,7 +22,11 @@ class TokenInfo {
   }
 }
 
-async function queryItems(collection: string, expectedNumTokens: number) {
+async function snapshot(
+  collection: string,
+  expectedNumTokens: number,
+  mint: boolean = false
+) {
   console.log('Querying items from collection:', collection);
 
   const client = await CosmWasmClient.connect(config.rpcEndpoint);
@@ -37,6 +42,9 @@ async function queryItems(collection: string, expectedNumTokens: number) {
       console.log(`${id}, ${tokenInfo.access.owner}`);
       const row = new TokenInfo(id.toString(), tokenInfo.access.owner);
       row.saveAsCSV();
+      if (mint) {
+        mintFor(id.toString(), tokenInfo.access.owner);
+      }
     } catch (error) {
       console.log(`${id}, burned`);
       const row = new TokenInfo(id.toString(), 'burned');
@@ -56,4 +64,4 @@ async function queryItems(collection: string, expectedNumTokens: number) {
 }
 
 const args = process.argv.slice(2);
-queryItems(args[0], parseInt(args[1] || '10000'));
+snapshot(args[0], parseInt(args[1] || '10000'), args[2] === 'mint');
