@@ -49,6 +49,9 @@ async function snapshot(
       console.log(`${id}, burned`);
       const row = new TokenInfo(id.toString(), 'burned');
       row.saveAsCSV();
+      if (mint) {
+        mintFor(id.toString(), config.account);
+      }
     }
   }
 
