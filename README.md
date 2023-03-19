@@ -189,7 +189,7 @@ Then generate a snapshot with the `--mint` flag. For example, to airdrop a new c
 yarn vending-snapshot stars19jq6mj84cnt9p7sagjxqf8hxtczwc8wlpuwe4sh62w45aheseues57n420 9999 --mint
 ```
 
-_Note: Burned tokens will be omitted._
+_Note: Burned tokens will be minted to your account._
 
 ## Testnet
 
