@@ -30,7 +30,7 @@ async function snapshot(collection: string, expectedNumTokens: number) {
   const row = new TokenInfo('token_id', 'address');
   row.saveAsCSV();
 
-  for (let id = 2762; id <= 2770; id++) {
+  for (let id = 1; id <= expectedNumTokens; id++) {
     try {
       const tokenInfo = await client.queryContractSmart(collection, {
         all_nft_info: { token_id: id.toString() },
