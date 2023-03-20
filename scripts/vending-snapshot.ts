@@ -22,11 +22,7 @@ class TokenInfo {
   }
 }
 
-async function snapshot(
-  collection: string,
-  expectedNumTokens: number,
-  mint: boolean = false
-) {
+async function snapshot(collection: string, expectedNumTokens: number) {
   console.log('Querying items from collection:', collection);
 
   const client = await CosmWasmClient.connect(config.rpcEndpoint);
@@ -34,7 +30,7 @@ async function snapshot(
   const row = new TokenInfo('token_id', 'address');
   row.saveAsCSV();
 
-  for (let id = 1; id <= expectedNumTokens; id++) {
+  for (let id = 2762; id <= 2770; id++) {
     try {
       const tokenInfo = await client.queryContractSmart(collection, {
         all_nft_info: { token_id: id.toString() },
@@ -42,16 +38,10 @@ async function snapshot(
       console.log(`${id}, ${tokenInfo.access.owner}`);
       const row = new TokenInfo(id.toString(), tokenInfo.access.owner);
       row.saveAsCSV();
-      if (mint) {
-        mintFor(id.toString(), tokenInfo.access.owner);
-      }
     } catch (error) {
-      console.log(`${id}, burned`);
+      console.log(`${id}, 'burned'`);
       const row = new TokenInfo(id.toString(), 'burned');
       row.saveAsCSV();
-      if (mint) {
-        mintFor(id.toString(), config.account);
-      }
     }
   }
 
@@ -67,4 +57,4 @@ async function snapshot(
 }
 
 const args = process.argv.slice(2);
-snapshot(args[0], parseInt(args[1] || '10000'), args[2] === 'mint');
+snapshot(args[0], parseInt(args[1] || '10000'));
