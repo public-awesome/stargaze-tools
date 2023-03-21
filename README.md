@@ -183,10 +183,16 @@ You can airdrop a new collection to owners of an existing vending collection.
 
 First configure a new minter following [instructions above](#configure-project).
 
-Then generate a snapshot with the `--mint` flag. For example, to airdrop a new collection to owners of Bad Kids:
+Then generate a snapshot. For example, to airdrop a new collection to owners of Bad Kids:
 
 ```
-yarn vending-snapshot stars19jq6mj84cnt9p7sagjxqf8hxtczwc8wlpuwe4sh62w45aheseues57n420 9999 --mint
+yarn vending-snapshot stars19jq6mj84cnt9p7sagjxqf8hxtczwc8wlpuwe4sh62w45aheseues57n420 9999
+```
+
+Then Airdrop to each address in the snapshot:
+
+```
+yarn mint-for-file
 ```
 
 _Note: Burned tokens will be minted to your account._
