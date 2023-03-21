@@ -19,7 +19,7 @@ import { parse } from 'csv-parse';
 import { assertIsDeliverTxSuccess } from '@cosmjs/stargate';
 
 const config = require('../config');
-const MSG_TRANSFER_LIMIT = 500;
+const MSG_AIRDROP_LIMIT = 500;
 const AIRDROP_FEE = [coin('0', 'ustars')];
 
 async function batch_mint_for() {
@@ -56,6 +56,11 @@ async function batch_mint_for() {
       console.log(tokens);
       console.log(addrs);
 
+      if (tokens.length > MSG_AIRDROP_LIMIT) {
+        throw Error(
+          'Airdrop limit is 500. Please reduce the number of rows in snapshot.csv'
+        );
+      }
       const validatedAddrs: Array<string> = [];
       addrs.forEach((addr) => {
         validatedAddrs.push(toStars(addr));
@@ -63,7 +68,7 @@ async function batch_mint_for() {
 
       for (const idx in addrs) {
         console.log(
-          'transfer token id',
+          'mint for token id',
           tokens[idx],
           'to recipient address: ',
           addrs[idx]
@@ -89,7 +94,7 @@ async function batch_mint_for() {
 
       // Get confirmation before preceding
       console.log(
-        'WARNING: Transfer is not reverisble. Please confirm the settings for transferring tokens to addresses. THERE IS NO WAY TO UNDO THIS ONCE IT IS ON CHAIN.'
+        'WARNING: Batch mint_for is not reversible. Please confirm the settings to mint_for specific tokens to addresses. THERE IS NO WAY TO UNDO THIS ONCE IT IS ON CHAIN.'
       );
       console.log(JSON.stringify(executeContractMsgs, null, 2));
       const answer = await inquirer.prompt([
