@@ -37,7 +37,7 @@ async function batch_mint_for() {
   const fileContent = fs.readFileSync(csvFilePath, { encoding: 'utf-8' });
   const tokens: Array<number> = [];
   const addrs: Array<string> = [];
-  const executeContractMsgs: Array<MsgExecuteContractEncodeObject> = [];
+  let executeContractMsgs: Array<MsgExecuteContractEncodeObject> = [];
   const client = await getClient();
   if (!config.minter) {
     throw Error(
@@ -102,6 +102,7 @@ async function batch_mint_for() {
           assertIsDeliverTxSuccess(result);
           console.log('Tx hash: ', result.transactionHash);
           count = 0;
+          executeContractMsgs = [];
         }
         count += 1;
       }
