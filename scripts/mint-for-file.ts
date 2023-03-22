@@ -24,7 +24,6 @@ import { parse } from 'csv-parse';
 import { assertIsDeliverTxSuccess } from '@cosmjs/stargate';
 
 const config = require('../config');
-const MSG_AIRDROP_LIMIT = 500;
 const AIRDROP_FEE = [coin('0', 'ustars')];
 
 async function batch_mint_for() {
@@ -61,16 +60,14 @@ async function batch_mint_for() {
       console.log(tokens);
       console.log(addrs);
 
-      if (tokens.length > MSG_AIRDROP_LIMIT) {
-        throw Error(
-          'Airdrop limit is 500. Please reduce the number of rows in snapshot.csv'
-        );
-      }
       const validatedAddrs: Array<string> = [];
       addrs.forEach((addr) => {
         validatedAddrs.push(toStars(addr));
       });
 
+      const gasPrice = GasPrice.fromString('0ustars');
+      const executeFee = calculateFee(50_000_000, gasPrice);
+      let count = 1;
       for (const idx in addrs) {
         console.log(
           'mint for token id',
@@ -95,33 +92,33 @@ async function batch_mint_for() {
           executeContractMsg.value.funds = AIRDROP_FEE;
         }
         executeContractMsgs.push(executeContractMsg);
+
+        if (count % 50 == 0) {
+          const result = await client.signAndBroadcast(
+            config.account,
+            executeContractMsgs,
+            executeFee,
+            'batch mint_for'
+          );
+
+          assertIsDeliverTxSuccess(result);
+          console.log('Tx hash: ', result.transactionHash);
+          count = 0;
+        }
+        count += 1;
       }
 
-      // Get confirmation before preceding
-      console.log(
-        'WARNING: Batch mint_for is not reversible. Please confirm the settings to mint_for specific tokens to addresses. THERE IS NO WAY TO UNDO THIS ONCE IT IS ON CHAIN.'
-      );
-      console.log(JSON.stringify(executeContractMsgs, null, 2));
-      const answer = await inquirer.prompt([
-        {
-          message: 'Ready to submit the transaction?',
-          name: 'confirmation',
-          type: 'confirm',
-        },
-      ]);
-      if (!answer.confirmation) return;
+      if (count > 0) {
+        const result = await client.signAndBroadcast(
+          config.account,
+          executeContractMsgs,
+          executeFee,
+          'batch mint_for'
+        );
 
-      const gasPrice = GasPrice.fromString('0ustars');
-      const executeFee = calculateFee(50_000_000, gasPrice);
-      const result = await client.signAndBroadcast(
-        config.account,
-        executeContractMsgs,
-        executeFee,
-        'batch mint_for'
-      );
-
-      assertIsDeliverTxSuccess(result);
-      console.log('Tx hash: ', result.transactionHash);
+        assertIsDeliverTxSuccess(result);
+        console.log('Tx hash: ', result.transactionHash);
+      }
     }
   );
 }
