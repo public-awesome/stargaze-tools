@@ -26,6 +26,10 @@ import { assertIsDeliverTxSuccess } from '@cosmjs/stargate';
 const config = require('../config');
 const AIRDROP_FEE = [coin('0', 'ustars')];
 
+function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 async function batch_mint_for() {
   interface AirdropData {
     token_id: number;
@@ -103,6 +107,7 @@ async function batch_mint_for() {
           console.log('Tx hash: ', result.transactionHash);
           count = 0;
           executeContractMsgs = [];
+          await sleep(5000);
         }
         count += 1;
       }
