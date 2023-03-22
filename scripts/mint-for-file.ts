@@ -7,7 +7,12 @@
 
 // Accepts cosmos, stars addresses.
 
-import { coin, MsgExecuteContractEncodeObject } from 'cosmwasm';
+import {
+  calculateFee,
+  coin,
+  GasPrice,
+  MsgExecuteContractEncodeObject,
+} from 'cosmwasm';
 import { toStars } from '../src/utils';
 import inquirer from 'inquirer';
 import { getClient } from '../src/client';
@@ -106,10 +111,12 @@ async function batch_mint_for() {
       ]);
       if (!answer.confirmation) return;
 
+      const gasPrice = GasPrice.fromString('0ustars');
+      const executeFee = calculateFee(50_000_000, gasPrice);
       const result = await client.signAndBroadcast(
         config.account,
         executeContractMsgs,
-        'auto',
+        executeFee,
         'batch mint_for'
       );
 
