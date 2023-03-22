@@ -22,6 +22,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { parse } from 'csv-parse';
 import { assertIsDeliverTxSuccess } from '@cosmjs/stargate';
+import { mintFor } from './mint';
 
 const config = require('../config');
 const MSG_AIRDROP_LIMIT = 500;
@@ -78,50 +79,8 @@ async function batch_mint_for() {
           'to recipient address: ',
           addrs[idx]
         );
-        const msg = {
-          mint_for: { token_id: Number(tokens[idx]), recipient: addrs[idx] },
-        };
-        const executeContractMsg: MsgExecuteContractEncodeObject = {
-          typeUrl: '/cosmwasm.wasm.v1.MsgExecuteContract',
-          value: MsgExecuteContract.fromPartial({
-            sender: config.account,
-            contract: config.minter,
-            msg: toUtf8(JSON.stringify(msg)),
-            funds: [],
-          }),
-        };
-        // handle 0ustars airdrop fee
-        if (AIRDROP_FEE[0].amount !== '0') {
-          executeContractMsg.value.funds = AIRDROP_FEE;
-        }
-        executeContractMsgs.push(executeContractMsg);
+        mintFor(tokens[idx].toString(), addrs[idx]);
       }
-
-      // Get confirmation before preceding
-      console.log(
-        'WARNING: Batch mint_for is not reversible. Please confirm the settings to mint_for specific tokens to addresses. THERE IS NO WAY TO UNDO THIS ONCE IT IS ON CHAIN.'
-      );
-      console.log(JSON.stringify(executeContractMsgs, null, 2));
-      const answer = await inquirer.prompt([
-        {
-          message: 'Ready to submit the transaction?',
-          name: 'confirmation',
-          type: 'confirm',
-        },
-      ]);
-      if (!answer.confirmation) return;
-
-      const gasPrice = GasPrice.fromString('0ustars');
-      const executeFee = calculateFee(50_000_000, gasPrice);
-      const result = await client.signAndBroadcast(
-        config.account,
-        executeContractMsgs,
-        executeFee,
-        'batch mint_for'
-      );
-
-      assertIsDeliverTxSuccess(result);
-      console.log('Tx hash: ', result.transactionHash);
     }
   );
 }
