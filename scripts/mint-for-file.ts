@@ -7,7 +7,12 @@
 
 // Accepts cosmos, stars addresses.
 
-import { coin, MsgExecuteContractEncodeObject } from 'cosmwasm';
+import {
+  calculateFee,
+  coin,
+  GasPrice,
+  MsgExecuteContractEncodeObject,
+} from 'cosmwasm';
 import { toStars } from '../src/utils';
 import inquirer from 'inquirer';
 import { getClient } from '../src/client';
@@ -19,8 +24,11 @@ import { parse } from 'csv-parse';
 import { assertIsDeliverTxSuccess } from '@cosmjs/stargate';
 
 const config = require('../config');
-const MSG_AIRDROP_LIMIT = 500;
 const AIRDROP_FEE = [coin('0', 'ustars')];
+
+function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
 async function batch_mint_for() {
   interface AirdropData {
@@ -33,7 +41,7 @@ async function batch_mint_for() {
   const fileContent = fs.readFileSync(csvFilePath, { encoding: 'utf-8' });
   const tokens: Array<number> = [];
   const addrs: Array<string> = [];
-  const executeContractMsgs: Array<MsgExecuteContractEncodeObject> = [];
+  let executeContractMsgs: Array<MsgExecuteContractEncodeObject> = [];
   const client = await getClient();
   if (!config.minter) {
     throw Error(
@@ -56,16 +64,12 @@ async function batch_mint_for() {
       console.log(tokens);
       console.log(addrs);
 
-      if (tokens.length > MSG_AIRDROP_LIMIT) {
-        throw Error(
-          'Airdrop limit is 500. Please reduce the number of rows in snapshot.csv'
-        );
-      }
       const validatedAddrs: Array<string> = [];
       addrs.forEach((addr) => {
         validatedAddrs.push(toStars(addr));
       });
 
+      let count = 1;
       for (const idx in addrs) {
         console.log(
           'mint for token id',
@@ -90,31 +94,35 @@ async function batch_mint_for() {
           executeContractMsg.value.funds = AIRDROP_FEE;
         }
         executeContractMsgs.push(executeContractMsg);
+
+        if (count % 50 == 0) {
+          const result = await client.signAndBroadcast(
+            config.account,
+            executeContractMsgs,
+            'auto',
+            'batch mint_for'
+          );
+
+          assertIsDeliverTxSuccess(result);
+          console.log('Tx hash: ', result.transactionHash);
+          count = 0;
+          executeContractMsgs = [];
+          await sleep(5000);
+        }
+        count += 1;
       }
 
-      // Get confirmation before preceding
-      console.log(
-        'WARNING: Batch mint_for is not reversible. Please confirm the settings to mint_for specific tokens to addresses. THERE IS NO WAY TO UNDO THIS ONCE IT IS ON CHAIN.'
-      );
-      console.log(JSON.stringify(executeContractMsgs, null, 2));
-      const answer = await inquirer.prompt([
-        {
-          message: 'Ready to submit the transaction?',
-          name: 'confirmation',
-          type: 'confirm',
-        },
-      ]);
-      if (!answer.confirmation) return;
+      if (count > 0) {
+        const result = await client.signAndBroadcast(
+          config.account,
+          executeContractMsgs,
+          'auto',
+          'batch mint_for'
+        );
 
-      const result = await client.signAndBroadcast(
-        config.account,
-        executeContractMsgs,
-        'auto',
-        'batch mint_for'
-      );
-
-      assertIsDeliverTxSuccess(result);
-      console.log('Tx hash: ', result.transactionHash);
+        assertIsDeliverTxSuccess(result);
+        console.log('Tx hash: ', result.transactionHash);
+      }
     }
   );
 }
