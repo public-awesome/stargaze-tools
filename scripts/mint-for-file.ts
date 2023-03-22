@@ -65,8 +65,6 @@ async function batch_mint_for() {
         validatedAddrs.push(toStars(addr));
       });
 
-      const gasPrice = GasPrice.fromString('0ustars');
-      const executeFee = calculateFee(50_000_000, gasPrice);
       let count = 1;
       for (const idx in addrs) {
         console.log(
@@ -97,7 +95,7 @@ async function batch_mint_for() {
           const result = await client.signAndBroadcast(
             config.account,
             executeContractMsgs,
-            executeFee,
+            'auto',
             'batch mint_for'
           );
 
@@ -112,7 +110,7 @@ async function batch_mint_for() {
         const result = await client.signAndBroadcast(
           config.account,
           executeContractMsgs,
-          executeFee,
+          'auto',
           'batch mint_for'
         );
 
