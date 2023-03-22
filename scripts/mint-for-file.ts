@@ -22,11 +22,23 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { parse } from 'csv-parse';
 import { assertIsDeliverTxSuccess } from '@cosmjs/stargate';
-import { mintFor } from './mint';
 
 const config = require('../config');
 const MSG_AIRDROP_LIMIT = 500;
 const AIRDROP_FEE = [coin('0', 'ustars')];
+
+function splitBatch(
+  msgs: Array<MsgExecuteContractEncodeObject> = [],
+  chunkSize: number
+) {
+  let result = [];
+
+  for (let i = 0; i < msgs.length; i += chunkSize) {
+    let chunk = msgs.slice(i, i + chunkSize);
+    result.push(chunk);
+  }
+  return result;
+}
 
 async function batch_mint_for() {
   interface AirdropData {
@@ -79,7 +91,39 @@ async function batch_mint_for() {
           'to recipient address: ',
           addrs[idx]
         );
-        mintFor(tokens[idx].toString(), addrs[idx]);
+        const msg = {
+          mint_for: { token_id: Number(tokens[idx]), recipient: addrs[idx] },
+        };
+        const executeContractMsg: MsgExecuteContractEncodeObject = {
+          typeUrl: '/cosmwasm.wasm.v1.MsgExecuteContract',
+          value: MsgExecuteContract.fromPartial({
+            sender: config.account,
+            contract: config.minter,
+            msg: toUtf8(JSON.stringify(msg)),
+            funds: [],
+          }),
+        };
+        // handle 0ustars airdrop fee
+        if (AIRDROP_FEE[0].amount !== '0') {
+          executeContractMsg.value.funds = AIRDROP_FEE;
+        }
+        executeContractMsgs.push(executeContractMsg);
+      }
+
+      const batchSize = 50;
+      const batches = splitBatch(executeContractMsgs, batchSize);
+      for (let i = 0; i < batches.length; i++) {
+        // create batches of 50 items
+        const gasPrice = GasPrice.fromString('0ustars');
+        const executeFee = calculateFee(50_000_000, gasPrice);
+        const result = await client.signAndBroadcast(
+          config.account,
+          batches[i],
+          executeFee,
+          'batch mint_for'
+        );
+        assertIsDeliverTxSuccess(result);
+        console.log('Tx hash: ', result.transactionHash);
       }
     }
   );
