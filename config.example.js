@@ -147,4 +147,8 @@ module.exports = {
   // The marketplace contract address
   //   marketplace:
   //       'stars1fvhcnyddukcqfnt7nlwv3thm5we22lyxyxylr9h77cvgkcn43xfsvgv0pl',
+  // // The code ID for the cw4-group contract
+  // cw4GroupCodeId: 26,
+  // // The code ID for the splits contract
+  // splitsCodeId: 35,
 };
