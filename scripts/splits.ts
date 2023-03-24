@@ -25,7 +25,8 @@ async function initGroup() {
     config.cw4GroupCodeId,
     msg,
     'cw4-group',
-    'auto'
+    'auto',
+    { admin: config.account }
   );
 
   const wasmEvent = result.logs[0].events.find((e) => e.type === 'instantiate');
@@ -65,7 +66,8 @@ async function initSplit(groupAddr: string) {
     config.splitsCodeId,
     msg,
     'splits',
-    'auto'
+    'auto',
+    { admin: config.account }
   );
 
   const wasmEvent = result.logs[0].events.find((e) => e.type === 'instantiate');
@@ -115,7 +117,8 @@ async function initCombo() {
     config.splitsCodeId,
     msg,
     'splits',
-    'auto'
+    'auto',
+    { admin: config.account }
   );
 
   const wasmEvent = result.logs[0].events.find((e) => e.type === 'instantiate');
