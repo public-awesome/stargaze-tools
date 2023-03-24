@@ -24,6 +24,7 @@
   },
   "scripts": {
     "account": "ts-node scripts/account.ts",
+    "add-member": "ts-node scripts/add-member.ts",
     "airdrop-file": "ts-node scripts/airdrop-file.ts",
     "base-minter": "ts-node scripts/base-minter.ts",
     "minter": "ts-node scripts/minter.ts",
