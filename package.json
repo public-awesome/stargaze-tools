@@ -51,6 +51,7 @@
     "group": "ts-node scripts/splits.ts",
     "splits": "ts-node scripts/splits.ts splits",
     "splits-combo": "ts-node scripts/splits.ts combo",
+    "distribute-splits": "ts-node scripts/distribute-splits.ts",
     "vending-snapshot": "ts-node scripts/vending-snapshot.ts",
     "mint-for-file": "ts-node scripts/mint-for-file.ts"
   }

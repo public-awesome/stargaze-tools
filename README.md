@@ -153,12 +153,11 @@ yarn splits [group-address]
 
 Now the address of the splits contract can be used for the `paymentAddress` (primary sales) and/or `royaltyPaymentAddress` (secondary sales) in `config.js` when creating a minter.
 
-Coming soon:
 
-To distribute funds from the splits contract, make sure you are either the `admin` or a member of the group, and run:
+To distribute funds from the splits contract(defined in `config.js`), make sure you are either the `admin` or a member of the group, and run:
 
 ```sh
-yarn splits-distribute
+yarn distribute-splits
 ```
 
 ## Snapshot
