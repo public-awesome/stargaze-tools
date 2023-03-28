@@ -87,6 +87,12 @@ Same as `mint --to` but mints the next [num] tokens sequentially to the given ad
 yarn update-metadata
 ```
 
+Update a single token's metadata
+
+```
+yarn update-metadata 1 ipfs://somethinghere
+```
+
 ### Whitelist (optional)
 
 Instantiate a whitelist contract:
