@@ -81,6 +81,8 @@ module.exports = {
   //   { addr: 'stars1...', weight: 10 },
   // ],
   // groupContract: 'stars1...',
+  // // The contract address of your splits contract to distribute funds 
+  // splitsContract: 'stars1...',
 
   //// MINTER CONTRACT ////
   // The base URI to be used to programmatically mint tokens
