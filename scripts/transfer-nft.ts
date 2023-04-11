@@ -28,7 +28,7 @@ let transferNft = async (token_address:string,token_id: string, recipient: strin
 const args = process.argv.slice(2);
 
 if (args.length != 3) {
-    console.log("Usage:<token_address> <token_id> <recipient>");
+    console.log("Usage:<sg721_address> <token_id> <recipient>");
     process.exit(1);
 }
 transferNft(args[0],args[1],args[2]);
