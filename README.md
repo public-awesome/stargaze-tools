@@ -87,6 +87,12 @@ Same as `mint --to` but mints the next [num] tokens sequentially to the given ad
 yarn update-metadata
 ```
 
+Update a single token's metadata
+
+```
+yarn update-metadata 1 ipfs://somethinghere
+```
+
 ### Whitelist (optional)
 
 Instantiate a whitelist contract:
@@ -159,6 +165,21 @@ To distribute funds from the splits contract(defined in `config.js`), make sure 
 ```sh
 yarn distribute-splits
 ```
+
+## Query Splits
+This command will query the splits contract. 
+```sh
+yarn query-splits <query-type>
+```
+### Possible query types:
+- **member** [member-address] | |
+*Query a member of the group with given address*
+- **group** | |
+*Query the group contract*
+- **list-members** | |
+*Query all members of the group*
+- **admin** | |
+*Query the admin of the group*
 
 ## Snapshot
 

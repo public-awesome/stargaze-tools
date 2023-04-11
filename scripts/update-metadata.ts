@@ -117,9 +117,57 @@ async function addFile() {
   );
 }
 
+async function updateTokenUri(token_id: number, token_uri: string) {
+  const client = await getClient();
+  if (!config.minter) {
+    throw Error(
+      '"minter" must be set to a minter contract address in config.js'
+    );
+  }
+  const minter = toStars(config.minter);
+  const configResponse = await client.queryContractSmart(minter, {
+    config: {},
+  });
+  const sg721 = configResponse.sg721_address;
+
+  const msg: ExecuteMsg = {
+    update_token_metadata: {
+      token_id,
+      token_uri,
+    },
+  };
+
+  // Get confirmation before preceding
+  console.log('WARNING: Please confirm update token metadata.');
+  console.log(JSON.stringify(msg, null, 2));
+  const answer = await inquirer.prompt([
+    {
+      message: 'Ready to submit the transaction?',
+      name: 'confirmation',
+      type: 'confirm',
+    },
+  ]);
+  if (!answer.confirmation) return;
+
+  let result = await client.execute(
+    config.account,
+    sg721,
+    msg,
+    'auto',
+    'update-metadata'
+  );
+  const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');
+  console.info(
+    'The `wasm` event emitted by the contract execution:',
+    wasmEvent
+  );
+}
+
 const args = process.argv.slice(2);
 if (args.length == 0) {
   addFile();
+} else if (args.length == 2) {
+  updateTokenUri(parseInt(args[0]), args[1]);
 } else {
   console.log('Invalid arguments.');
 }
