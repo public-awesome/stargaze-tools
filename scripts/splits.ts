@@ -2,18 +2,19 @@ import inquirer from 'inquirer';
 import { toStars } from '../src/utils';
 import { getClient } from '../src/client';
 import { toBase64 } from 'cosmwasm';
+import { toUtf8 } from '@cosmjs/encoding';
 import { InstantiateMsg as SplitsInstantiateMsg } from '@stargazezone/launchpad/src/Splits.types';
 
 const config = require('../config');
 
 async function initGroup() {
   const client = await getClient();
-
+  
   // @ts-ignore
   const msg: InstantiateMsg = {
     members: config.members,
   };
-
+  
   if (config.groupAdmin != undefined) {
     msg.admin = toStars(config.groupAdmin);
   }
@@ -93,7 +94,7 @@ async function initCombo() {
 
   // base64 encode groupMsg
   // @ts-ignore
-  const groupMsgBase64 = toBase64(JSON.parse(groupMsg));
+  const groupMsgBase64 = toBase64(toUtf8(JSON.stringify(groupMsg)));
 
   // @ts-ignore
   const msg: InstantiateMsg = {
@@ -129,8 +130,9 @@ async function initCombo() {
 }
 
 const args = process.argv.slice(2);
+
 if (args.length == 0) {
-  initGroup();
+   initGroup();
 } else if (args[0] == 'splits' && args.length == 2) {
   initSplit(args[1]);
 } else if (args[0] == 'combo') {
