@@ -27,6 +27,7 @@
     "airdrop-file": "ts-node scripts/airdrop-file.ts",
     "base-minter": "ts-node scripts/base-minter.ts",
     "minter": "ts-node scripts/minter.ts",
+    "minter-flex": "ts-node scripts/minter-flex.ts",
     "mint": "ts-node scripts/mint.ts",
     "burn": "ts-node scripts/burn.ts",
     "nft-storage-upload": "ts-node scripts/nft-storage-upload.ts",
