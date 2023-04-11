@@ -167,6 +167,21 @@ To distribute funds from the splits contract, make sure you are either the `admi
 yarn splits-distribute
 ```
 
+## Query Splits
+This command will query the splits contract. 
+```sh
+yarn query-splits <query-type>
+```
+### Possible query types:
+- **member** [member-address] | |
+*Query a member of the group with given address*
+- **group** | |
+*Query the group contract*
+- **list-members** | |
+*Query all members of the group*
+- **admin** | |
+*Query the admin of the group*
+
 ## Snapshot
 
 Create a snapshot of owners of a vending collection:
