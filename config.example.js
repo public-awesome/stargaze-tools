@@ -130,6 +130,8 @@ module.exports = {
     'stars1csq2m3gpca9syyq386v6rsfq5r3cp8llee9eyx5uj4wcmxcmg98sqx5xzg',
   // The code ID for the whitelist contract
   whitelistCodeId: 277,
+  // The code ID for the whitelist flexible contract
+  whitelistFlexCodeId: 2002,
   // The marketplace contract address
   //   marketplace:
   //     'stars18cszlvm6pze0x9sz32qnjq4vtd45xehqs8dq7cwy8yhq35wfnn3qgzs5gu',
