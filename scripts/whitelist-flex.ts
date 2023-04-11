@@ -16,18 +16,12 @@ interface Member {
 }
 
 async function init() {
+  // `members`, `start_time`, `end_time`, `mint_price`, `member_limit`, `admins`, `admins_mutable`, `whale_cap`
   if (!config.whitelistStartTime || config.whitelistStartTime == '') {
     throw new Error('invalid whitelistStartTime');
   }
   if (!config.whitelistEndTime || config.whitelistEndTime == '') {
     throw new Error('invalid whitelistEndTime');
-  }
-  if (
-    !config.whitelistPerAddressLimit ||
-    config.whitelistPerAddressLimit <= 0 ||
-    config.whitelistPerAddressLimit > 30
-  ) {
-    throw new Error('invalid whitelistPerAddressLimit in config.js');
   }
   if (!config.whitelistMemberLimit) {
     throw new Error('whitelistMemberLimit required');
@@ -65,13 +59,19 @@ async function init() {
       amount: (config.whitelistPrice * 1000000).toString(),
       denom: 'ustars',
     },
-    per_address_limit: config.whitelistPerAddressLimit,
     member_limit: config.whitelistMemberLimit,
+    admins: [config.account],
+    admins_mutable: config.adminsMutable,
   };
+  if (config.whaleCap != undefined) {
+    msg.whale_cap = config.whaleCap;
+  }
+  msg.admins_mutable =
+    config.adminsMutable == undefined ? false : config.adminsMutable;
 
   // Get confirmation before preceding
   console.log(
-    'Please confirm the settings for your whitelist. THERE IS NO WAY TO UPDATE THIS ONCE IT IS ON CHAIN.'
+    'Please confirm the settings for your whitelist-flexible. THERE IS NO WAY TO UPDATE THIS ONCE IT IS ON CHAIN.'
   );
   console.log(JSON.stringify(msg, null, 2));
   console.log(
