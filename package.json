@@ -43,6 +43,7 @@
     "query-mint-count": "ts-node scripts/query-mint-count.ts",
     "ts": "tsc --noEmit --incremental",
     "whitelist": "ts-node scripts/whitelist.ts",
+    "whitelist-flex": "ts-node scripts/whitelist-flex.ts",
     "whitelist-file": "ts-node scripts/whitelist-file.ts",
     "devops-pin": "ts-node devops/pin.ts",
     "devops-rarity": "ts-node devops/rarity.ts",
