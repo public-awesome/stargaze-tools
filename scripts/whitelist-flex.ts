@@ -10,6 +10,11 @@ const config = require('../config');
 
 const WHITELIST_CREATION_FEE = coins('100000000', 'ustars');
 
+interface Member {
+  address: string;
+  mint_count: number;
+}
+
 async function init() {
   if (!config.whitelistStartTime || config.whitelistStartTime == '') {
     throw new Error('invalid whitelistStartTime');
@@ -101,32 +106,22 @@ async function init() {
   );
 }
 
-async function add(add: string) {
+async function add(data: string) {
   const client = await getClient();
   const account = toStars(config.account);
   const whitelistContract = toStars(config.whitelistContract);
 
-  const addAddresses = add == '' ? null : add.split(',');
-  if (addAddresses != null) {
-    addAddresses.forEach(function (addr, index) {
-      addAddresses[index] = toStars(addr);
+  const addMembers: Array<Member> = JSON.parse(data);
+  if (addMembers.length != 0) {
+    addMembers.forEach(function (member: Member, index) {
+      addMembers[index].address = toStars(member.address);
+      console.log('member: ', member.address, ',', member.mint_count);
     });
-    console.log('add addresses: ', addAddresses.join(','));
   }
-
-  const answer = await inquirer.prompt([
-    {
-      message:
-        'Are you sure your want to add these addresses to the whitelist?',
-      name: 'confirmation',
-      type: 'confirm',
-    },
-  ]);
-  if (!answer.confirmation) return;
 
   const msg = {
     add_members: {
-      to_add: addAddresses,
+      to_add: addMembers,
     },
   };
   console.log(JSON.stringify(msg, null, 2));
