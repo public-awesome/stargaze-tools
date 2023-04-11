@@ -1,6 +1,5 @@
 import { CosmWasmClient } from 'cosmwasm';
 import { appendFileSync } from 'fs';
-import { mintFor } from './mint';
 
 const config = require('../config');
 

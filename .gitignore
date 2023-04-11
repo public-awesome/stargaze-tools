@@ -43,6 +43,7 @@ config.js
 config.austinPOAP.js
 whitelist_addresses.csv
 airdrop_addresses.csv
+owner_nft_count.csv
 
 .env
 
