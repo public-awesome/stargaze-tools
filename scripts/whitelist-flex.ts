@@ -89,7 +89,7 @@ async function init() {
   ]);
   if (!answer.confirmation) return;
 
-  console.log('Instantiating whitelist...');
+  console.log('Instantiating flexible whitelist...');
 
   const result = await client.instantiate(
     config.account,
@@ -106,12 +106,14 @@ async function init() {
   );
 }
 
+// { "members": [{"address": "stars1...", "mint_count": 1}, ...] }
 async function add(data: string) {
   const client = await getClient();
   const account = toStars(config.account);
   const whitelistContract = toStars(config.whitelistContract);
 
-  const addMembers: Array<Member> = JSON.parse(data);
+  console.log(JSON.parse(data).stringify);
+  const addMembers: Array<Member> = JSON.parse(data).members;
   if (addMembers.length != 0) {
     addMembers.forEach(function (member: Member, index) {
       addMembers[index].address = toStars(member.address);
