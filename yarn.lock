@@ -1896,10 +1896,10 @@
   resolved "https://registry.yarnpkg.com/@sinclair/typebox/-/typebox-0.24.42.tgz#a74b608d494a1f4cc079738e050142a678813f52"
   integrity sha512-d+2AtrHGyWek2u2ITF0lHRIv6Tt7X0dEHW+0rP+5aDCEjC3fiN2RBjrLD0yU0at52BcZbRGxLbAtXiR0hFCjYw==
 
-"@stargazezone/launchpad@^0.25.1":
-  version "0.25.1"
-  resolved "https://registry.yarnpkg.com/@stargazezone/launchpad/-/launchpad-0.25.1.tgz#a3b33ba75582a18b6cf15e46c83bbbb82559eb2f"
-  integrity sha512-05crf0Q8pJz/k0X6nlwwd73QBM0dgep+muDRD9Dl1Czxpb8SSQNb3xHeDXDmfv1r1G5sfyQ0EQZhQs8yZcGQ9g==
+"@stargazezone/launchpad@^2.3.3":
+  version "2.3.3"
+  resolved "https://registry.yarnpkg.com/@stargazezone/launchpad/-/launchpad-2.3.3.tgz#91ed7311b1ca506f3bb88691861a503e84fbe1fc"
+  integrity sha512-0GYQ9LkHYJsddX5ouzudjP7k12vDxPMrxeELdz9Fm9hkCHLxGNytNRZuPu37wGSWQyYzfkwO9W5Mis5bKLYaEg==
   dependencies:
     "@cosmjs/amino" "^0.29.5"
     "@cosmjs/cosmwasm-stargate" "^0.29.5"
