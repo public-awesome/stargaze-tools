@@ -122,12 +122,17 @@ module.exports = {
   vendingMinterCodeId: 275,
   // The code ID for updatable vending minter
   updatableVendingMinterCodeId: 1654,
+  // The code ID for vending flexible minter for use with whitelist flexible
+  flexibleVendingMinterCodeId: 2004,
   // Addr for vending factory contract
   vendingFactory:
     'stars1j4qn9krchp5xs8nued4j4vcr4j654wxkhf7acy76734xe5fsz08sku28s2',
   // Addr for updatable vending factory contract
   updatableVendingFactory:
     'stars1csq2m3gpca9syyq386v6rsfq5r3cp8llee9eyx5uj4wcmxcmg98sqx5xzg',
+  // Addr for flexible vending factory contract
+  flexibleVendingFactory:
+    'stars1ngtwljk0ewua5zazzmy8zmnje9pkl9wl5qf6snqsmghtkes30v7svgjgqw',
   // The code ID for the whitelist contract
   whitelistCodeId: 277,
   // The code ID for the whitelist flexible contract
