@@ -59,9 +59,13 @@ async function addFile() {
   );
 
   console.log(
-    'Whitelist addresses validated and deduped. member number: ' +
+    'Whitelist addresses validated. member number: ' +
       validated_wl_entries.length
   );
+
+  if (validated_wl_entries.length > MSG_ADD_ADDR_LIMIT) {
+    throw Error('Too many addresses to add. Please split into multiple files.');
+  }
 
   const msg: ExecuteMsg = {
     add_members: { to_add: validated_wl_entries },
