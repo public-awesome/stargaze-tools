@@ -3,6 +3,7 @@
 // If you run into an error with `member_limit`, run `yarn whitelist --increase-member-limit`
 
 import {
+  AddMembersMsg,
   ExecuteMsg,
   Member,
 } from '@stargazezone/launchpad/src/WhitelistFlex.types';
@@ -32,7 +33,7 @@ async function addFile() {
       '"minter" must be set to a minter contract address in config.js'
     );
   }
-  await parse(
+  parse(
     fileContent,
     {
       delimiter: ',',
@@ -46,45 +47,55 @@ async function addFile() {
         wl_entries.push({ address: row.address, mint_count: row.mint_count })
       );
 
-      wl_entries.forEach((wl_entry) => {
-        validated_wl_entries.push({
-          address: toStars(wl_entry.address),
-          mint_count: wl_entry.mint_count,
-        });
-      });
+      //   wl_entries.forEach((wl_entry) => {
+      //     validated_wl_entries.push({
+      //       address: toStars(wl_entry.address),
+      //       mint_count: wl_entry.mint_count,
+      //     });
+      //   });
 
-      console.log(
-        'Whitelist addresses validated. member number: ' +
-          validated_wl_entries.length
-      );
-      let addrs: Array<string> = [];
-      validated_wl_entries.map((member) => {
-        addrs.push(member.address);
-      });
-      if (validated_wl_entries.length != [...new Set(addrs)].length) {
-        throw Error('Duplicate addresses in whitelist file');
-      }
+      //   console.log(
+      //     'Whitelist addresses validated. member number: ' +
+      //       validated_wl_entries.length
+      //   );
+      //   let addrs: Array<string> = [];
+      //   validated_wl_entries.map((member) => {
+      //     addrs.push(member.address);
+      //   });
+      //   if (validated_wl_entries.length != [...new Set(addrs)].length) {
+      //     throw Error('Duplicate addresses in whitelist file');
+      //   }
 
       let count = 1;
-      let addMembers: Array<Member> = [];
+      //   let addMembers: Array<Member> = [];
+
+      console.log(wl_entries[0]);
 
       // make msg to add members
+      const add_members = {
+        to_add: [wl_entries[0]],
+      };
       const msg = {
         add_members: {
-          to_add: [validated_wl_entries[0]],
+          to_add: [
+            {
+              address: wl_entries[0].address,
+              mint_count: wl_entries[0].mint_count,
+            },
+          ],
         },
       };
       console.log(JSON.stringify(msg, null, 2));
+      //   console.log('msg: ', msg);
 
       const result = await client.execute(
         account,
         whitelistContract,
         msg,
-        'auto',
-        'update whitelist'
+        'auto'
       );
 
-      addMembers = [];
+      //   addMembers = [];
 
       //   for (const idx in validated_wl_entries) {
       //     addMembers.push({
