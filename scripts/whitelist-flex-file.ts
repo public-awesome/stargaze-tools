@@ -2,19 +2,11 @@
 // Accepts cosmos, stars addresses.
 // If you run into an error with `member_limit`, run `yarn whitelist --increase-member-limit`
 
-import {
-  AddMembersMsg,
-  ExecuteMsg,
-  Member,
-} from '@stargazezone/launchpad/src/WhitelistFlex.types';
-import { MsgExecuteContractEncodeObject } from 'cosmwasm';
 import { toStars } from '../src/utils';
 import { getClient } from '../src/client';
-import { toUtf8 } from '@cosmjs/encoding';
 import * as fs from 'fs';
 import * as path from 'path';
 import { parse } from 'csv-parse';
-import { assertIsDeliverTxSuccess } from '@cosmjs/stargate';
 
 const config = require('../config');
 
@@ -23,8 +15,8 @@ async function addFile() {
   const csvFilePath = path.resolve(__dirname, './owner_nft_count.csv');
   const headers = ['address', 'mint_count'];
   const fileContent = fs.readFileSync(csvFilePath, { encoding: 'utf-8' });
-  const wl_entries: Array<Member> = [];
-  const validated_wl_entries: Array<Member> = [];
+  const wl_entries: any[] = [];
+  const validated_wl_entries: any[] = [];
   const client = await getClient();
   const account = toStars(config.account);
   const whitelistContract = toStars(config.whitelistContract);
@@ -39,76 +31,90 @@ async function addFile() {
       delimiter: ',',
       columns: headers,
     },
-    async (error, fileContents: Member[]) => {
+    async (error, fileContents: any[]) => {
       if (error) {
         throw error;
       }
       fileContents.map((row) =>
-        wl_entries.push({ address: row.address, mint_count: row.mint_count })
+        wl_entries.push({
+          address: row.address,
+          mint_count: parseInt(row.mint_count),
+        })
       );
 
-      //   wl_entries.forEach((wl_entry) => {
-      //     validated_wl_entries.push({
-      //       address: toStars(wl_entry.address),
-      //       mint_count: wl_entry.mint_count,
-      //     });
-      //   });
+      wl_entries.forEach((wl_entry) => {
+        validated_wl_entries.push({
+          address: toStars(wl_entry.address),
+          mint_count: wl_entry.mint_count,
+        });
+      });
 
-      //   console.log(
-      //     'Whitelist addresses validated. member number: ' +
-      //       validated_wl_entries.length
-      //   );
-      //   let addrs: Array<string> = [];
-      //   validated_wl_entries.map((member) => {
-      //     addrs.push(member.address);
-      //   });
-      //   if (validated_wl_entries.length != [...new Set(addrs)].length) {
-      //     throw Error('Duplicate addresses in whitelist file');
-      //   }
+      console.log(
+        'Whitelist addresses validated. member number: ' +
+          validated_wl_entries.length
+      );
+      let addrs: Array<string> = [];
+      validated_wl_entries.map((member) => {
+        addrs.push(member.address);
+      });
+      if (validated_wl_entries.length != [...new Set(addrs)].length) {
+        throw Error('Duplicate addresses in whitelist file');
+      }
 
-      let count = 1;
-      //   let addMembers: Array<Member> = [];
+      let count = 0;
+      let addMembers: any[] = [];
 
-      console.log(wl_entries[0]);
-
-      // make msg to add members
-      const add_members = {
-        to_add: [wl_entries[0]],
-      };
-      const msg = {
-        add_members: {
-          to_add: [
-            {
-              address: wl_entries[0].address,
-              mint_count: wl_entries[0].mint_count,
+      for (const idx in validated_wl_entries) {
+        count += 1;
+        addMembers.push({
+          address: validated_wl_entries[idx].address,
+          mint_count: parseInt(validated_wl_entries[idx].mint_count),
+        });
+        if (count % 50 == 0) {
+          const msg = {
+            add_members: {
+              to_add: addMembers,
             },
-          ],
-        },
-      };
-      console.log(JSON.stringify(msg, null, 2));
-      //   console.log('msg: ', msg);
-
-      const result = await client.execute(
-        account,
-        whitelistContract,
-        msg,
-        'auto'
-      );
-
-      //   addMembers = [];
-
-      //   for (const idx in validated_wl_entries) {
-      //     addMembers.push({
-      //       address: validated_wl_entries[idx].address,
-      //       mint_count: validated_wl_entries[idx].mint_count,
-      //     });
-      //     // console.log(validated_wl_entries[idx]);
-      //     // if (count % 50 == 0) {
-      //     const msg: ExecuteMsg = {
-      //       add_members: { to_add: addMembers },
-      //     };
-      //     console.log(JSON.stringify(msg, null, 2));
-      //   }
+          };
+          console.log(JSON.stringify(msg, null, 2));
+          const result = await client.execute(
+            account,
+            whitelistContract,
+            msg,
+            'auto',
+            'update whitelist'
+          );
+          const wasmEvent = result.logs[0].events.find(
+            (e) => e.type === 'wasm'
+          );
+          console.info(
+            'The `wasm` event emitted by the contract execution:',
+            wasmEvent
+          );
+          count = 0;
+          addMembers = [];
+        }
+      }
+      if (count > 0) {
+        const msg = {
+          add_members: {
+            to_add: addMembers,
+          },
+        };
+        console.log(JSON.stringify(msg, null, 2));
+        const result = await client.execute(
+          account,
+          whitelistContract,
+          msg,
+          'auto',
+          'update whitelist'
+        );
+        const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');
+        console.info(
+          'The `wasm` event emitted by the contract execution:',
+          wasmEvent
+        );
+      }
     }
   );
 }
