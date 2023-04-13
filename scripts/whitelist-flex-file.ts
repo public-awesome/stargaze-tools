@@ -1,4 +1,4 @@
-// Simple upload 500 addresses and per address limit to whitelist-flexible using owner_nft_count.csv.
+// Add members with mint_count to whitelist-flexible using owner_nft_count.csv.
 // Accepts cosmos, stars addresses.
 // If you run into an error with `member_limit`, run `yarn whitelist --increase-member-limit`
 
@@ -6,12 +6,9 @@ import {
   ExecuteMsg,
   Member,
 } from '@stargazezone/launchpad/src/WhitelistFlex.types';
-// import { ExecuteMsg } from '@stargazezone/types/contracts/whitelist-flexible/execute_msg';
 import { MsgExecuteContractEncodeObject } from 'cosmwasm';
 import { toStars } from '../src/utils';
-import inquirer from 'inquirer';
 import { getClient } from '../src/client';
-import { MsgExecuteContract } from 'cosmjs-types/cosmwasm/wasm/v1/tx';
 import { toUtf8 } from '@cosmjs/encoding';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -19,7 +16,6 @@ import { parse } from 'csv-parse';
 import { assertIsDeliverTxSuccess } from '@cosmjs/stargate';
 
 const config = require('../config');
-const MSG_ADD_ADDR_LIMIT = 500;
 
 async function addFile() {
   const __dirname = process.cwd();
@@ -29,6 +25,8 @@ async function addFile() {
   const wl_entries: Array<Member> = [];
   const validated_wl_entries: Array<Member> = [];
   const client = await getClient();
+  const account = toStars(config.account);
+  const whitelistContract = toStars(config.whitelistContract);
   if (!config.minter) {
     throw Error(
       '"minter" must be set to a minter contract address in config.js'
@@ -47,7 +45,6 @@ async function addFile() {
       fileContents.map((row) =>
         wl_entries.push({ address: row.address, mint_count: row.mint_count })
       );
-      console.log(wl_entries);
 
       wl_entries.forEach((wl_entry) => {
         validated_wl_entries.push({
@@ -55,58 +52,54 @@ async function addFile() {
           mint_count: wl_entry.mint_count,
         });
       });
+
+      console.log(
+        'Whitelist addresses validated. member number: ' +
+          validated_wl_entries.length
+      );
+      let addrs: Array<string> = [];
+      validated_wl_entries.map((member) => {
+        addrs.push(member.address);
+      });
+      if (validated_wl_entries.length != [...new Set(addrs)].length) {
+        throw Error('Duplicate addresses in whitelist file');
+      }
+
+      let count = 1;
+      let addMembers: Array<Member> = [];
+
+      // make msg to add members
+      const msg = {
+        add_members: {
+          to_add: [validated_wl_entries[0]],
+        },
+      };
+      console.log(JSON.stringify(msg, null, 2));
+
+      const result = await client.execute(
+        account,
+        whitelistContract,
+        msg,
+        'auto',
+        'update whitelist'
+      );
+
+      addMembers = [];
+
+      //   for (const idx in validated_wl_entries) {
+      //     addMembers.push({
+      //       address: validated_wl_entries[idx].address,
+      //       mint_count: validated_wl_entries[idx].mint_count,
+      //     });
+      //     // console.log(validated_wl_entries[idx]);
+      //     // if (count % 50 == 0) {
+      //     const msg: ExecuteMsg = {
+      //       add_members: { to_add: addMembers },
+      //     };
+      //     console.log(JSON.stringify(msg, null, 2));
+      //   }
     }
   );
-
-  console.log(
-    'Whitelist addresses validated. member number: ' +
-      validated_wl_entries.length
-  );
-
-  if (validated_wl_entries.length > MSG_ADD_ADDR_LIMIT) {
-    throw Error('Too many addresses to add. Please split into multiple files.');
-  }
-
-  const msg: ExecuteMsg = {
-    add_members: { to_add: validated_wl_entries },
-  };
-  const executeContractMsg: MsgExecuteContractEncodeObject = {
-    typeUrl: '/cosmwasm.wasm.v1.MsgExecuteContract',
-    value: MsgExecuteContract.fromPartial({
-      sender: config.account,
-      contract: config.whitelistContract,
-      msg: toUtf8(JSON.stringify(msg)),
-      funds: [],
-    }),
-  };
-
-  // Get confirmation before preceding
-  console.log(
-    'Please confirm the settings for adding whitelist file. THERE IS NO WAY TO UPDATE THIS ONCE IT IS ON CHAIN.'
-  );
-  console.log(JSON.stringify(msg, null, 2));
-  const answer = await inquirer.prompt([
-    {
-      message: 'Ready to submit the transaction?',
-      name: 'confirmation',
-      type: 'confirm',
-    },
-  ]);
-  if (!answer.confirmation) return;
-
-  const result = await client.signAndBroadcast(
-    config.account,
-    [executeContractMsg],
-    'auto',
-    'batch add addrs to whitelist'
-  );
-  assertIsDeliverTxSuccess(result);
-
-  console.log('Tx hash: ', result.transactionHash);
-  let res = await client.queryContractSmart(config.whitelistContract, {
-    members: { limit: 100 },
-  });
-  console.log('first 100 members:', res);
 }
 
 addFile();
