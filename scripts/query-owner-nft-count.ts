@@ -12,11 +12,11 @@ const config = require('../config');
 const SNAPSHOT = 'snapshot.csv';
 
 class TokenInfo {
-  tokenId: string;
   owner: string;
+  tokenId: string;
   constructor(tokenId = '', owner = '') {
-    this.tokenId = tokenId;
     this.owner = owner;
+    this.tokenId = tokenId;
   }
 }
 
@@ -67,8 +67,8 @@ async function queryNftCount() {
           owners.set(row.owner, 1);
         }
       });
-      owners.forEach((k, v) => {
-        const row = new OwnerNftCount(k, v);
+      owners.forEach((count, addr) => {
+        const row = new OwnerNftCount(addr, count);
         row.saveAsCSV();
       });
     }
