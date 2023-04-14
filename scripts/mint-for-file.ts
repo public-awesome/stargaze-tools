@@ -36,7 +36,7 @@ async function batch_mint_for() {
     address: string;
   }
   const __dirname = process.cwd();
-  const csvFilePath = path.resolve(__dirname, './snapshot.csv');
+  const csvFilePath = path.resolve(__dirname, './airdrop-mint-for.csv');
   const headers = ['token_id', 'address'];
   const fileContent = fs.readFileSync(csvFilePath, { encoding: 'utf-8' });
   const tokens: Array<number> = [];
