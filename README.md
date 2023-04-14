@@ -217,6 +217,20 @@ yarn mint-for-file
 
 _Note: Burned tokens will be minted to your account._
 
+### Flexible Whitelist
+
+Use a whitelist that has custom `per_address_limit` based on NFT ownership of a different collection. This requires using the flexible factory address, flexible minter code id, and flexible whitelist code id.
+
+```sh
+yarn minter --flex-vending
+yarn vending-snapshot
+yarn query-owner-nft-count
+# creates owner-nft-count.csv with the number of NFTs owned by each address
+yarn whitelist-flex
+yarn whitelist-flex-file
+yarn minter --whitelist [whitelist_address]
+```
+
 ## Testnet
 
 Test your contract. Make sure it's visible in launchpad. Try minting and viewing the NFT in your profile.
