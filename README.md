@@ -210,7 +210,6 @@ Use a whitelist that has custom `per_address_limit` based on NFT ownership of a 
 ```sh
 yarn minter --flex-vending
 yarn vending-snapshot
-# replace 'burned' with your address in snapshot.csv
 yarn query-owner-nft-count
 # creates owner-nft-count.csv with the number of NFTs owned by each address
 yarn whitelist-flex
