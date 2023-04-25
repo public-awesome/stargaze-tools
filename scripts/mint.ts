@@ -2,6 +2,7 @@ import { MsgExecuteContractEncodeObject, coins, toUtf8, Coin } from 'cosmwasm';
 import { MsgExecuteContract } from 'cosmjs-types/cosmwasm/wasm/v1/tx';
 import { getClient } from '../src/client';
 import { isValidIpfsUrl, toStars } from '../src/utils';
+import inquirer from 'inquirer';
 
 const config = require('../config');
 
@@ -104,11 +105,7 @@ export async function mintTo(recipient: string) {
 
 export async function batchMint(recipient: string, num: number) {
   const client = await getClient();
-
   const starsRecipient = toStars(recipient);
-  console.log('Minter contract: ', config.minter);
-  console.log('Minting ' + num + ' tokens to:', starsRecipient);
-
   const msg = { mint_to: { recipient: starsRecipient } };
 
   const executeContractMsg: MsgExecuteContractEncodeObject = {
@@ -120,6 +117,25 @@ export async function batchMint(recipient: string, num: number) {
       funds: [],
     }),
   };
+
+    const fee = await client.simulate(
+      config.account,
+      Array(num).fill(executeContractMsg),
+      'auto'
+    );
+  console.log('Estimated gas fee: ', fee + ' ustars');
+  console.log('Minter contract: ', config.minter);
+  console.log('Minting ' + num + ' tokens to:', starsRecipient);
+
+  const answer = await inquirer.prompt([
+    {
+      message: 'Ready to submit the transaction?',
+      name: 'confirmation',
+      type: 'confirm',
+    },
+  ]);
+  if (!answer.confirmation) return;
+
   if ((await format_funds(AIRDROP_FEE[0])) == true) {
     executeContractMsg.value.funds = AIRDROP_FEE;
   }
