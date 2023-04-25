@@ -74,12 +74,15 @@ async function addFile() {
           funds: [],
         }),
       };
-
+      
+      let estimatedGas = await client.simulate(config.account,[executeContractMsg], 'auto');
+      
       // Get confirmation before preceding
       console.log(
         'Please confirm the settings for adding whitelist file. THERE IS NO WAY TO UPDATE THIS ONCE IT IS ON CHAIN.'
-      );
-      console.log(JSON.stringify(msg, null, 2));
+        );
+        console.log(JSON.stringify(msg, null, 2));
+        console.log('Estimated gas:', estimatedGas + ' ustars');
       const answer = await inquirer.prompt([
         {
           message: 'Ready to submit the transaction?',
