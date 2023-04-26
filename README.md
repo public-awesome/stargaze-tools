@@ -159,13 +159,27 @@ yarn splits [group-address]
 
 Now the address of the splits contract can be used for the `paymentAddress` (primary sales) and/or `royaltyPaymentAddress` (secondary sales) in `config.js` when creating a minter.
 
-Coming soon:
 
-To distribute funds from the splits contract, make sure you are either the `admin` or a member of the group, and run:
+To distribute funds from the splits contract(defined in `config.js`), make sure you are either the `admin` or a member of the group, and run:
 
 ```sh
-yarn splits-distribute
+yarn distribute-splits
 ```
+
+## Query Splits
+This command will query the splits contract. 
+```sh
+yarn query-splits <query-type>
+```
+### Possible query types:
+- **member** [member-address] | |
+*Query a member of the group with given address*
+- **group** | |
+*Query the group contract*
+- **list-members** | |
+*Query all members of the group*
+- **admin** | |
+*Query the admin of the group*
 
 ## Snapshot
 
@@ -202,6 +216,20 @@ yarn mint-for-file
 ```
 
 _Note: Burned tokens will be minted to your account._
+
+### Flexible Whitelist
+
+Use a whitelist that has custom `per_address_limit` based on NFT ownership of a different collection. This requires using the flexible factory address, flexible minter code id, and flexible whitelist code id.
+
+```sh
+yarn minter --flex-vending
+yarn vending-snapshot
+yarn query-owner-nft-count
+# creates owner-nft-count.csv with the number of NFTs owned by each address
+yarn whitelist-flex
+yarn whitelist-flex-file
+yarn minter --whitelist [whitelist_address]
+```
 
 ## Testnet
 

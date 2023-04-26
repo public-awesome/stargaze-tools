@@ -44,6 +44,7 @@ config.austinPOAP.js
 whitelist_addresses.csv
 airdrop_addresses.csv
 transfer.csv
+owner_nft_count.csv
 
 .env
 

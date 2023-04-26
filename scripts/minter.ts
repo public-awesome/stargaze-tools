@@ -226,6 +226,16 @@ async function create_updatable_vending_minter() {
   create_minter(params);
 }
 
+async function create_flex_vending_minter() {
+  console.log('flexible vending minter');
+  let params = {
+    sg721CodeId: config.sg721BaseCodeId,
+    vendingMinterCodeId: config.flexibleVendingMinterCodeId,
+    vendingFactory: config.flexibleVendingFactory,
+  };
+  create_minter(params);
+}
+
 async function setWhitelist(whitelist: string) {
   const client = await getClient();
   const account = toStars(config.account);
@@ -426,6 +436,8 @@ if (args.length == 0) {
   create_minter(undefined);
 } else if (args.length == 1 && args[0] == '--updatable-vending') {
   create_updatable_vending_minter();
+} else if (args.length == 1 && args[0] == '--flex-vending') {
+  create_flex_vending_minter();
 } else if (args.length == 2 && args[0] == '--whitelist') {
   setWhitelist(args[1]);
 } else if (args.length == 1 && args[0] == '--update-start-time') {
