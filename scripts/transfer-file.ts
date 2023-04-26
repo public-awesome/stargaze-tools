@@ -1,6 +1,6 @@
 // Transfer specific NFTs to recipient addresses using transfer.csv
 
-// Requires transfer.csv with "recipient" and "token-id" columns
+// Requires transfer.csv with "recipient" and "token_id" columns
 // Requires account have all the token-ids or it will error out
 // Cycles through addresses and token ids to construct an array of messages to be broadcast
 
@@ -18,7 +18,7 @@ import { parse } from 'csv-parse';
 import { assertIsDeliverTxSuccess } from '@cosmjs/stargate';
 
 const config = require('../config');
-const MSG_TRANSFER_LIMIT = 50;
+const MSG_TRANSFER_LIMIT = 250;
 
 async function addFile() {
   interface TransferData {
@@ -91,7 +91,7 @@ async function addFile() {
           typeUrl: '/cosmwasm.wasm.v1.MsgExecuteContract',
           value: MsgExecuteContract.fromPartial({
             sender: config.account,
-            contract: config.minter,
+            contract: config.sg721,
             msg: toUtf8(JSON.stringify(msg)),
             funds,
           }),
@@ -99,12 +99,11 @@ async function addFile() {
 
         executeContractMsgs.push(executeContractMsg);
       }
-
+      console.log("Estimated gas price is" + await client.simulate(config.account, executeContractMsgs, 'auto') + " ustars");
       // Get confirmation before preceding
       console.log(
-        'WARNING: Transfer is not reverisble. Please confirm the settings for transferring tokens to addresses. THERE IS NO WAY TO UNDO THIS ONCE IT IS ON CHAIN.'
+        'WARNING: Transfer is not reversible. Please confirm the settings for transferring tokens to addresses. THERE IS NO WAY TO UNDO THIS ONCE IT IS ON CHAIN.'
       );
-      console.log(JSON.stringify(executeContractMsgs, null, 2));
       const answer = await inquirer.prompt([
         {
           message: 'Ready to submit the transaction?',
