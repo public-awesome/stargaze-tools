@@ -24,7 +24,6 @@
   },
   "scripts": {
     "account": "ts-node scripts/account.ts",
-    "airdrop-file": "ts-node scripts/airdrop-file.ts",
     "base-minter": "ts-node scripts/base-minter.ts",
     "minter": "ts-node scripts/minter.ts",
     "mint": "ts-node scripts/mint.ts",
@@ -42,7 +41,6 @@
     "query-mint-count": "ts-node scripts/query-mint-count.ts",
     "ts": "tsc --noEmit --incremental",
     "whitelist": "ts-node scripts/whitelist.ts",
-    "whitelist-file": "ts-node scripts/whitelist-file.ts",
     "devops-pin": "ts-node devops/pin.ts",
     "devops-rarity": "ts-node devops/rarity.ts",
     "devops-launch": "ts-node devops/testnet-launch.ts",
@@ -52,6 +50,9 @@
     "splits": "ts-node scripts/splits.ts splits",
     "splits-combo": "ts-node scripts/splits.ts combo",
     "vending-snapshot": "ts-node scripts/vending-snapshot.ts",
-    "mint-for-file": "ts-node scripts/mint-for-file.ts"
+    "whitelist-file": "ts-node scripts/whitelist-file.ts",
+    "airdrop-file": "ts-node scripts/airdrop-file.ts",
+    "mint-for-file": "ts-node scripts/mint-for-file.ts",
+    "transfer-file": "ts-node scripts/transfer-file.ts"
   }
 }
