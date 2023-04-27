@@ -58,6 +58,7 @@
     "distribute-splits": "ts-node scripts/distribute-splits.ts",
     "query-splits": "ts-node scripts/query-splits.ts query-splits",
     "vending-snapshot": "ts-node scripts/vending-snapshot.ts",
-    "mint-for-file": "ts-node scripts/mint-for-file.ts"
+    "mint-for-file": "ts-node scripts/mint-for-file.ts",
+    "transfer-file": "ts-node scripts/transfer-file.ts"
   }
 }
