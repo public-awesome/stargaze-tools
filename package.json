@@ -59,6 +59,7 @@
     "query-splits": "ts-node scripts/query-splits.ts query-splits",
     "vending-snapshot": "ts-node scripts/vending-snapshot.ts",
     "mint-for-file": "ts-node scripts/mint-for-file.ts",
+    "transfer-nft": "ts-node scripts/transfer-nft.ts"
     "transfer-file": "ts-node scripts/transfer-file.ts"
   }
 }

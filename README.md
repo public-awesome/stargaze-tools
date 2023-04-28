@@ -141,6 +141,13 @@ yarn query
 
 For all possible queries, see the [query types](https://github.com/public-awesome/cw-nfts/blob/main/contracts/cw721-base/src/msg.rs#L76).
 
+## Transfer NFT
+You can transfer your nft to another address with:
+
+```sh
+yarn transfer-nft [sg721_address] [token_id] [recipient_address]
+```
+
 ## Splits (optional)
 
 Splits allow splitting mint revenue and secondary sale royalties across multiple accounts.
