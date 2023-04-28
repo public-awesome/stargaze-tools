@@ -92,10 +92,12 @@ async function addFile(uniqueOnly: boolean) {
             funds,
           }),
         };
-
+        
         executeContractMsgs.push(executeContractMsg);
       }
-
+      
+      let simulate = await client.simulate(config.account, executeContractMsgs, undefined);
+      console.log('Estimated gas fee to be paid', simulate + " ustars");
       // Get confirmation before preceding
       console.log(
         'WARNING: Airdrop order is not maintained! Please confirm the settings for airdropping to addresses. THERE IS NO WAY TO UNDO THIS ONCE IT IS ON CHAIN.'

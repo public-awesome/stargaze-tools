@@ -11,6 +11,7 @@ import {
   isValidIpfsUrl,
   formatRoyaltyInfo,
 } from '../src/utils';
+import { toUtf8 } from '@cosmjs/encoding';
 
 const config = require('../config');
 
@@ -154,6 +155,23 @@ export async function create_minter(params: MinterParams) {
     tempMsg.create_minter.collection_params.info.royalty_info = null;
   }
   const msg = clean(tempMsg);
+  // encode msg is needed for simulate function
+  const encodeMsgcreator= (obj: any)=> {
+    const msg = {
+      typeUrl: '/cosmwasm.wasm.v1.MsgExecuteContract',
+      value: {
+        sender: account,
+        contract: config.vendingFactory,
+        msg: toUtf8(
+          JSON.stringify(obj)
+        ),
+        funds:NEW_COLLECTION_FEE,
+      },
+    };
+  
+  return msg;
+  }
+  const encodeMsg = encodeMsgcreator(msg);
 
   // Get confirmation before preceding
   console.log(
@@ -166,6 +184,7 @@ export async function create_minter(params: MinterParams) {
       ' ' +
       NEW_COLLECTION_FEE[0].denom
   );
+  console.log("Total gas fee to be paid",await client.simulate(account, [encodeMsg],undefined)+" ustars");
   const answer = await inquirer.prompt([
     {
       message: 'Ready to submit the transaction?',
@@ -203,6 +222,16 @@ async function create_updatable_vending_minter() {
     sg721CodeId: config.sg721UpdatableCodeId,
     vendingMinterCodeId: config.updatableVendingMinterCodeId,
     vendingFactory: config.updatableVendingFactory,
+  };
+  create_minter(params);
+}
+
+async function create_flex_vending_minter() {
+  console.log('flexible vending minter');
+  let params = {
+    sg721CodeId: config.sg721BaseCodeId,
+    vendingMinterCodeId: config.flexibleVendingMinterCodeId,
+    vendingFactory: config.flexibleVendingFactory,
   };
   create_minter(params);
 }
@@ -407,6 +436,8 @@ if (args.length == 0) {
   create_minter(undefined);
 } else if (args.length == 1 && args[0] == '--updatable-vending') {
   create_updatable_vending_minter();
+} else if (args.length == 1 && args[0] == '--flex-vending') {
+  create_flex_vending_minter();
 } else if (args.length == 2 && args[0] == '--whitelist') {
   setWhitelist(args[1]);
 } else if (args.length == 1 && args[0] == '--update-start-time') {
