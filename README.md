@@ -85,6 +85,7 @@ Same as `mint --to` but mints the next [num] tokens sequentially to the given ad
 
 ```sh
 yarn update-metadata
+
 ```
 
 Update a single token's metadata
@@ -146,6 +147,12 @@ You can transfer your nft to another address with:
 
 ```sh
 yarn transfer-nft [sg721_address] [token_id] [recipient_address]
+```
+
+## SG-721 Batch Transfer
+You can batch transfer tokens from a file. Copy `transfer.example.csv` to `transfer.csv` and configure for recipients and their `token_id`. Then use the following command:
+```sh
+yarn transfer-file
 ```
 
 ## Splits (optional)
