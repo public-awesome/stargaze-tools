@@ -47,16 +47,16 @@
 
 // must use config.js since getClient uses config.js
 const config = require('../config');
-import { getClient } from '../src/client';
+import { getClient } from '../src/utils/client';
 const configKeys = ['rpcEndpoint', 'minterCodeId', 'sg721CodeId'];
 const collection1 = require('./collection1');
 const collection2 = require('./collection2');
 const collection3 = require('./collection3');
-import { create_minter as create_minter } from '../scripts/minter';
-import { batchMint } from '../scripts/mint';
-import { toStars } from '../src/utils';
+import { create_minter as create_minter } from '../src/create-collection/minter';
+import { batchMint } from '../src/collection-actions/execute/mint';
+import { toStars } from '../src/utils/utils';
 import { CosmWasmClient } from 'cosmwasm';
-import { naturalCompare } from '../src/sort';
+import { naturalCompare } from '../src/utils/sort';
 
 // Define constants to use for launch. overrides config.js
 // minter code id already locked in the factory addr contract
