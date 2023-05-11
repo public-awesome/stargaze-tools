@@ -3,8 +3,8 @@ import fs from 'fs';
 import { NFTStorage } from 'nft.storage';
 import os from 'os';
 import path from 'path';
-import { naturalCompare } from '../utils/sort';
-import { checkFiles, validateMetadata } from '../utils/validation';
+import { naturalCompare } from '../helpers/sort';
+import { checkFiles, validateMetadata } from '../helpers/validation';
 
 // Load config
 const config = require('../../config');

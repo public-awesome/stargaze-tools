@@ -1,6 +1,6 @@
 import inquirer from 'inquirer';
-import { toStars } from '../../utils/utils';
-import { getClient } from '../../utils/client';
+import { toStars } from '../../helpers/utils';
+import { getClient } from '../../helpers/client';
 const config = require('../../../config');
 
 let transferNft = async (token_address:string,token_id: string, recipient: string) => {

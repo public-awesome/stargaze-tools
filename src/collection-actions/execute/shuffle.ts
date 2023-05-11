@@ -5,8 +5,8 @@
 // Shuffle Fee is meant to be controlled by governance proposal. It is currently hardcoded to 500 stars.
 
 import { coins } from 'cosmwasm';
-import { toStars } from '../../utils/utils';
-import { getClient } from '../../utils/client';
+import { toStars } from '../../helpers/utils';
+import { getClient } from '../../helpers/client';
 
 const config = require('../../../config');
 

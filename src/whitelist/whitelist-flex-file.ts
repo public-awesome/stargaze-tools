@@ -2,8 +2,8 @@
 // Accepts cosmos, stars addresses.
 // If you run into an error with `member_limit`, run `yarn whitelist --increase-member-limit`
 
-import { toStars } from '../../src/utils/utils';
-import { getClient } from '../../src/utils/client';
+import { toStars } from '../helpers/utils';
+import { getClient } from '../helpers/client';
 import * as fs from 'fs';
 import * as path from 'path';
 import { parse } from 'csv-parse';

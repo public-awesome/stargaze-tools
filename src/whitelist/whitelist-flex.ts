@@ -3,8 +3,8 @@ import { ExecuteMsg } from '@stargazezone/types/contracts/whitelist/execute_msg'
 import { Timestamp } from '@stargazezone/types/contracts/minter/shared-types';
 import { coins } from 'cosmwasm';
 import inquirer from 'inquirer';
-import { toStars } from '../../src/utils/utils';
-import { getClient } from '../../src/utils/client';
+import { toStars } from '../helpers/utils';
+import { getClient } from '../helpers/client';
 
 const config = require('../../config');
 

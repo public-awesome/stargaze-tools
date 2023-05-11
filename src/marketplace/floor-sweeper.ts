@@ -2,10 +2,10 @@
 // Buying the cheapest nfts regardless of attributes
 // Queries AsksSortedByPrice for N nft's and returns total price
 // --execute tries to purchase N nft's all-or-none
-import { toStars } from '../utils/utils';
+import { toStars } from '../helpers/utils';
 const config = require('../../config');
 import inquirer from 'inquirer';
-import { getClient } from '../utils/client';
+import { getClient } from '../helpers/client';
 import { coin, MsgExecuteContractEncodeObject, toUtf8 } from 'cosmwasm';
 import { MsgExecuteContract } from 'cosmjs-types/cosmwasm/wasm/v1/tx';
 import { assertIsDeliverTxSuccess } from '@cosmjs/stargate';

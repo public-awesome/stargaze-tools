@@ -2,8 +2,8 @@ import fs from 'fs';
 import os from 'os';
 import path from 'path';
 import pinataSDK from '@pinata/sdk';
-import { naturalCompare } from '../utils/sort';
-import { checkFiles, validateMetadata } from '../utils/validation';
+import { naturalCompare } from '../helpers/sort';
+import { checkFiles, validateMetadata } from '../helpers/validation';
 
 // Load config
 const config = require('../../config');

@@ -4,13 +4,13 @@ import {
 } from '@stargazezone/launchpad/src/VendingMinter.types';
 import { coins, Decimal } from 'cosmwasm';
 import inquirer from 'inquirer';
-import { getClient } from '../utils/client';
+import { getClient } from '../helpers/client';
 import {
   isValidHttpUrl,
   toStars,
   isValidIpfsUrl,
   formatRoyaltyInfo,
-} from '../utils/utils';
+} from '../helpers/utils';
 import { toUtf8 } from '@cosmjs/encoding';
 
 const config = require('../../config');

@@ -1,5 +1,5 @@
-import { getClient } from '../../utils/client';
-import { toStars } from '../../utils/utils';
+import { getClient } from '../../helpers/client';
+import { toStars } from '../../helpers/utils';
 import inquirer from 'inquirer';
 import { mintTo } from './mint';
 import { SigningCosmWasmClient } from 'cosmwasm';

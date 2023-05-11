@@ -9,9 +9,9 @@
 
 import { ExecuteMsg } from '@stargazezone/types/contracts/minter/execute_msg';
 import { coin, MsgExecuteContractEncodeObject } from 'cosmwasm';
-import { toStars } from '../../utils/utils';
+import { toStars } from '../../helpers/utils';
 import inquirer from 'inquirer';
-import { getClient } from '../../utils/client';
+import { getClient } from '../../helpers/client';
 import { MsgExecuteContract } from 'cosmjs-types/cosmwasm/wasm/v1/tx';
 import { toUtf8 } from '@cosmjs/encoding';
 import * as fs from 'fs';

@@ -4,9 +4,9 @@
 
 import { ExecuteMsg } from '@stargazezone/types/contracts/whitelist/execute_msg';
 import { MsgExecuteContractEncodeObject } from 'cosmwasm';
-import { toStars } from '../../src/utils/utils';
+import { toStars } from '../helpers/utils';
 import inquirer from 'inquirer';
-import { getClient } from '../../src/utils/client';
+import { getClient } from '../helpers/client';
 import { MsgExecuteContract } from 'cosmjs-types/cosmwasm/wasm/v1/tx';
 import { toUtf8 } from '@cosmjs/encoding';
 import * as fs from 'fs';

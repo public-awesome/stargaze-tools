@@ -8,8 +8,8 @@ import { assertIsDeliverTxSuccess } from '@cosmjs/stargate';
 import * as fs from 'fs';
 import * as path from 'path';
 import { parse } from 'csv-parse';
-import { toStars } from '../../utils/utils';
-import { getClient } from '../../utils/client';
+import { toStars } from '../../helpers/utils';
+import { getClient } from '../../helpers/client';
 
 // TODO custom type for update_token_metadata until sg721-updatable types added
 export type ExecuteMsg = {

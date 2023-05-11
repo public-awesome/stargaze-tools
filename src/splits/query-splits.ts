@@ -1,5 +1,5 @@
 import { CosmWasmClient } from 'cosmwasm';
-import { toStars } from '../utils/utils';
+import { toStars } from '../helpers/utils';
 
 const config = require('../../config');
 let splitsAddress= config.splitsContract;

@@ -1,4 +1,4 @@
-import { getClient } from '../utils/client';
+import { getClient } from '../helpers/client';
 import { ExecuteMsg } from '@stargazezone/launchpad/src/Splits.types';
 
 

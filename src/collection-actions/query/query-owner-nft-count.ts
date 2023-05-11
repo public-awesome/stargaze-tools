@@ -2,7 +2,7 @@
 // output address and nft count to owner_nft_count.csv
 // burned nfts count gets added towards config.account address
 
-import { toStars } from '../../utils/utils';
+import { toStars } from '../../helpers/utils';
 import * as fs from 'fs';
 import { appendFileSync } from 'fs';
 import * as path from 'path';

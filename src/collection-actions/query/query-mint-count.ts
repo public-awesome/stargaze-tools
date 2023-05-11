@@ -1,5 +1,5 @@
 import { CosmWasmClient } from 'cosmwasm';
-import { toStars } from '../../utils/utils';
+import { toStars } from '../../helpers/utils';
 
 import * as fs from 'fs';
 import * as path from 'path';

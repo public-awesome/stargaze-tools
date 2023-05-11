@@ -7,8 +7,8 @@
 // Accepts cosmos, stars addresses.
 
 import { coin, MsgExecuteContractEncodeObject } from 'cosmwasm';
-import { toStars } from '../../utils/utils';
-import { getClient } from '../../utils/client';
+import { toStars } from '../../helpers/utils';
+import { getClient } from '../../helpers/client';
 import inquirer from 'inquirer';
 import { MsgExecuteContract } from 'cosmjs-types/cosmwasm/wasm/v1/tx';
 import { toUtf8 } from '@cosmjs/encoding';

@@ -1,13 +1,13 @@
 import { CreateMinterMsgForNullable_Empty } from '@stargazezone/launchpad/src/BaseMinter.types';
 import { coins, Decimal } from 'cosmwasm';
 import inquirer from 'inquirer';
-import { getClient } from '../utils/client';
+import { getClient } from '../helpers/client';
 import {
   isValidHttpUrl,
   toStars,
   isValidIpfsUrl,
   formatRoyaltyInfo,
-} from '../utils/utils';
+} from '../helpers/utils';
 
 const config = require('../../config');
 

@@ -4,7 +4,7 @@
 // Outputs to console as csv
 
 import { CosmWasmClient } from 'cosmwasm';
-import { toStars } from '../utils/utils';
+import { toStars } from '../helpers/utils';
 const config = require('../../config');
 const fetch = require('node-fetch');
 require('dotenv').config();

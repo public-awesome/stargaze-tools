@@ -1,7 +1,7 @@
 import { MsgExecuteContractEncodeObject, coins, toUtf8, Coin } from 'cosmwasm';
 import { MsgExecuteContract } from 'cosmjs-types/cosmwasm/wasm/v1/tx';
-import { getClient } from '../../utils/client';
-import { isValidIpfsUrl, toStars } from '../../utils/utils';
+import { getClient } from '../../helpers/client';
+import { isValidIpfsUrl, toStars } from '../../helpers/utils';
 import inquirer from 'inquirer';
 
 const config = require('../../../config');
