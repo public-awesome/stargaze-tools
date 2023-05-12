@@ -24,9 +24,9 @@ module.exports = {
 
   //// NETWORK CONFIG ////
    // The RPC endpoint for Stargaze testnet
-   mainnetRpc: 'https://rpc.elgafar-1.stargaze-apis.com/',
+   mainnetRpc: 'https://rpc.stargaze-apis.com/',
    // The RPC endpoint for Stargaze mainnet
-   testnetRpc: 'https://rpc.stargaze-apis.com/',
+   testnetRpc: 'https://rpc.elgafar-1.stargaze-apis.com/',
   // Set this to true if you are using Stargaze mainnet
     mainnet: false, 
 
