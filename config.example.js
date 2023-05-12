@@ -13,7 +13,6 @@ module.exports = {
   account: 'stars1...',
 
   //// API CONFIG ////
-
   // NFT.storage endpoint
   nftStorageEndpoint: 'https://api.nft.storage',
   // NFT.storage API key
@@ -30,7 +29,6 @@ module.exports = {
    testnetRpc: 'https://rpc.stargaze-apis.com/',
   // Set this to true if you are using Stargaze mainnet
     mainnet: false, 
-
 
   //// COLLECTION INFO ////
   // The name of your collection
