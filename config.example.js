@@ -13,10 +13,6 @@ module.exports = {
   account: 'stars1...',
 
   //// API CONFIG ////
-  // The RPC endpoint for Stargaze testnet
-  rpcEndpoint: 'https://rpc.elgafar-1.stargaze-apis.com/',
-  // The RPC endpoint for Stargaze mainnet
-  // rpcEndpoint: 'https://rpc.stargaze-apis.com/',
   // NFT.storage endpoint
   nftStorageEndpoint: 'https://api.nft.storage',
   // NFT.storage API key
@@ -25,6 +21,14 @@ module.exports = {
   pinataApiKey: '',
   // Pinata Secret Key (optional)
   pinataSecretKey: '',
+
+  //// NETWORK CONFIG ////
+   // The RPC endpoint for Stargaze testnet
+   mainnetRpc: 'https://rpc.stargaze-apis.com/',
+   // The RPC endpoint for Stargaze mainnet
+   testnetRpc: 'https://rpc.elgafar-1.stargaze-apis.com/',
+  // Set this to true if you are using Stargaze mainnet
+    mainnet: false, 
 
   //// COLLECTION INFO ////
   // The name of your collection
