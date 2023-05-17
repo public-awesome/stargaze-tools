@@ -116,47 +116,47 @@ module.exports = {
 
   //// CONTRACT CODE IDs: Testnet ////
   // The code ID for sg721_base
-  sg721BaseCodeId: 274,
+  sg721BaseCodeId: 2092,
   // The code ID for sg721-updatable
-  sg721UpdatableCodeId: 1652,
+  sg721UpdatableCodeId: 1912,
   // The code ID for base minter
-  baseMinterCodeId: 1641,
+  baseMinterCodeId: 1910,
   // Address for the base factory contract
   baseFactory:
-    'stars1vqm5yjmv64ncgtjdue3uxaxaave0gutavsk3szwdzz4flpk5palskdx6pu',
+    'stars18kzfpdgx36m95mszchegnk7car4sq03uvg25zeph2j7xg3rk03cs007sxr',
   // The code ID for vending minter
-  vendingMinterCodeId: 275,
+  vendingMinterCodeId: 2091,
   // The code ID for updatable vending minter
   updatableVendingMinterCodeId: 1654,
   // The code ID for vending flexible minter for use with whitelist flexible
-  flexibleVendingMinterCodeId: 2004,
+  flexibleVendingMinterCodeId: 2080,
   // Addr for vending factory contract
   vendingFactory:
-    'stars1j4qn9krchp5xs8nued4j4vcr4j654wxkhf7acy76734xe5fsz08sku28s2',
+    'stars1ukaladct74um4lhn6eru0d9hdrcqzj3q8sjrfcg7226xey0xc2gsy0gl22',
   // Addr for updatable vending factory contract
   updatableVendingFactory:
-    'stars1csq2m3gpca9syyq386v6rsfq5r3cp8llee9eyx5uj4wcmxcmg98sqx5xzg',
+    'stars1fnfywcnzzwledr93at65qm8gf953tjxgh6u2u4r8n9vsdv7u75eqe7ecn3',
   // Addr for flexible vending factory contract
   flexibleVendingFactory:
-    'stars1ngtwljk0ewua5zazzmy8zmnje9pkl9wl5qf6snqsmghtkes30v7svgjgqw',
+    'stars1l5v0vgly8r9jw4exeajnftymr29kn70n23gpl2g5fylaww2pzkhq0rks7c',
   // The code ID for the whitelist contract
-  whitelistCodeId: 277,
+  whitelistCodeId: 2093,
   // The code ID for the whitelist flexible contract
-  whitelistFlexCodeId: 2002,
+  whitelistFlexCodeId: 2005,
   // The marketplace contract address
   //   marketplace:
   //     'stars18cszlvm6pze0x9sz32qnjq4vtd45xehqs8dq7cwy8yhq35wfnn3qgzs5gu',
 
   // //// CONTRACT CODE IDs: Mainnet ////
   // // The code ID for sg721
-  // sg721BaseCodeId: 36,
+  // sg721BaseCodeId: 41,
   // // The code ID for the minter contract
-  // vendingMinterCodeId: 37,
+  // vendingMinterCodeId: 49,
   // // Addr for vending factory contract
   // vendingFactory:
-  //  'stars15p5xmrj4ryfh39pdvlphdr64kunm4zrvq3p6rku82zlahkn63vtqm3gmpt',
+  //  'stars1cadkattm22c7mn6l844r4y0n70x9k5e5dp0ez38w29rxxc8qnuss5hk94j',
   // // The code ID for the whitelist contract
-  // whitelistCodeId: 18,
+  // whitelistCodeId: 50,
   // The marketplace contract address
   //   marketplace:
   //       'stars1fvhcnyddukcqfnt7nlwv3thm5we22lyxyxylr9h77cvgkcn43xfsvgv0pl',
@@ -165,3 +165,4 @@ module.exports = {
   // // The code ID for the splits contract
   // splitsCodeId: 35,
 };
+
