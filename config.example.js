@@ -29,6 +29,10 @@ module.exports = {
    testnetRpc: 'https://rpc.elgafar-1.stargaze-apis.com/',
   // Set this to true if you are using Stargaze mainnet
     mainnet: false, 
+  // Names contract address for Stargaze testnet
+    testnetNamesContract: 'stars1rgn9tuxnl3ju9td3mfxdl2vm4t8xuaztcdakgtyx23c4ffm97cus25fvjs',
+  // Names contract address for Stargaze mainnet
+    mainnetNamesContract: 'stars1fx74nkqkw2748av8j7ew7r3xt9cgjqduwn8m0ur5lhe49uhlsasszc5fhr',
 
   //// COLLECTION INFO ////
   // The name of your collection

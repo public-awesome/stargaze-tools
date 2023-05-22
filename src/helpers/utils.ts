@@ -1,4 +1,5 @@
 import { toBech32, fromBech32 } from 'cosmwasm';
+const config = require('../../config');
 
 export const toStars = (addr: string) => {
   try {
@@ -56,5 +57,38 @@ export const formatRoyaltyInfo = (
       throw new Error('royaltyPaymentAddress present, but no royaltyShare');
     }
     return { payment_address: royaltyPaymentAddress, share: royaltyShare };
+  }
+};
+
+export const nameToAddress = async (name: string) =>  {
+  try {
+    let RPC_ENDPOINT = config.testnetRpc;
+    let NAMES_CONTRACT = config.testnetNameServiceContract;
+    if (config.mainnet === true) {
+      RPC_ENDPOINT = config.mainnetRpc;
+      NAMES_CONTRACT = config.mainnetNameServiceContract;
+    }
+    
+    if (!name) {
+      throw new Error('Name is empty');
+    }
+    
+    const query = {
+      associated_address: {
+        name,
+      },
+    };
+    const encodedQuery = Buffer.from(JSON.stringify(query)).toString('base64');
+    const url = `${RPC_ENDPOINT}/cosmwasm/wasm/v1/contract/${NAMES_CONTRACT}/smart/${encodedQuery}`;
+
+    const response = await fetch(url);
+    const json = await response.json();
+    if (!json.data) {
+      throw new Error('No data key in json response');
+    }
+    return json.data;
+
+  } catch (err) {
+    throw new Error('Error fetching address from name service: ' + err);
   }
 };
