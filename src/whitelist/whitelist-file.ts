@@ -37,8 +37,11 @@ async function addFile() {
     {
       delimiter: ',',
       columns: headers,
+      skip_empty_lines: true,
+      skip_records_with_empty_values: true,
+      trim: true,
     },
-    async (error, fileContents: Whitelist[]) => {
+    async (error: any, fileContents: Whitelist[]) => {
       if (error) {
         throw error;
       }
