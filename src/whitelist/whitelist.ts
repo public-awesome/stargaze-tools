@@ -3,7 +3,7 @@ import { ExecuteMsg } from '@stargazezone/types/contracts/whitelist/execute_msg'
 import { Timestamp } from '@stargazezone/types/contracts/minter/shared-types';
 import { coins } from 'cosmwasm';
 import inquirer from 'inquirer';
-import { toStars } from '../helpers/utils';
+import { toStars, nameToAddress } from '../helpers/utils';
 import { getClient } from '../helpers/client';
 
 const config = require('../../config');
@@ -35,8 +35,13 @@ async function init() {
   whitelist =
     whitelist.length > 0
       ? (function (tmpWhitelist: Array<string> = config.whitelist) {
-          tmpWhitelist.forEach(function (addr, index) {
-            tmpWhitelist[index] = toStars(addr);
+          tmpWhitelist.forEach(async function (addr, index) {
+            if (addr.endsWith('.stars')) {
+              const _addr = await nameToAddress(addr);
+              tmpWhitelist[index] = toStars(_addr);
+            } else {
+              tmpWhitelist[index] = toStars(addr);
+            }
           });
           return tmpWhitelist;
         })()
