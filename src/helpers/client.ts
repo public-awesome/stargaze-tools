@@ -9,7 +9,7 @@ import { isValidHttpUrl } from './utils';
 
 const config = require('../../config');
 
-export const gasPrice = GasPrice.fromString('0ustars');
+export const gasPrice = GasPrice.fromString('1ustars');
 
 export async function getClient() {
   const wallet = await DirectSecp256k1HdWallet.fromMnemonic(config.mnemonic, {
