@@ -55,10 +55,13 @@ module.exports = {
   // A list of whitelisted addresses that will be able to purchase the sale early
   // Comment out if not using a whilelist
   // whitelist: ['stars1..', 'stars1...'],
+  // The list of admin addresses that can perform actions on the whitelist after its instantiation
+  // admins: ['stars1...'],
+  // admins_mutable: true,
   // The date when the whitelist only purchasing period ends and everyone can buy (in ISO format)
-  // whitelistStartTime: '2022-03-11T21:00:00.000Z',
-  // whitelistEndTime: '2022-03-13T21:00:00.000Z',
-  // The price (in STARS) for the whitelist (minimum 25 STARS)
+  // whitelistStartTime: '2023-05-14T21:00:00.000Z',
+  // whitelistEndTime: '2023-05-15T21:00:00.000Z',
+  // The price (in STARS) for the whitelist (minimum 0 STARS)
   // whitelistPrice: 50,
   // The Per Address Limit during whitelist period this can be different than the main public limit
   // whitelistPerAddressLimit: 5,
@@ -74,7 +77,7 @@ module.exports = {
   baseTokenUri: 'ipfs://...',
   // The number of tokens to mint
   numTokens: 100,
-  // The price (in STARS) for your NFTs (minimum 50 STARS)
+  // The price (in STARS) for your NFTs (minimum 0 STARS)
   mintPrice: 100,
   // Specify a payment address if different from the account
   paymentAddress: 'stars1...',
