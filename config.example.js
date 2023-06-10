@@ -59,10 +59,15 @@ module.exports = {
   // A list of whitelisted addresses that will be able to purchase the sale early
   // Comment out if not using a whilelist
   // whitelist: ['stars1..', 'stars1...'],
+  // 'mint_count' is the number of NFTs that can be minted by the address in the flexible whitelist
+  // whitelistFlex: [{address: 'stars1...', mint_count: 2}, {address: 'stars1...', mint_count: 1}],
+  // The list of admin addresses that can perform actions on the whitelist after its instantiation
+  // admins: ['stars1...'],
+  // adminsMutable: true,
   // The date when the whitelist only purchasing period ends and everyone can buy (in ISO format)
-  // whitelistStartTime: '2022-03-11T21:00:00.000Z',
-  // whitelistEndTime: '2022-03-13T21:00:00.000Z',
-  // The price (in STARS) for the whitelist (minimum 25 STARS)
+  // whitelistStartTime: '2023-05-14T21:00:00.000Z',
+  // whitelistEndTime: '2023-05-15T21:00:00.000Z',
+  // The price (in STARS) for the whitelist (minimum 0 STARS)
   // whitelistPrice: 50,
   // The Per Address Limit during whitelist period this can be different than the main public limit
   // whitelistPerAddressLimit: 5,
@@ -72,32 +77,13 @@ module.exports = {
   // Get this after running `yarn whitelist`
   // whitelistContract: 'stars1...',
 
-  // //// SPLITS CONTRACT (OPTIONAL) ////
-  // // The code ID for the cw4-group contract
-  // cw4GroupCodeId: 1904,
-  // // The code ID for the splits contract
-  // splitsCodeId: 1905,
-  // // This admin can add/remove members from the group (optional)
-  // // If not set, the group is immutable forever, so it's best to set this.
-  // groupAdmin: 'stars1...',
-  // // This admin can control distribution from the splits contract (optional)
-  // // If not set, any member of the group can control distribution (recommended)
-  // splitsAdmin: 'stars1...',
-  // // Members and their weights
-  // members: [
-  //   { addr: 'stars1...', weight: 90 },
-  //   { addr: 'stars1...', weight: 10 },
-  // ],
-  // groupContract: 'stars1...',
-  // // The contract address of your splits contract to distribute funds 
-  // splitsContract: 'stars1...',
 
-  //// MINTER CONTRACT ////
+  //// MINTER CONTRACT Configuration ////
   // The base URI to be used to programmatically mint tokens
   baseTokenUri: 'ipfs://...',
   // The number of tokens to mint
   numTokens: 100,
-  // The price (in STARS) for your NFTs (minimum 50 STARS)
+  // The price (in STARS) for your NFTs (minimum 0 STARS)
   mintPrice: 100,
   // Specify a payment address if different from the account
   paymentAddress: 'stars1...',
@@ -120,52 +106,89 @@ module.exports = {
 
   //// CONTRACT CODE IDs: Testnet ////
   // The code ID for sg721_base
-  sg721BaseCodeId: 274,
+  sg721BaseCodeId: 2092,
   // The code ID for sg721-updatable
-  sg721UpdatableCodeId: 1652,
+  sg721UpdatableCodeId: 1912,
   // The code ID for base minter
-  baseMinterCodeId: 1641,
+  baseMinterCodeId: 1910,
   // Address for the base factory contract
   baseFactory:
-    'stars1vqm5yjmv64ncgtjdue3uxaxaave0gutavsk3szwdzz4flpk5palskdx6pu',
+    'stars18kzfpdgx36m95mszchegnk7car4sq03uvg25zeph2j7xg3rk03cs007sxr',
   // The code ID for vending minter
-  vendingMinterCodeId: 275,
+  vendingMinterCodeId: 2091,
   // The code ID for updatable vending minter
-  updatableVendingMinterCodeId: 1654,
+  updatableVendingMinterCodeId: 1909,
   // The code ID for vending flexible minter for use with whitelist flexible
-  flexibleVendingMinterCodeId: 2004,
+  flexibleVendingMinterCodeId: 2080,
   // Addr for vending factory contract
   vendingFactory:
-    'stars1j4qn9krchp5xs8nued4j4vcr4j654wxkhf7acy76734xe5fsz08sku28s2',
+    'stars1ukaladct74um4lhn6eru0d9hdrcqzj3q8sjrfcg7226xey0xc2gsy0gl22',
   // Addr for updatable vending factory contract
   updatableVendingFactory:
-    'stars1csq2m3gpca9syyq386v6rsfq5r3cp8llee9eyx5uj4wcmxcmg98sqx5xzg',
+    'stars1fnfywcnzzwledr93at65qm8gf953tjxgh6u2u4r8n9vsdv7u75eqe7ecn3',
   // Addr for flexible vending factory contract
   flexibleVendingFactory:
-    'stars1ngtwljk0ewua5zazzmy8zmnje9pkl9wl5qf6snqsmghtkes30v7svgjgqw',
+    'stars1gy6hr9sq9fzrykzw0emmehnjy27agreuepjrfnjnlwlugg29l2qqt0yu2j',
   // The code ID for the whitelist contract
-  whitelistCodeId: 277,
+  whitelistCodeId: 2093,
   // The code ID for the whitelist flexible contract
-  whitelistFlexCodeId: 2002,
+  whitelistFlexCodeId: 2005,
   // The marketplace contract address
   //   marketplace:
   //     'stars18cszlvm6pze0x9sz32qnjq4vtd45xehqs8dq7cwy8yhq35wfnn3qgzs5gu',
 
   // //// CONTRACT CODE IDs: Mainnet ////
   // // The code ID for sg721
-  // sg721BaseCodeId: 36,
+  // sg721BaseCodeId: 41,
+  // // The code ID for sg721-updatable
+  // sg721UpdatableCodeId: 57,
+  // // The code ID for base minter
+  // baseMinterCodeId: 40,
+  // // Address for the base factory contract
+  // baseFactory:
+  //   'stars1a9hmesdu8ckzrc0k8lp2hsf2r2j23qw7rk864e7h3my53cwtyp8s6d8hw7',
   // // The code ID for the minter contract
-  // vendingMinterCodeId: 37,
+  // vendingMinterCodeId: 49,
+  // flexibleVendingMinterCodeId: 54,
   // // Addr for vending factory contract
   // vendingFactory:
-  //  'stars15p5xmrj4ryfh39pdvlphdr64kunm4zrvq3p6rku82zlahkn63vtqm3gmpt',
+  //  'stars1yv0xyj44s33r6ccj2l00z336xsm9dwdqegmada37ajxaqr36t77qmcgcej',
+  // flexibleVendingFactory:
+  //   'stars1gy6hr9sq9fzrykzw0emmehnjy27agreuepjrfnjnlwlugg29l2qqt0yu2j',
   // // The code ID for the whitelist contract
-  // whitelistCodeId: 18,
+  // whitelistCodeId: 50,
+  // whitelistFlexCodeId: 53,
   // The marketplace contract address
   //   marketplace:
   //       'stars1fvhcnyddukcqfnt7nlwv3thm5we22lyxyxylr9h77cvgkcn43xfsvgv0pl',
+
+    // //// SPLITS CONTRACT (OPTIONAL) ////
+
+  // // Mainnet Use  
   // // The code ID for the cw4-group contract
   // cw4GroupCodeId: 26,
   // // The code ID for the splits contract
   // splitsCodeId: 35,
+
+  // // Testnet Use
+  // // The code ID for the cw4-group contract
+  // cw4GroupCodeId: 1904,
+  // // The code ID for the splits contract
+  // splitsCodeId: 1905,
+
+  // // This admin can add/remove members from the group (optional)
+  // // If not set, the group is immutable forever, so it's best to set this.
+  // groupAdmin: 'stars1...',
+  // // This admin can control distribution from the splits contract (optional)
+  // // If not set, any member of the group can control distribution (recommended)
+  // splitsAdmin: 'stars1...',
+  // // Members and their weights
+  // members: [
+  //   { addr: 'stars1...', weight: 90 },
+  //   { addr: 'stars1...', weight: 10 },
+  // ],
+  // groupContract: 'stars1...',
+  // // The contract address of your splits contract to distribute funds 
+  // splitsContract: 'stars1...',
 };
+

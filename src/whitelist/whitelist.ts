@@ -56,8 +56,12 @@ async function init() {
     new Date(config.whitelistEndTime).getTime() * 1_000_000
   ).toString();
 
+  const admins = config.admins || [config.account];
+
   // @ts-ignore
   const msg: InstantiateMsg = {
+    admins: admins,
+    admins_mutable: config.adminsMutable,
     members: whitelist,
     start_time: whitelistStartTime,
     end_time: whitelistEndTime,
