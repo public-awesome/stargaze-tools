@@ -30,15 +30,15 @@ async function init() {
   const client = await getClient();
 
   // Whitelist can start with empty values and added later
-  let whitelist = config.whitelist || [];
+  let whitelist = config.whitelistFlex || [];
   whitelist =
     whitelist.length > 0
-      ? (function (tmpWhitelist: Array<string> = config.whitelist) {
-          tmpWhitelist.forEach(function (addr, index) {
-            tmpWhitelist[index] = toStars(addr);
-          });
-          return tmpWhitelist;
-        })()
+      ? whitelist.map((item: any) => {
+          return {
+            address: toStars(item.address),
+            mint_count: item.mint_count,
+          };
+        })
       : [];
 
   // time expressed in nanoseconds (1 millionth of a millisecond)

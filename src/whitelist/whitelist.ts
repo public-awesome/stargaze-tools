@@ -56,7 +56,7 @@ async function init() {
   // @ts-ignore
   const msg: InstantiateMsg = {
     admins: admins,
-    admins_mutable: config.admins_mutable,
+    admins_mutable: config.adminsMutable,
     members: whitelist,
     start_time: whitelistStartTime,
     end_time: whitelistEndTime,

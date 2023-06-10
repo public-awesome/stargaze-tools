@@ -55,9 +55,11 @@ module.exports = {
   // A list of whitelisted addresses that will be able to purchase the sale early
   // Comment out if not using a whilelist
   // whitelist: ['stars1..', 'stars1...'],
+  // 'mint_count' is the number of NFTs that can be minted by the address in the flexible whitelist
+  // whitelistFlex: [{address: 'stars1...', mint_count: 2}, {address: 'stars1...', mint_count: 1}],
   // The list of admin addresses that can perform actions on the whitelist after its instantiation
   // admins: ['stars1...'],
-  // admins_mutable: true,
+  // adminsMutable: true,
   // The date when the whitelist only purchasing period ends and everyone can buy (in ISO format)
   // whitelistStartTime: '2023-05-14T21:00:00.000Z',
   // whitelistEndTime: '2023-05-15T21:00:00.000Z',
