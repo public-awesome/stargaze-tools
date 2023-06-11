@@ -196,6 +196,14 @@ module.exports = {
   //  'stars1yv0xyj44s33r6ccj2l00z336xsm9dwdqegmada37ajxaqr36t77qmcgcej',
   // flexibleVendingFactory:
   //   'stars1gy6hr9sq9fzrykzw0emmehnjy27agreuepjrfnjnlwlugg29l2qqt0yu2j',
+  // Addr for open edition factory contract  
+  // openEditionFactory:
+  //   'stars1...',
+  // // Addr for open edition updatable factory contract  
+  // openEditionUpdatableFactory:
+  //   'stars1...',
+  // // The code ID for open edition minter
+  // openEditionMinterCodeId: N/A,   
   // // The code ID for the whitelist contract
   // whitelistCodeId: 50,
   // whitelistFlexCodeId: 53,
