@@ -28,6 +28,7 @@
     "airdrop-file": "ts-node src/collection-actions/execute/airdrop-file.ts",
     "base-minter": "ts-node src/create-collection/base-minter.ts",
     "minter": "ts-node src/create-collection/minter.ts",
+    "open-edition-minter": "ts-node src/create-collection/open-edition-minter.ts",
     "mint": "ts-node src/collection-actions/execute/mint.ts",
     "burn": "ts-node src/collection-actions/execute/burn.ts",
     "nft-storage-upload": "ts-node src/create-collection/nft-storage-upload.ts",

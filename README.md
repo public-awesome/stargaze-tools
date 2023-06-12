@@ -132,6 +132,41 @@ yarn base-minter
 yarn mint --token-uri [token-uri]
 ```
 
+## Open Edition Minter
+
+Open edition minter allows multiple copies of a single NFT to be minted for a given time interval.
+
+### Initialize an open edition minter contract
+Specify the collection info and open edition minter configuration in `config.js`, then run:
+```sh
+yarn open-edition-minter
+```
+The user is prompted to choose whether the metadata will be stored off-chain or on-chain. 
+- **off-chain**: the metadata needs to be uploaded to IPFS beforehand and the URI should be specified as _tokenUri_ in `config.js/openEditionMinterConfig`
+- **on-chain**: the metadata will be stored on-chain upon collection creation and should be specified as _metadata_ in `config.js/openEditionMinterConfig`
+### Mint
+#### Mint a token to an address
+Specify the minter contract address in `config.js` and run:
+```sh
+yarn mint --to [address]
+```
+This mints a token to the given address.
+#### Batch mint tokens to an address
+Mint `num` tokens to an address.
+
+```sh
+yarn mint --to [address] --batch [num]
+```
+#### Update trading start time
+Specify the new `startTradingTime` in `config.js/openEditionMinterConfig` and run:
+```sh
+yarn open-edition-minter --update-start-trading-time
+```
+#### Update per address limit
+Specify the new `perAddressLimit` in `config.js/openEditionMinterConfig` and run:
+```sh
+yarn open-edition-minter --update-per-address-limit
+```
 ## Query sg721
 
 You can run queries against an instantiated sg721 contract with:

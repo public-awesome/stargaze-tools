@@ -23,16 +23,16 @@ module.exports = {
   pinataSecretKey: '',
 
   //// NETWORK CONFIG ////
-   // The RPC endpoint for Stargaze testnet
-   mainnetRpc: 'https://rpc.stargaze-apis.com/',
-   // The RPC endpoint for Stargaze mainnet
-   testnetRpc: 'https://rpc.elgafar-1.stargaze-apis.com/',
+  // The RPC endpoint for Stargaze testnet
+  mainnetRpc: 'https://rpc.stargaze-apis.com/',
+  // The RPC endpoint for Stargaze mainnet
+  testnetRpc: 'https://rpc.elgafar-1.stargaze-apis.com/',
   // Set this to true if you are using Stargaze mainnet
-    mainnet: false, 
+  mainnet: false,
   // Names contract address for Stargaze testnet
-    testnetNamesContract: 'stars1rgn9tuxnl3ju9td3mfxdl2vm4t8xuaztcdakgtyx23c4ffm97cus25fvjs',
+  testnetNamesContract: 'stars1rgn9tuxnl3ju9td3mfxdl2vm4t8xuaztcdakgtyx23c4ffm97cus25fvjs',
   // Names contract address for Stargaze mainnet
-    mainnetNamesContract: 'stars1fx74nkqkw2748av8j7ew7r3xt9cgjqduwn8m0ur5lhe49uhlsasszc5fhr',
+  mainnetNamesContract: 'stars1fx74nkqkw2748av8j7ew7r3xt9cgjqduwn8m0ur5lhe49uhlsasszc5fhr',
 
   //// COLLECTION INFO ////
   // The name of your collection
@@ -104,6 +104,39 @@ module.exports = {
   // Get this after running `yarn minter`
   sg721: 'stars1...',
 
+  // OPEN EDITION MINTER Configuration
+  // Please make sure to fill in the related fields under Collection Info as well
+  // openEditionMinterConfig: {
+  //   mintPrice: 100,
+  //   perAddressLimit: 3,
+  //   paymentAddress: 'stars1...',
+  //   startTime: '2023-06-12T17:00:00.000Z',
+  //   endTime: '2023-06-13T17:00:00.000Z',
+  //   startTradingTime: '2023-06-14T19:00:00.000Z',
+    // The token URI to be used with the off-chain metadata option (metadata needs to be pre-uploaded to IPFS)
+    // tokenUri: 'ipfs://bafy...',
+    // The metadata to be used with the on-chain metadata option (metadata is stored on-chain during collection creation)
+    // metadata: {
+    //   image: 'ipfs://...',
+    //   externalURL: 'https://...',
+    //   description: 'Description of the NFT',
+    //   name: 'Name of the NFT',
+    //   attributes: [
+    //     {
+    //       trait_type: 'Trait Type',
+    //       value: 'Trait Value',
+    //     },
+    //     {
+    //       trait_type: 'Trait Type',
+    //       value: 'Trait Value',
+    //     }
+    //   ],
+    //   animationURL: 'ipfs://...',
+    //   youtubeURL: 'https://www.youtube.com/watch?v=...',
+    // },
+  // },
+
+
   //// CONTRACT CODE IDs: Testnet ////
   // The code ID for sg721_base
   sg721BaseCodeId: 2092,
@@ -129,6 +162,14 @@ module.exports = {
   // Addr for flexible vending factory contract
   flexibleVendingFactory:
     'stars1gy6hr9sq9fzrykzw0emmehnjy27agreuepjrfnjnlwlugg29l2qqt0yu2j',
+  // Addr for open edition factory contract  
+  openEditionFactory:
+    'stars15jkxfr78kfa5gya05l6kzwdxsy5trnxyt5yzk8w32g6wtzamwq6src8sfl',
+  // Addr for open edition updatable factory contract  
+  openEditionUpdatableFactory:
+    'stars1u50sgc5ly9qmwxe3789fgsvpd0e2e5r6glljp27a4vufeacvp0mqakwwtj',
+  // The code ID for open edition minter
+  openEditionMinterCodeId: 2549,   
   // The code ID for the whitelist contract
   whitelistCodeId: 2093,
   // The code ID for the whitelist flexible contract
@@ -155,6 +196,14 @@ module.exports = {
   //  'stars1yv0xyj44s33r6ccj2l00z336xsm9dwdqegmada37ajxaqr36t77qmcgcej',
   // flexibleVendingFactory:
   //   'stars1gy6hr9sq9fzrykzw0emmehnjy27agreuepjrfnjnlwlugg29l2qqt0yu2j',
+  // Addr for open edition factory contract  
+  // openEditionFactory:
+  //   'stars1...',
+  // // Addr for open edition updatable factory contract  
+  // openEditionUpdatableFactory:
+  //   'stars1...',
+  // // The code ID for open edition minter
+  // openEditionMinterCodeId: N/A,   
   // // The code ID for the whitelist contract
   // whitelistCodeId: 50,
   // whitelistFlexCodeId: 53,
