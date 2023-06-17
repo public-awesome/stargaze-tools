@@ -164,12 +164,12 @@ module.exports = {
     'stars1gy6hr9sq9fzrykzw0emmehnjy27agreuepjrfnjnlwlugg29l2qqt0yu2j',
   // Addr for open edition factory contract  
   openEditionFactory:
-    'stars15jkxfr78kfa5gya05l6kzwdxsy5trnxyt5yzk8w32g6wtzamwq6src8sfl',
+    'stars1m4fjq0qf3mj6zhplng7yxngp9hq98hd4tj90gjp759l5e0fvf3qqkqzqsf',
   // Addr for open edition updatable factory contract  
   openEditionUpdatableFactory:
-    'stars1u50sgc5ly9qmwxe3789fgsvpd0e2e5r6glljp27a4vufeacvp0mqakwwtj',
+    'stars1ss39vpz3wfv76nkxpls48srvf58lk57980yatwcjrvvygv9nt8tq5rgslt',
   // The code ID for open edition minter
-  openEditionMinterCodeId: 2549,   
+  openEditionMinterCodeId: 2570,   
   // The code ID for the whitelist contract
   whitelistCodeId: 2093,
   // The code ID for the whitelist flexible contract
