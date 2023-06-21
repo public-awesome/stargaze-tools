@@ -220,7 +220,7 @@ async function create_updatable_vending_minter() {
   console.log('updatable');
   let params = {
     sg721CodeId: config.sg721UpdatableCodeId,
-    vendingMinterCodeId: config.updatableVendingMinterCodeId,
+    vendingMinterCodeId: config.vendingMinterCodeId,
     vendingFactory: config.updatableVendingFactory,
   };
   create_minter(params);
