@@ -139,41 +139,39 @@ module.exports = {
 
   //// CONTRACT CODE IDs: Testnet ////
   // The code ID for sg721_base
-  sg721BaseCodeId: 2092,
+  sg721BaseCodeId: 2595,
   // The code ID for sg721-updatable
-  sg721UpdatableCodeId: 1912,
+  sg721UpdatableCodeId: 2596,
   // The code ID for base minter
-  baseMinterCodeId: 1910,
+  baseMinterCodeId: 2598,
   // Address for the base factory contract
   baseFactory:
-    'stars18kzfpdgx36m95mszchegnk7car4sq03uvg25zeph2j7xg3rk03cs007sxr',
+    'stars1a45hcxty3spnmm2f0papl8v4dk5ew29s4syhn4efte8u5haex99qlkrtnx',
   // The code ID for vending minter
-  vendingMinterCodeId: 2091,
-  // The code ID for updatable vending minter
-  updatableVendingMinterCodeId: 1909,
+  vendingMinterCodeId: 2600,
   // The code ID for vending flexible minter for use with whitelist flexible
-  flexibleVendingMinterCodeId: 2080,
+  flexibleVendingMinterCodeId: 2601,
   // Addr for vending factory contract
   vendingFactory:
-    'stars1ukaladct74um4lhn6eru0d9hdrcqzj3q8sjrfcg7226xey0xc2gsy0gl22',
+    'stars18h7ugh8eaug7wr0w4yjw0ls5s937z35pnkg935ucsek2y9xl3gaqqk4jtx',
   // Addr for updatable vending factory contract
   updatableVendingFactory:
-    'stars1fnfywcnzzwledr93at65qm8gf953tjxgh6u2u4r8n9vsdv7u75eqe7ecn3',
+    'stars1h65nms9gwg4vdktyqj84tu50gwlm34e0eczl5w2ezllxuzfxy9esa9qlt0',
   // Addr for flexible vending factory contract
   flexibleVendingFactory:
-    'stars1gy6hr9sq9fzrykzw0emmehnjy27agreuepjrfnjnlwlugg29l2qqt0yu2j',
+    'stars1hvu2ghqkcnvhtj2fc6wuazxt4dqcftslp2rwkkkcxy269a35a9pq60ug2q',
   // Addr for open edition factory contract  
   openEditionFactory:
-    'stars1p39ed5jypc2dg8xfdcadsslq0uq8vmx4czeap3j0tty94u9uwe5st4fan7',
+    'stars13r06dn4jc6mudvvkl9rclxjctywm4nhl045jn9f8mk6vc53eylusy4zxzj',
   // Addr for open edition updatable factory contract  
   openEditionUpdatableFactory:
-    'stars1mqrydf565zte4wnzttdg8dlt54hseu4aa2qvm47uxw84khc2uyysh6rnr3',
+    'stars1n7np7wdmm4ea8tapkz00j3jtxupne0g8v9jj02j96wfn9w9ukxgs6hcsv0',
   // The code ID for open edition minter
   openEditionMinterCodeId: 2579,   
   // The code ID for the whitelist contract
-  whitelistCodeId: 2093,
+  whitelistCodeId: 2602,
   // The code ID for the whitelist flexible contract
-  whitelistFlexCodeId: 2005,
+  whitelistFlexCodeId: 2603,
   // The marketplace contract address
   //   marketplace:
   //     'stars18cszlvm6pze0x9sz32qnjq4vtd45xehqs8dq7cwy8yhq35wfnn3qgzs5gu',
