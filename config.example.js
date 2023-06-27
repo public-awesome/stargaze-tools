@@ -185,7 +185,7 @@ module.exports = {
   // sg721BaseCodeId: 41,
   // // The code ID for sg721-updatable
   // sg721UpdatableCodeId: 57,
-  // // The code ID for ıoen edition sg721-base
+  // // The code ID for open edition sg721-base
   // sg721OpenEditionCodeId: 62,
   // // The code ID for open edition sg721-updatable
   // sg721OpenEditionUpdatableCodeId: N/A,
