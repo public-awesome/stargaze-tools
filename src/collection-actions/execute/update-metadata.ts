@@ -14,7 +14,7 @@ import { getClient } from '../../helpers/client';
 // TODO custom type for update_token_metadata until sg721-updatable types added
 export type ExecuteMsg = {
   update_token_metadata: {
-    token_id: number;
+    token_id: string;
     token_uri: string;
     [k: string]: unknown;
   };
@@ -75,7 +75,7 @@ async function addFile() {
         console.log('changing ', token_id, 'metadata to ', metadata[id]);
         const msg: ExecuteMsg = {
           update_token_metadata: {
-            token_id: token_id,
+            token_id: token_id.toString(),
             token_uri: metadata[id],
           },
         };
@@ -132,7 +132,7 @@ async function updateTokenUri(token_id: number, token_uri: string) {
 
   const msg: ExecuteMsg = {
     update_token_metadata: {
-      token_id,
+      token_id: token_id.toString(),
       token_uri,
     },
   };
@@ -156,7 +156,7 @@ async function updateTokenUri(token_id: number, token_uri: string) {
     'auto',
     'update-metadata'
   );
-  const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');
+  const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm-update_update_token_metadata');
   console.info(
     'The `wasm` event emitted by the contract execution:',
     wasmEvent

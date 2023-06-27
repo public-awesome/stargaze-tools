@@ -142,6 +142,10 @@ module.exports = {
   sg721BaseCodeId: 2595,
   // The code ID for sg721-updatable
   sg721UpdatableCodeId: 2596,
+  // The code ID for open edition sg721-base
+  sg721OpenEditionCodeId: 2595,
+  // The code ID for open edition sg721-updatable
+  sg721OpenEditionUpdatableCodeId: 2596,
   // The code ID for base minter
   baseMinterCodeId: 2598,
   // Address for the base factory contract
@@ -181,6 +185,10 @@ module.exports = {
   // sg721BaseCodeId: 41,
   // // The code ID for sg721-updatable
   // sg721UpdatableCodeId: 57,
+  // // The code ID for open edition sg721-base
+  // sg721OpenEditionCodeId: 62,
+  // // The code ID for open edition sg721-updatable
+  // sg721OpenEditionUpdatableCodeId: N/A,
   // // The code ID for base minter
   // baseMinterCodeId: 40,
   // // Address for the base factory contract
@@ -196,12 +204,12 @@ module.exports = {
   //   'stars1yv0xyj44s33r6ccj2l00z336xsm9dwdqegmada37ajxaqr36t77qmcgcej',
   // Addr for open edition factory contract  
   // openEditionFactory:
-  //   'stars1...',
+  //   'stars1xsmnt6tnw4uq2rgq4dnjdjvxj08uysv5e5ukwkd9cwppydludjuskxvpkl',
   // // Addr for open edition updatable factory contract  
   // openEditionUpdatableFactory:
-  //   'stars1...',
+  //   'N/A',
   // // The code ID for open edition minter
-  // openEditionMinterCodeId: N/A,   
+  // openEditionMinterCodeId: 61,   
   // // The code ID for the whitelist contract
   // whitelistCodeId: 50,
   // whitelistFlexCodeId: 53,

@@ -30,7 +30,7 @@ export type OpenEditionMinterParams =
 export async function create_minter(params: OpenEditionMinterParams) {
   if (params !== undefined) {
     const { sg721CodeId, openEditionMinterCodeId, openEditionFactory } = params;
-    config.sg721BaseCodeId = sg721CodeId;
+    config.sg721OpenEditionCodeId = sg721CodeId;
     config.openEditionMinterCodeId = openEditionMinterCodeId;
     config.openEditionFactory = openEditionFactory;
   }
@@ -125,7 +125,7 @@ export async function create_minter(params: OpenEditionMinterParams) {
       payment_address: paymentAddress,
     },
     collection_params: {
-      code_id: config.sg721BaseCodeId,
+      code_id: config.sg721OpenEditionCodeId,
       name: config.name,
       symbol: config.symbol,
       info: {
@@ -225,7 +225,7 @@ export async function create_minter(params: OpenEditionMinterParams) {
 async function create_updatable_open_edition_minter() {
   console.log('Creating updatable open edition minter...');
   let params = {
-    sg721CodeId: config.sg721UpdatableCodeId,
+    sg721CodeId: config.sg721OpenEditionUpdatableCodeId,
     openEditionMinterCodeId: config.openEditionMinterCodeId,
     openEditionFactory: config.openEditionUpdatableFactory,
   };
