@@ -20,11 +20,12 @@ class TokenInfo {
     }
   }
 }
+const rpcEndpoint = config.mainnet === true ? config.mainnetRpc : config.testnetRpc;
 
 async function snapshot(collection: string, expectedNumTokens: number) {
   console.log('Querying items from collection:', collection);
 
-  const client = await CosmWasmClient.connect(config.rpcEndpoint);
+  const client = await CosmWasmClient.connect(rpcEndpoint);
 
   const row = new TokenInfo('token_id', 'address');
   row.saveAsCSV();
