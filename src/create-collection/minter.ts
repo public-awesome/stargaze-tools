@@ -143,6 +143,8 @@ export async function create_minter(params: MinterParams) {
   );
   console.log('params response', paramsResponse);
 
+  const creationFee = paramsResponse.params.creation_fee.amount;
+
   const tempMsg = { create_minter: initMsg };
 
   // TODO use recursive cleanup of undefined and null values
@@ -165,7 +167,7 @@ export async function create_minter(params: MinterParams) {
         msg: toUtf8(
           JSON.stringify(obj)
         ),
-        funds:NEW_COLLECTION_FEE,
+        funds: coins(creationFee, 'ustars'),
       },
     };
   
@@ -180,9 +182,9 @@ export async function create_minter(params: MinterParams) {
   console.log(JSON.stringify(msg, null, 2));
   console.log(
     'Cost of minter instantiation: ' +
-      NEW_COLLECTION_FEE[0].amount +
+      creationFee +
       ' ' +
-      NEW_COLLECTION_FEE[0].denom
+      'ustars'
   );
   console.log("Total gas fee to be paid",await client.simulate(account, [encodeMsg],undefined)+" ustars");
   const answer = await inquirer.prompt([
@@ -200,7 +202,7 @@ export async function create_minter(params: MinterParams) {
     msg,
     'auto',
     config.name,
-    NEW_COLLECTION_FEE
+    coins(creationFee, 'ustars')
   );
   const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');
   console.info(

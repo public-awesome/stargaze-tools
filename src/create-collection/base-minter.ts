@@ -11,8 +11,6 @@ import {
 
 const config = require('../../config');
 
-const NEW_COLLECTION_FEE = coins('250000000', 'ustars');
-
 function clean(obj: any) {
   return JSON.parse(JSON.stringify(obj));
 }
@@ -70,6 +68,8 @@ export async function create_minter() {
 
   const tempMsg = { create_minter: initMsg };
 
+  const creationFee = paramsResponse.params.creation_fee.amount;
+
   if (
     tempMsg.create_minter?.collection_params.info?.royalty_info
       ?.payment_address === undefined &&
@@ -87,9 +87,9 @@ export async function create_minter() {
   console.log(JSON.stringify(msg, null, 2));
   console.log(
     'Cost of minter instantiation: ' +
-      NEW_COLLECTION_FEE[0].amount +
+      creationFee +
       ' ' +
-      NEW_COLLECTION_FEE[0].denom
+      'ustars'
   );
   const answer = await inquirer.prompt([
     {
@@ -106,7 +106,7 @@ export async function create_minter() {
     msg,
     'auto',
     config.name,
-    NEW_COLLECTION_FEE
+    coins(creationFee, 'ustars')
   );
   const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');
   console.info(

@@ -12,8 +12,6 @@ import { toUtf8 } from '@cosmjs/encoding';
 
 const config = require('../../config');
 
-const NEW_COLLECTION_FEE = coins('1000000000', 'ustars');
-
 function clean(obj: any) {
   return JSON.parse(JSON.stringify(obj));
 }
@@ -151,6 +149,8 @@ export async function create_minter(params: OpenEditionMinterParams) {
 
   const tempMsg = { create_minter: initMsg };
 
+  const creationFee = paramsResponse.params.creation_fee.amount;
+
   // TODO use recursive cleanup of undefined and null values
   if (
     tempMsg.create_minter?.collection_params.info?.royalty_info
@@ -171,7 +171,7 @@ export async function create_minter(params: OpenEditionMinterParams) {
         msg: toUtf8(
           JSON.stringify(obj)
         ),
-        funds:NEW_COLLECTION_FEE,
+        funds:coins(creationFee, 'ustars')
       },
     };
   
@@ -186,9 +186,9 @@ export async function create_minter(params: OpenEditionMinterParams) {
   console.log(JSON.stringify(msg, null, 2));
   console.log(
     'Cost of minter instantiation: ' +
-      NEW_COLLECTION_FEE[0].amount +
+      creationFee +
       ' ' +
-      NEW_COLLECTION_FEE[0].denom
+      'ustars'
   );
   console.log("Total gas fee to be paid: ",await client.simulate(account, [encodeMsg],undefined)+" ustars");
   const answer = await inquirer.prompt([
@@ -206,7 +206,7 @@ export async function create_minter(params: OpenEditionMinterParams) {
     msg,
     'auto',
     config.name,
-    NEW_COLLECTION_FEE
+    coins(creationFee, 'ustars')
   );
   const wasmEvent = result.logs[0].events.find((e) => e.type === 'wasm');
   console.info(
