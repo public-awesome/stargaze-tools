@@ -58,6 +58,25 @@ async function init() {
 
   const admins = config.admins || [config.account];
 
+  const vendingMinterMintingDenoms = await Promise.all(
+    config.vendingFactoryAddresses.map(async (address: string) => {
+      let params = await client.queryContractSmart(address, {
+        params: {},
+      });
+      return params.params.min_mint_price.denom;
+    })
+  );
+
+  // Ask user to pick denom for whitelist
+  const denom = await inquirer.prompt([
+    {
+      message: 'Select a denom for whitelist mint price',
+      name: 'denom',
+      type: 'list',
+      choices: await vendingMinterMintingDenoms,
+    },
+  ]);
+
   // @ts-ignore
   const msg: InstantiateMsg = {
     admins: admins,
@@ -67,7 +86,7 @@ async function init() {
     end_time: whitelistEndTime,
     mint_price: {
       amount: (config.whitelistPrice * 1000000).toString(),
-      denom: 'ustars',
+      denom: denom,
     },
     per_address_limit: config.whitelistPerAddressLimit,
     member_limit: config.whitelistMemberLimit,
