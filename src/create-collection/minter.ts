@@ -124,7 +124,6 @@ export async function create_minter(params: MinterParams) {
       message: 'Pick a denom',
       name: 'params',
       type: 'list',
-      // Choises should be 1 to paramsResponses.length+1. FE [1,2,3,4,5]
       choices: factories.map((factory: any, index: number) => {
         return {
           name: factory.denom,
