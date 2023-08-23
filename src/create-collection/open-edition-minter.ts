@@ -20,17 +20,17 @@ export type OpenEditionMinterParams =
   | {
       sg721CodeId: number;
       openEditionMinterCodeId: number;
-      openEditionFactory: string;
+      openEditionFactoryAddresses: string;
       [k: string]: unknown;
     }
   | undefined;
 
 export async function create_minter(params: OpenEditionMinterParams) {
   if (params !== undefined) {
-    const { sg721CodeId, openEditionMinterCodeId, openEditionFactory } = params;
+    const { sg721CodeId, openEditionMinterCodeId, openEditionFactoryAddresses } = params;
     config.sg721OpenEditionCodeId = sg721CodeId;
     config.openEditionMinterCodeId = openEditionMinterCodeId;
-    config.openEditionFactory = openEditionFactory;
+    config.openEditionFactoryAddresses = openEditionFactoryAddresses;
   }
   console.log('Collection name:', config.name);
   console.log('Account:', config.account, '\n');
@@ -97,6 +97,35 @@ export async function create_minter(params: OpenEditionMinterParams) {
           const startTradingTime: Timestamp | null = config.openEditionMinterConfig.startTradingTime
           ? (new Date(config.openEditionMinterConfig.startTradingTime).getTime() * 1_000_000).toString()
           : null;
+
+          const factories = await Promise.all(
+            config.openEditionFactoryAddresses.map(async (address: string) => {
+              const factory = await client.queryContractSmart(address, {
+                params: {},
+              });
+              return {
+                address: address,
+                denom: factory.params.min_mint_price.denom,
+                fee: factory.params.creation_fee.amount,
+              }
+            })
+          );
+          
+          const pickedFactory = await inquirer.prompt([
+            {
+              message: 'Pick a denom',
+              name: 'params',
+              type: 'list',
+              // Choises should be 1 to paramsResponses.length+1. FE [1,2,3,4,5]
+              choices: factories.map((factory: any, index: number) => {
+                return {
+                  name: factory.denom,
+                  value: factory,
+                };
+              }
+              ),
+            },
+          ]);
           
   const initMsg = {
     init_msg: {
@@ -117,7 +146,7 @@ export async function create_minter(params: OpenEditionMinterParams) {
       end_time: endTime,
       mint_price: {
         amount: (config.openEditionMinterConfig.mintPrice * 1000000).toString(),
-        denom: 'ustars',
+        denom: pickedFactory.params.denom,
       },
       per_address_limit: config.openEditionMinterConfig.perAddressLimit,
       payment_address: paymentAddress,
@@ -137,19 +166,11 @@ export async function create_minter(params: OpenEditionMinterParams) {
     },
   };
 
-  console.log('Open Edition Factory address: ', config.openEditionFactory);
-
-  const paramsResponse = await client.queryContractSmart(
-    config.openEditionFactory,
-    {
-      params: {},
-    }
-  );
-  console.log('Open Edition Factory parameters: ', paramsResponse);
+  console.log('Open Edition Factory address: ', pickedFactory.params.address);
 
   const tempMsg = { create_minter: initMsg };
 
-  const creationFee = paramsResponse.params.creation_fee.amount;
+  const creationFee = pickedFactory.params.fee;
 
   // TODO use recursive cleanup of undefined and null values
   if (
@@ -167,7 +188,7 @@ export async function create_minter(params: OpenEditionMinterParams) {
       typeUrl: '/cosmwasm.wasm.v1.MsgExecuteContract',
       value: {
         sender: account,
-        contract: config.openEditionFactory,
+        contract: pickedFactory.params.address,
         msg: toUtf8(
           JSON.stringify(obj)
         ),
@@ -202,7 +223,7 @@ export async function create_minter(params: OpenEditionMinterParams) {
 
   const result = await client.execute(
     account,
-    config.openEditionFactory,
+    pickedFactory.params.address,
     msg,
     'auto',
     config.name,
@@ -227,7 +248,7 @@ async function create_updatable_open_edition_minter() {
   let params = {
     sg721CodeId: config.sg721OpenEditionUpdatableCodeId,
     openEditionMinterCodeId: config.openEditionMinterCodeId,
-    openEditionFactory: config.openEditionUpdatableFactory,
+    openEditionFactoryAddresses: config.openEditionUpdatableFactoryAddresses,
   };
   create_minter(params);
 }
