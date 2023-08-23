@@ -67,7 +67,7 @@ async function init() {
     choices: flexibleVendingDenoms,
     },
   ]);
-  
+
   // @ts-ignore
   const msg: InstantiateMsg = {
     members: whitelist,
@@ -75,7 +75,7 @@ async function init() {
     end_time: whitelistEndTime,
     mint_price: {
       amount: (config.whitelistPrice * 1000000).toString(),
-      denom: denom,
+      denom: denom.denom,
     },
     member_limit: config.whitelistMemberLimit,
     admins: [config.account],
