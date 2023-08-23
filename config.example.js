@@ -156,20 +156,20 @@ module.exports = {
   // The code ID for vending flexible minter for use with whitelist flexible
   flexibleVendingMinterCodeId: 2601,
   // Addr for vending factory contract
-  vendingFactory:
-    'stars18h7ugh8eaug7wr0w4yjw0ls5s937z35pnkg935ucsek2y9xl3gaqqk4jtx',
+  vendingFactoryAddresses:
+    ['stars18h7ugh8eaug7wr0w4yjw0ls5s937z35pnkg935ucsek2y9xl3gaqqk4jtx'],
   // Addr for updatable vending factory contract
-  updatableVendingFactory:
-    'stars1h65nms9gwg4vdktyqj84tu50gwlm34e0eczl5w2ezllxuzfxy9esa9qlt0',
+  updatableVendingFactoryAddresses:
+    ['stars1h65nms9gwg4vdktyqj84tu50gwlm34e0eczl5w2ezllxuzfxy9esa9qlt0'],
   // Addr for flexible vending factory contract
-  flexibleVendingFactory:
-    'stars1hvu2ghqkcnvhtj2fc6wuazxt4dqcftslp2rwkkkcxy269a35a9pq60ug2q',
+  flexibleVendingFactoryAddresses:
+    ['stars1hvu2ghqkcnvhtj2fc6wuazxt4dqcftslp2rwkkkcxy269a35a9pq60ug2q'],
   // Addr for open edition factory contract  
-  openEditionFactory:
-    'stars13r06dn4jc6mudvvkl9rclxjctywm4nhl045jn9f8mk6vc53eylusy4zxzj',
+  openEditionFactoryAddresses:
+    ['stars13r06dn4jc6mudvvkl9rclxjctywm4nhl045jn9f8mk6vc53eylusy4zxzj'],
   // Addr for open edition updatable factory contract  
-  openEditionUpdatableFactory:
-    'stars1n7np7wdmm4ea8tapkz00j3jtxupne0g8v9jj02j96wfn9w9ukxgs6hcsv0',
+  openEditionUpdatableFactoryAddresses:
+    ['stars1n7np7wdmm4ea8tapkz00j3jtxupne0g8v9jj02j96wfn9w9ukxgs6hcsv0'],
   // The code ID for open edition minter
   openEditionMinterCodeId: 2579,   
   // The code ID for the whitelist contract
