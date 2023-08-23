@@ -12,6 +12,7 @@ import {
   formatRoyaltyInfo,
 } from '../helpers/utils';
 import { toUtf8 } from '@cosmjs/encoding';
+import Prompt from 'inquirer/lib/prompts/base';
 
 const config = require('../../config');
 
@@ -25,17 +26,17 @@ export type MinterParams =
   | {
       sg721CodeId: number;
       vendingMinterCodeId: number;
-      vendingFactory: string;
+      vendingFactoryAddresses: string;
       [k: string]: unknown;
     }
   | undefined;
 
 export async function create_minter(params: MinterParams) {
   if (params !== undefined) {
-    const { sg721CodeId, vendingMinterCodeId, vendingFactory } = params;
+    const { sg721CodeId, vendingMinterCodeId, vendingFactoryAddresses } = params;
     config.sg721BaseCodeId = sg721CodeId;
     config.vendingMinterCodeId = vendingMinterCodeId;
-    config.vendingFactory = vendingFactory;
+    config.vendingFactoryAddresses = vendingFactoryAddresses;
   }
   console.log('Collection name:', config.name);
   console.log('Account:', config.account, '\n');
@@ -104,6 +105,36 @@ export async function create_minter(params: MinterParams) {
     );
   }
 
+  const factories = await Promise.all(
+    config.vendingFactoryAddresses.map(async (address: string) => {
+      const factory = await client.queryContractSmart(address, {
+        params: {},
+      });
+      return {
+        address: address,
+        denom: factory.params.min_mint_price.denom,
+        fee: factory.params.creation_fee.amount,
+      }
+    })
+  );
+  await new Promise((r) => setTimeout(r, 1000));
+  
+  const pickedFactory = await inquirer.prompt([
+    {
+      message: 'Pick a denom',
+      name: 'params',
+      type: 'list',
+      // Choises should be 1 to paramsResponses.length+1. FE [1,2,3,4,5]
+      choices: factories.map((factory: any, index: number) => {
+        return {
+          name: factory.denom,
+          value: factory,
+        };
+      }
+      ),
+    },
+  ]);
+
   const initMsg: CreateMinterMsgForVendingMinterInitMsgExtension = {
     init_msg: {
       base_token_uri: config.baseTokenUri,
@@ -111,7 +142,7 @@ export async function create_minter(params: MinterParams) {
       num_tokens: config.numTokens,
       mint_price: {
         amount: (config.mintPrice * 1000000).toString(),
-        denom: 'ustars',
+        denom: pickedFactory.params.denom,
       },
       per_address_limit: config.perAddressLimit,
       payment_address: paymentAddress,
@@ -131,19 +162,7 @@ export async function create_minter(params: MinterParams) {
       },
     },
   };
-
-  // should be stars1nelx34qg6xtm5u748jzjsahthddsktrrg5dw2rx8vzpc8hwwgk5q32mj2h
-  console.log('vending factory addr: ', config.vendingFactory);
-
-  const paramsResponse = await client.queryContractSmart(
-    config.vendingFactory,
-    {
-      params: {},
-    }
-  );
-  console.log('params response', paramsResponse);
-
-  const creationFee = paramsResponse.params.creation_fee.amount;
+  const creationFee = pickedFactory.params.fee
 
   const tempMsg = { create_minter: initMsg };
 
@@ -163,7 +182,7 @@ export async function create_minter(params: MinterParams) {
       typeUrl: '/cosmwasm.wasm.v1.MsgExecuteContract',
       value: {
         sender: account,
-        contract: config.vendingFactory,
+        contract: pickedFactory.params.address,
         msg: toUtf8(
           JSON.stringify(obj)
         ),
@@ -198,7 +217,7 @@ export async function create_minter(params: MinterParams) {
 
   const result = await client.execute(
     account,
-    config.vendingFactory,
+    pickedFactory.params.address,
     msg,
     'auto',
     config.name,
@@ -223,7 +242,7 @@ async function create_updatable_vending_minter() {
   let params = {
     sg721CodeId: config.sg721UpdatableCodeId,
     vendingMinterCodeId: config.vendingMinterCodeId,
-    vendingFactory: config.updatableVendingFactory,
+    vendingFactoryAddresses: config.updatableVendingFactoryAddresses,
   };
   create_minter(params);
 }
@@ -233,7 +252,7 @@ async function create_flex_vending_minter() {
   let params = {
     sg721CodeId: config.sg721BaseCodeId,
     vendingMinterCodeId: config.flexibleVendingMinterCodeId,
-    vendingFactory: config.flexibleVendingFactory,
+    vendingFactoryAddresses: config.flexibleVendingFactoryAddresses,
   };
   create_minter(params);
 }
