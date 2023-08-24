@@ -117,7 +117,6 @@ export async function create_minter(params: MinterParams) {
       }
     })
   );
-  await new Promise((r) => setTimeout(r, 1000));
   
   const pickedFactory = await inquirer.prompt([
     {
