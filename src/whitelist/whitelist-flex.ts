@@ -50,6 +50,24 @@ async function init() {
     new Date(config.whitelistEndTime).getTime() * 1_000_000
   ).toString();
 
+  const flexibleVendingDenoms = await Promise.all(
+    config.flexibleVendingFactoryAddresses.map(async (factoryAddress: string) => {
+      const res = await client.queryContractSmart(factoryAddress, {
+        params: {},
+      });
+      return res.params.min_mint_price.denom;
+    })
+  );
+  // Ask user to select a denom for whitelist mint price
+  const denom = await inquirer.prompt([
+    {
+    message: 'Select a denom for whitelist mint price',
+    name: 'denom',
+    type: 'list',
+    choices: flexibleVendingDenoms,
+    },
+  ]);
+
   // @ts-ignore
   const msg: InstantiateMsg = {
     members: whitelist,
@@ -57,7 +75,7 @@ async function init() {
     end_time: whitelistEndTime,
     mint_price: {
       amount: (config.whitelistPrice * 1000000).toString(),
-      denom: 'ustars',
+      denom: denom.denom,
     },
     member_limit: config.whitelistMemberLimit,
     admins: [config.account],
